@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lelono 16K</title>
+<meta name="description" content="Jadwal latihan 15 minggu menuju Lelono 16K dengan catatan progres.">
+<meta name="theme-color" content="#1d4a36">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Lelono 16K">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Source+Sans+3:wght@400;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: sticky bib header, one scrolling view per tab, fixed bottom tab bar; day detail opens as a bottom sheet */
+:root {
+  --bg: #eef2ef; --surface: #ffffff; --fg: #17221d; --muted: #5b6a63; --line: #d3ddd7;
+  --accent: #2f6b4f; --accent-fg: #ffffff; --brand: #1d4a36; --brand-fg: #eef2ef;
+  --easy: #dcebe2; --easy-fg: #24563f; --hill: #f6e3c4; --hill-fg: #7a4c0e;
+  --long: #cfe3ea; --long-fg: #144d61; --str: #e3def0; --str-fg: #4b3d78;
+  --rest: #e8ecea; --rest-fg: #66746e; --race: #c8411f; --race-fg: #ffffff;
+  --stage: #f5f8f6; --figure: #17221d; --figure-far: #9aaba3; --scrim: rgba(10, 20, 15, .45);
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #111815; --surface: #18221e; --fg: #e4ece7; --muted: #95a59d; --line: #2b3832;
+  --accent: #7cc4a0; --accent-fg: #0d1a14; --brand: #142e23; --brand-fg: #e4ece7;
+  --easy: #1f3a2d; --easy-fg: #a6dcbf; --hill: #3d2f17; --hill-fg: #f0c27c;
+  --long: #173541; --long-fg: #9fd3e6; --str: #2a2540; --str-fg: #c6b9f0;
+  --rest: #1c2420; --rest-fg: #7f8f88; --race: #e0603c; --race-fg: #160c08;
+  --stage: #141c18; --figure: #e4ece7; --figure-far: #56675f; --scrim: rgba(0, 0, 0, .6);
+  color-scheme: dark; } }
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.45 var(--font-body); -webkit-tap-highlight-color: transparent; }
+button, input, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); }
+.eyebrow { font: 600 11px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+
+/* Header */
+.top { position: sticky; top: 0; z-index: 5; background: var(--brand); color: var(--brand-fg);
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px 12px; }
+.top-in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+.top h1 { font: 700 26px/1 var(--font-display); margin: 2px 0 0; letter-spacing: .01em; }
+.top .eyebrow { opacity: .75; }
+.top .grow { flex: 1; min-width: 0; }
+.count { text-align: right; }
+.count b { display: block; font: 700 34px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.count span { font: 500 10px var(--font-mono); letter-spacing: .08em; text-transform: uppercase; opacity: .75; }
+.install { background: var(--brand-fg); color: var(--brand); border: 0; border-radius: 99px; padding: 6px 12px; font-weight: 700; font-size: 13px; cursor: pointer; }
+
+main { max-width: 560px; margin: 0 auto; padding: 16px 16px calc(env(safe-area-inset-bottom, 0px) + 96px); }
+.view { display: grid; gap: 16px; }
+h2 { font: 700 26px/1.05 var(--font-display); margin: 0; text-wrap: balance; }
+h3 { font: 700 20px/1.1 var(--font-display); margin: 0; }
+.muted { color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+
+/* Type colors */
+.t-easy { background: var(--easy); color: var(--easy-fg); }
+.t-hill { background: var(--hill); color: var(--hill-fg); }
+.t-long { background: var(--long); color: var(--long-fg); }
+.t-str  { background: var(--str);  color: var(--str-fg); }
+.t-rest { background: var(--rest); color: var(--rest-fg); }
+.t-race { background: var(--race); color: var(--race-fg); }
+.chip { display: inline-block; font: 600 12px var(--font-mono); padding: 3px 9px; border-radius: 99px; letter-spacing: .02em; }
+
+/* Workout hero (Hari Ini + sheet) */
+.hero { border-radius: 12px; padding: 16px; display: grid; gap: 6px; }
+.hero .when { font: 600 12px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; opacity: .8; }
+.hero .what { font: 700 34px/1 var(--font-display); }
+.hero .note { font-size: 15px; }
+.extra { display: grid; gap: 8px; }
+.extra ul, .extra ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; font-size: 15px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 700; text-decoration: underline; cursor: pointer; justify-self: start; }
+
+/* Log form */
+.log { display: grid; gap: 14px; }
+.done-btn { width: 100%; border: 2px solid var(--accent); background: transparent; color: var(--accent); border-radius: 12px; padding: 14px; font-weight: 700; font-size: 17px; cursor: pointer; }
+.done-btn[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); }
+.field { display: grid; gap: 6px; }
+.field label, .field .lbl { font-weight: 600; font-size: 14px; }
+.field input, .field textarea { width: 100%; border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 12px; font-size: 16px; }
+.field textarea { min-height: 72px; resize: vertical; }
+.rpe { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.rpe button { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 8px 2px; font-size: 12px; line-height: 1.15; cursor: pointer; }
+.rpe button b { display: block; font: 700 18px var(--font-display); }
+.rpe button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.saved { font: 500 12px var(--font-mono); color: var(--muted); min-height: 1em; }
+
+/* Week strip */
+.strip { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.sd { border: 0; border-radius: 10px; padding: 6px 2px 8px; display: grid; justify-items: center; gap: 2px; cursor: pointer; min-width: 0; }
+.sd .d { font: 600 10px var(--font-mono); text-transform: uppercase; opacity: .8; }
+.sd .n { font: 700 20px/1 var(--font-display); }
+.sd .m { font-size: 12px; height: 14px; line-height: 14px; }
+.sd.today { outline: 2px solid var(--fg); outline-offset: 1px; }
+
+/* Calendar */
+.phase-h { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; border-bottom: 2px solid var(--fg); padding-bottom: 4px; }
+.week-h { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 10px; font-size: 13px; color: var(--muted); padding: 8px 2px 4px; }
+.week-h b { color: var(--fg); font: 700 17px var(--font-display); }
+.week-h .km { font-family: var(--font-mono); font-size: 12px; }
+.days { display: grid; gap: 5px; }
+.row { display: grid; grid-template-columns: 62px 1fr auto; gap: 10px; align-items: center; border: 0; border-radius: 10px; padding: 9px 12px; text-align: left; cursor: pointer; width: 100%; }
+.row .dt { font: 600 11px/1.3 var(--font-mono); text-transform: uppercase; opacity: .85; }
+.row .tt { font-weight: 700; font-size: 15px; line-height: 1.2; }
+.row .nt { font-size: 13px; opacity: .9; }
+.row.today { outline: 2px solid var(--fg); outline-offset: 1px; }
+.tick { width: 24px; height: 24px; border-radius: 50%; border: 2px solid currentColor; display: grid; place-items: center; font-size: 14px; font-weight: 700; opacity: .7; }
+.done .tick { background: currentColor; opacity: 1; }
+.done .tick::after { content: "✓"; color: var(--surface); }
+.row.done .tt { text-decoration: line-through; text-decoration-thickness: 2px; }
+.missed .tick { border-style: dashed; }
+.week-block { scroll-margin-top: 90px; }
+
+/* Progress */
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; min-width: 0; }
+.tile b { display: block; font: 700 28px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.tile span { font-size: 12.5px; color: var(--muted); }
+.chart svg { width: 100%; height: auto; display: block; }
+.chart text { fill: var(--muted); font: 500 9px var(--font-mono); }
+.chart .cur { fill: var(--fg); font-weight: 600; }
+.bar-plan { fill: var(--line); }
+.bar-done { fill: var(--accent); }
+.grid { stroke: var(--line); stroke-width: 1; }
+.legend { display: flex; gap: 14px; font-size: 13px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.logs { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.logs li { display: grid; gap: 2px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.logs li:last-child { border-bottom: 0; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--bg); border-radius: 10px; padding: 10px 14px; font-weight: 600; cursor: pointer; }
+.btn.danger { color: var(--race); border-color: var(--race); }
+.btn.danger.armed { background: var(--race); color: var(--race-fg); }
+
+/* Moves */
+.move { padding: 0; overflow: hidden; gap: 0; }
+.stage { position: relative; background: var(--stage); border-bottom: 1px solid var(--line); }
+.stage canvas { display: block; width: 100%; aspect-ratio: 240 / 215; cursor: pointer; }
+.stage .play { position: absolute; right: 10px; bottom: 10px; font: 600 12px var(--font-mono); background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 4px 12px; cursor: pointer; }
+.stage .vw { position: absolute; left: 12px; bottom: 12px; font: 500 11px var(--font-mono); color: var(--muted); }
+.move-b { padding: 14px 16px 16px; display: grid; gap: 10px; }
+.move-t { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.avoid { margin: 0; padding: 8px 10px; border-radius: 8px; font-size: 14px; }
+
+/* Tab bar */
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 6px 8px calc(env(safe-area-inset-bottom, 0px) + 6px); }
+.tabs-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); }
+.tab { border: 0; background: none; padding: 6px 2px; display: grid; justify-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border-radius: 10px; }
+.tab svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tab[aria-current="page"] { color: var(--accent); }
+
+/* Sheet */
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 10; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 11; max-height: 88vh; overflow: auto; background: var(--surface);
+  border-radius: 18px 18px 0 0; padding: 10px 16px calc(env(safe-area-inset-bottom, 0px) + 20px); }
+.sheet-in { max-width: 560px; margin: 0 auto; display: grid; gap: 14px; }
+.grab { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 4px; }
+.sheet-close { justify-self: end; border: 0; background: var(--bg); border-radius: 99px; padding: 6px 14px; font-weight: 600; cursor: pointer; }
+@media (prefers-reduced-motion: no-preference) { .sheet { animation: up .22s ease-out; } @keyframes up { from { transform: translateY(30px); opacity: .6; } } }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 72px); z-index: 20; white-space: nowrap;
+  background: var(--fg); color: var(--bg); padding: 8px 16px; border-radius: 99px; font-size: 14px; font-weight: 600; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="grow">
+      <div class="eyebrow" id="phase-label">Lelono by Mantra</div>
+      <h1>Lelono 16K</h1>
+    </div>
+    <button class="install" id="install-btn" hidden>Pasang</button>
+    <div class="count"><b id="count">–</b><span id="count-l">hari lagi</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="view" id="v-today" aria-label="Hari ini"></section>
+  <section class="view" id="v-cal" aria-label="Kalender" hidden></section>
+  <section class="view" id="v-moves" aria-label="Gerakan" hidden>
+    <div><h2>Panduan Gerakan</h2><p class="muted" style="margin:4px 0 0">Untuk hari Kekuatan: kerjakan semua gerakan, istirahat 45–60 detik antar set. Ketuk animasi untuk menjeda.</p></div>
+    <div class="view" id="moves"></div>
+  </section>
+  <section class="view" id="v-prog" aria-label="Progres" hidden></section>
+</main>
+
+<nav class="tabs" aria-label="Menu">
+  <div class="tabs-in">
+    <button class="tab" data-v="today" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Hari Ini</button>
+    <button class="tab" data-v="cal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Kalender</button>
+    <button class="tab" data-v="moves"><svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M8 21l3-6 3 3v3M11 15l1-6 4 3h3M12 9l-4 1-2 3"/></svg>Gerakan</button>
+    <button class="tab" data-v="prog"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Progres</button>
+  </div>
+</nav>
+
+<div id="sheet-root"></div>
+
+<script>
+/* ================= Plan ================= */
+const R = ["rest","Istirahat","Jalan santai atau peregangan",0];
+const S = (n) => ["str","Kekuatan",n || "7 gerakan, lihat tab Gerakan",0];
+const E = (km, n) => ["easy",`Easy ${km} km`,n || "Road, pace ngobrol",km];
+const H = (t, n, km) => ["hill",t,n,km];
+const L = (km, t, n) => ["long",t || `Long run ${km} km`,n,km];
+const PHASES = [
+  { name: "Fondasi", weeks: [
+    [R, E(5), S(), E(5), R, E(4,"Tambah 4× strides 20 detik"), L(8,null,"Santai, boleh di road")],
+    [R, E(6), S(), E(5,"Tambah 4× strides 20 detik"), R, E(5), L(10,null,"Santai, coba sebagian di tanah")],
+    [R, E(6), S(), H("Tempo 20 mnt","Total ±7 km dengan pemanasan",7), R, E(5), L(12,null,"Pace santai, latih minum")],
+    [R, E(5), S("Versi ringan, 2 set per gerakan"), E(5), R, E(4), L(9,"Long run 9 km","Minggu ringan, pemulihan")],
+  ]},
+  { name: "Tanjakan & Trail", weeks: [
+    [R, H("Hill 6× 1 mnt","Turun jalan kaki sebagai pemulihan",6), S(), E(6), R, E(5), L(12,"Trail 12 km","Jalur tanah, kenali sepatu trail")],
+    [R, H("Hill 8× 1 mnt","Usaha kuat tapi terkontrol",7), S(), E(6), R, E(5), L(13,"Trail 13 km","Latih turunan: langkah pendek, cepat")],
+    [R, H("Hill 6× 2 mnt","Jaga usaha stabil tiap repetisi",7), S(), H("Tempo 25 mnt","Total ±8 km",8), R, E(5), L(14,"Trail 14 km","Power hiking di tanjakan curam")],
+    [R, E(5), S("Versi ringan, 2 set per gerakan"), E(5), R, E(4), L(10,"Trail 10 km","Minggu ringan, pace santai")],
+    [R, H("Hill 8× 2 mnt","Tanjakan lebih panjang bila ada",8), S(), E(7), R, E(5), L(15,"Trail 15 km","Bawa rompi hidrasi + gel")],
+    [R, H("Hill 10× 1,5 mnt","Fokus postur saat lelah",8), S(), H("Tempo 30 mnt","Total ±9 km",9), R, E(5), L(16,"Trail 16 km","Jarak lomba, santai saja")],
+  ]},
+  { name: "Puncak", weeks: [
+    [R, H("Hill 8× 2 mnt","Pemanasan 15 mnt dulu",8), S(), E(7), R, E(5), L(18,"Simulasi 18 km","Sepatu, rompi, dan gel hari H")],
+    [R, H("Hill 10× 2 mnt","Sesi tanjakan terberat",9), S(), H("Tempo 30 mnt","Total ±9 km",9), R, E(5), L(20,"Trail 20 km","Long run terpanjang, boleh banyak jalan")],
+    [R, E(6), S(), H("Hill 6× 2 mnt","Pemanasan 15 mnt dulu",7), ["rest","Istirahat","Tahun baru, nikmati",0], E(5), L(16,"Trail 16 km","Sebaiknya saat/sesudah hujan")],
+  ]},
+  { name: "Taper", weeks: [
+    [R, E(6,"Tambah 6× strides 20 detik"), S("Versi ringan, 1–2 set per gerakan"), H("Tempo 15 mnt","Total ±6 km",6), R, E(4), L(10,"Trail 10 km","Santai, cek perlengkapan")],
+    [R, E(5,"Tambah 4× strides 20 detik"), R, E(4,"Tambah 4× strides, lalu selesai"), R, ["easy","Shakeout 15–20 mnt","Siapkan perlengkapan, tidur cukup",3], ["race","LELONO 16K","Kusuma Agrowisata, Batu",16]],
+  ]},
+];
+const START = new Date(2026, 9, 5), RACE = new Date(2027, 0, 17);
+const DOW = ["Sen","Sel","Rab","Kam","Jum","Sab","Min"];
+const DOWL = ["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Minggu"];
+const MON = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const keyOf = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const fmt = (d) => `${d.getDate()} ${MON[d.getMonth()]}`;
+const TYPE_LABEL = { easy: "Easy run", hill: "Tanjakan / tempo", long: "Long run", str: "Kekuatan", rest: "Istirahat", race: "Lomba" };
+
+const PLAN = []; const BYKEY = {};
+{ let w = 0;
+  PHASES.forEach((p, pi) => p.weeks.forEach((days) => {
+    days.forEach((d, i) => {
+      const date = addDays(START, w * 7 + i);
+      const day = { key: keyOf(date), date, dow: i, week: w, phase: pi, type: d[0], title: d[1], note: d[2], km: d[3] };
+      PLAN.push(day); BYKEY[day.key] = day;
+    });
+    w++;
+  }));
+}
+const WEEKS = 15;
+
+/* ================= Storage ================= */
+const STORE_KEY = "lelono16k-v1";
+let state = { v: 1, log: {} };
+try { const s = JSON.parse(localStorage.getItem(STORE_KEY)); if (s && typeof s.log === "object") state = s; } catch (e) {}
+try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
+let toastTimer;
+function toast(msg) {
+  let t = document.querySelector(".toast");
+  if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 1600);
+}
+function persist() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); return true; }
+  catch (e) { toast("Gagal menyimpan. Penyimpanan browser penuh atau diblokir."); return false; }
+}
+const entry = (k) => state.log[k] || {};
+function setEntry(k, patch) {
+  const e = { ...entry(k), ...patch };
+  if (!e.done && e.km == null && !e.rpe && !e.note) delete state.log[k]; else state.log[k] = e;
+  return persist();
+}
+
+/* ================= Helpers ================= */
+let TODAY = keyOf(new Date());
+const todayDate = () => { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); };
+function currentDay() {
+  if (BYKEY[TODAY]) return BYKEY[TODAY];
+  return todayDate() < START ? PLAN[0] : PLAN[PLAN.length - 1];
+}
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const doneKm = (d) => { const e = entry(d.key); return e.done ? (e.km != null ? e.km : d.km) : 0; };
+const isPast = (d) => d.key < TODAY;
+
+function extraFor(d) {
+  if (d.type === "str") return `<div class="extra"><b>Gerakan hari ini</b><ul>
+      <li>Squat 3×12</li><li>Lunges jalan 3×10 per kaki</li><li>Step-up 3×10 per kaki</li>
+      <li>Calf raise satu kaki 3×15 per kaki</li><li>Plank 3×40 detik</li><li>Side plank 2×30 detik per sisi</li>
+      <li>Single-leg deadlift 2×10 per kaki</li></ul>
+      <button class="linkbtn" data-go="moves">Lihat animasi gerakan</button></div>`;
+  if (d.type === "hill" && d.title.startsWith("Hill")) return `<div class="extra"><b>Cara melakukan</b><ol>
+      <li>Pemanasan 10–15 menit lari santai.</li><li>Lari menanjak dengan usaha kuat tapi terkontrol sesuai durasi.</li>
+      <li>Turun jalan kaki atau jogging pelan sebagai pemulihan.</li><li>Tanjakan curam: pakai power hiking.</li>
+      <li>Pendinginan 10 menit.</li></ol></div>`;
+  if (d.type === "hill") return `<div class="extra"><b>Cara melakukan</b><ol>
+      <li>Pemanasan 10 menit lari santai.</li><li>Tempo: pace “nyaman tapi berat”, masih bisa bicara sepatah dua patah kata.</li>
+      <li>Pendinginan 10 menit jogging pelan.</li></ol></div>`;
+  if (d.type === "long") return `<div class="extra"><b>Tips</b><ul>
+      <li>Pakai sepatu trail di jalur tanah.</li><li>Minum atau makan gel tiap ±45 menit.</li>
+      <li>Tanjakan curam: power hiking. Turunan: langkah pendek dan cepat.</li></ul>
+      <button class="linkbtn" data-go="moves">Lihat teknik power hiking</button></div>`;
+  if (d.type === "easy" && /strides/i.test(d.note)) return `<div class="extra"><b>Strides</b><p style="margin:0">Di akhir lari: 20 detik cepat tapi rileks, hampir sprint, lalu jalan 40 detik. Ulangi sesuai jumlah.</p></div>`;
+  if (d.type === "easy") return `<div class="extra muted">Pakai sepatu road kalau di aspal. Pace santai, masih bisa ngobrol.</div>`;
+  if (d.type === "race") return `<div class="extra"><b>Checklist hari H</b><ul>
+      <li>BIB, rompi hidrasi terisi, gel yang sudah biasa dipakai.</li><li>Sepatu trail dengan grip kuat, jalur basah.</li>
+      <li>Sarapan 2–3 jam sebelum start.</li><li>Mulai pelan, nikmati air terjunnya.</li></ul></div>`;
+  return `<div class="extra muted">Istirahat juga bagian dari latihan. Tidur cukup dan jalan santai boleh.</div>`;
+}
+
+const RPE = [["1","Sangat ringan"],["2","Ringan"],["3","Sedang"],["4","Berat"],["5","Sangat berat"]];
+function logForm(d, onChange) {
+  const e = entry(d.key);
+  const wrap = document.createElement("div");
+  wrap.className = "log";
+  const runType = d.type !== "str" && d.type !== "rest";
+  const id = (s) => `${s}-${d.key}`;
+  wrap.innerHTML = `
+    <button type="button" class="done-btn" aria-pressed="${e.done ? "true" : "false"}">${e.done ? "✓ Selesai" : "Tandai selesai"}</button>
+    ${runType ? `<div class="field"><label for="${id("km")}">Jarak aktual (km)</label>
+      <input id="${id("km")}" type="number" inputmode="decimal" step="0.1" min="0" placeholder="Rencana: ${d.km} km" value="${e.km ?? ""}"></div>` : ""}
+    ${d.type !== "rest" ? `<div class="field"><span class="lbl" id="${id("rpel")}">Rasanya</span>
+      <div class="rpe" role="group" aria-labelledby="${id("rpel")}">${RPE.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${String(e.rpe) === v}"><b>${v}</b>${l}</button>`).join("")}</div></div>` : ""}
+    <div class="field"><label for="${id("note")}">Catatan</label>
+      <textarea id="${id("note")}" placeholder="Rute, cuaca, rasa kaki, pace…">${esc(e.note)}</textarea></div>
+    <div class="saved" aria-live="polite"></div>`;
+  const saved = wrap.querySelector(".saved");
+  const ok = () => { saved.textContent = "Tersimpan di HP ini"; onChange && onChange(); };
+  const btn = wrap.querySelector(".done-btn");
+  btn.addEventListener("click", () => {
+    const v = !entry(d.key).done;
+    if (setEntry(d.key, { done: v })) {
+      btn.setAttribute("aria-pressed", String(v)); btn.textContent = v ? "✓ Selesai" : "Tandai selesai";
+      if (v) toast(d.type === "race" ? "Selamat, finisher!" : "Mantap, sesi tercatat");
+      ok();
+    }
+  });
+  const km = wrap.querySelector("input[type=number]");
+  if (km) km.addEventListener("input", () => {
+    const v = km.value.trim() === "" ? null : Math.max(0, parseFloat(km.value.replace(",", ".")));
+    if (setEntry(d.key, { km: Number.isFinite(v) ? v : null })) ok();
+  });
+  wrap.querySelectorAll(".rpe button").forEach((b) => b.addEventListener("click", () => {
+    const cur = entry(d.key).rpe, v = Number(b.dataset.v);
+    const nv = cur === v ? null : v;
+    if (setEntry(d.key, { rpe: nv })) {
+      wrap.querySelectorAll(".rpe button").forEach((x) => x.setAttribute("aria-pressed", String(Number(x.dataset.v) === nv)));
+      ok();
+    }
+  }));
+  const note = wrap.querySelector("textarea");
+  let nt; note.addEventListener("input", () => { clearTimeout(nt); nt = setTimeout(() => { if (setEntry(d.key, { note: note.value.trim() })) ok(); }, 350); });
+  return wrap;
+}
+
+function heroHTML(d, label) {
+  return `<div class="hero t-${d.type}">
+    <div class="when">${label ? label + " · " : ""}${DOWL[d.dow]}, ${fmt(d.date)} · Minggu ${d.week + 1}</div>
+    <div class="what">${esc(d.title)}</div>
+    ${d.note ? `<div class="note">${esc(d.note)}</div>` : ""}
+  </div>`;
+}
+
+/* ================= Views ================= */
+function renderToday() {
+  const v = document.getElementById("v-today");
+  const td = todayDate();
+  const d = currentDay();
+  let label = "Hari ini";
+  if (td < START) label = "Latihan pertama";
+  if (td > RACE) label = "Hari lomba";
+  const weekDays = PLAN.filter((x) => x.week === d.week);
+  const next = PLAN[PLAN.indexOf(d) + 1];
+  v.innerHTML = `
+    ${td > RACE ? `<div class="card"><h2>Lomba sudah lewat</h2><p class="muted" style="margin:0">Semua catatan latihanmu masih ada di tab Progres.</p></div>` : ""}
+    ${heroHTML(d, label)}
+    <div class="card" id="today-log"><div class="extra-slot"></div></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Minggu ${d.week + 1}</h3><span class="muted" style="font-size:13px">${PHASES[d.phase].name}</span></div>
+      <div class="strip">${weekDays.map((x) => {
+        const e = entry(x.key);
+        const mark = e.done ? "✓" : (x.type === "rest" ? "–" : (isPast(x) ? "·" : ""));
+        return `<button type="button" class="sd t-${x.type}${x.key === TODAY ? " today" : ""}" data-day="${x.key}" aria-label="${DOWL[x.dow]} ${fmt(x.date)}, ${esc(x.title)}${e.done ? ", selesai" : ""}">
+          <span class="d">${DOW[x.dow]}</span><span class="n">${x.date.getDate()}</span><span class="m">${mark}</span></button>`;
+      }).join("")}</div>
+    </div>
+    ${next ? `<button type="button" class="row t-${next.type}" data-day="${next.key}"><span class="dt">Besok<br>${fmt(next.date)}</span><span><span class="tt">${esc(next.title)}</span><br><span class="nt">${esc(next.note)}</span></span><span></span></button>` : ""}`;
+  const card = v.querySelector("#today-log");
+  card.querySelector(".extra-slot").outerHTML = extraFor(d);
+  card.appendChild(logForm(d, () => { renderCal(); renderProg(); renderTodayStrip(); }));
+}
+function renderTodayStrip() {
+  document.querySelectorAll("#v-today .sd").forEach((b) => {
+    const x = BYKEY[b.dataset.day], e = entry(x.key);
+    b.querySelector(".m").textContent = e.done ? "✓" : (x.type === "rest" ? "–" : (isPast(x) ? "·" : ""));
+  });
+}
+
+function renderCal() {
+  const v = document.getElementById("v-cal");
+  let html = "";
+  PHASES.forEach((p, pi) => {
+    const weeks = [...new Set(PLAN.filter((d) => d.phase === pi).map((d) => d.week))];
+    html += `<div class="phase-h"><h2>${p.name}</h2><span class="eyebrow muted">Minggu ${weeks[0] + 1}${weeks.length > 1 ? "–" + (weeks[weeks.length - 1] + 1) : ""}</span></div>`;
+    weeks.forEach((w) => {
+      const days = PLAN.filter((d) => d.week === w);
+      const plan = days.reduce((a, d) => a + d.km, 0);
+      const sess = days.filter((d) => d.type !== "rest");
+      const dn = sess.filter((d) => entry(d.key).done).length;
+      html += `<div class="week-block" id="wk-${w}"><div class="week-h"><b>Minggu ${w + 1}</b><span>${fmt(days[0].date)} – ${fmt(days[6].date)}</span><span class="km">±${plan} km · ${dn}/${sess.length} sesi</span></div><div class="days">`;
+      days.forEach((d) => {
+        const e = entry(d.key);
+        const cls = [d.key === TODAY ? "today" : "", e.done ? "done" : "", !e.done && isPast(d) && d.type !== "rest" ? "missed" : ""].join(" ");
+        html += `<button type="button" class="row t-${d.type} ${cls}" data-day="${d.key}">
+          <span class="dt">${DOW[d.dow]}<br>${fmt(d.date)}</span>
+          <span><span class="tt">${esc(d.title)}</span>${d.note ? `<br><span class="nt">${esc(d.note)}${e.km != null ? ` · tercatat ${e.km} km` : ""}</span>` : ""}</span>
+          ${d.type !== "rest" ? `<span class="tick" aria-label="${e.done ? "selesai" : "belum"}"></span>` : "<span></span>"}
+        </button>`;
+      });
+      html += `</div></div>`;
+    });
+  });
+  v.innerHTML = html;
+}
+
+function renderProg() {
+  const v = document.getElementById("v-prog");
+  const sessAll = PLAN.filter((d) => d.type !== "rest");
+  const due = sessAll.filter((d) => d.key <= TODAY);
+  const done = sessAll.filter((d) => entry(d.key).done);
+  const kmDone = PLAN.reduce((a, d) => a + doneKm(d), 0);
+  const kmPlan = PLAN.reduce((a, d) => a + d.km, 0);
+  const cw = currentDay().week;
+  const wk = sessAll.filter((d) => d.week === cw);
+  const wkDone = wk.filter((d) => entry(d.key).done).length;
+
+  const plan = [], act = [];
+  for (let w = 0; w < WEEKS; w++) {
+    const days = PLAN.filter((d) => d.week === w);
+    plan.push(days.reduce((a, d) => a + d.km, 0));
+    act.push(days.reduce((a, d) => a + doneKm(d), 0));
+  }
+  const top = Math.max(20, Math.ceil(Math.max(...plan, ...act) / 20) * 20);
+  const X0 = 26, X1 = 334, Y0 = 8, Y1 = 128, bw = (X1 - X0) / WEEKS;
+  const y = (k) => Y1 - (k / top) * (Y1 - Y0);
+  let svg = "";
+  for (let t = 0; t <= top; t += 20) svg += `<line class="grid" x1="${X0}" x2="${X1}" y1="${y(t)}" y2="${y(t)}"/><text x="${X0 - 5}" y="${y(t) + 3}" text-anchor="end">${t}</text>`;
+  for (let w = 0; w < WEEKS; w++) {
+    const x = X0 + w * bw + bw * 0.18, wd = bw * 0.64;
+    svg += `<rect class="bar-plan" x="${x}" y="${y(plan[w])}" width="${wd}" height="${Y1 - y(plan[w])}" rx="2"/>`;
+    if (act[w] > 0) svg += `<rect class="bar-done" x="${x + wd * 0.2}" y="${y(Math.min(act[w], top))}" width="${wd * 0.6}" height="${Y1 - y(Math.min(act[w], top))}" rx="2"/>`;
+    svg += `<text x="${x + wd / 2}" y="${Y1 + 13}" text-anchor="middle" class="${w === cw ? "cur" : ""}">${w + 1}</text>`;
+  }
+
+  const logs = PLAN.filter((d) => { const e = entry(d.key); return e.note || e.rpe; }).slice(-6).reverse();
+  v.innerHTML = `
+    <h2>Progres</h2>
+    <div class="tiles">
+      <div class="tile"><b>${done.length}/${sessAll.length}</b><span>sesi selesai dari seluruh rencana</span></div>
+      <div class="tile"><b>${kmDone % 1 ? kmDone.toFixed(1) : kmDone}</b><span>km dari ${kmPlan} km rencana</span></div>
+      <div class="tile"><b>${wkDone}/${wk.length}</b><span>sesi minggu ini</span></div>
+    </div>
+    <div class="card chart">
+      <h3>Km per minggu</h3>
+      <svg viewBox="0 0 340 145" role="img" aria-label="Grafik km rencana dan km tercatat per minggu">${svg}</svg>
+      <div class="legend"><span><i style="background:var(--line)"></i>Rencana</span><span><i style="background:var(--accent)"></i>Tercatat</span></div>
+      <p class="muted" style="margin:0;font-size:13px">Sesi yang ditandai selesai tanpa jarak dihitung sesuai rencana.</p>
+    </div>
+    <div class="card">
+      <h3>Catatan terakhir</h3>
+      ${logs.length ? `<ul class="logs">${logs.map((d) => { const e = entry(d.key);
+        return `<li><span class="eyebrow muted">${DOW[d.dow]} ${fmt(d.date)} · ${esc(d.title)}${e.rpe ? ` · rasa ${e.rpe}/5` : ""}</span>${e.note ? `<span>${esc(e.note)}</span>` : ""}</li>`; }).join("")}</ul>`
+      : `<p class="muted" style="margin:0">Belum ada catatan. Setelah latihan, buka sesi hari itu lalu isi rasa dan catatanmu.</p>`}
+    </div>
+    <div class="card">
+      <h3>Cadangan data</h3>
+      <p class="muted" style="margin:0;font-size:14px">Progres tersimpan di HP ini. Simpan cadangan sebelum ganti HP atau menghapus data browser.</p>
+      <div class="btns">
+        <button type="button" class="btn" id="exp">Simpan cadangan</button>
+        <label class="btn" for="imp">Pulihkan cadangan</label>
+        <input id="imp" type="file" accept="application/json,.json" class="sr">
+        <button type="button" class="btn danger" id="reset">Hapus semua</button>
+      </div>
+    </div>`;
+  v.querySelector("#exp").addEventListener("click", exportData);
+  v.querySelector("#imp").addEventListener("change", importData);
+  const rb = v.querySelector("#reset");
+  rb.addEventListener("click", () => {
+    if (!rb.classList.contains("armed")) { rb.classList.add("armed"); rb.textContent = "Ketuk lagi untuk menghapus"; setTimeout(() => { rb.classList.remove("armed"); rb.textContent = "Hapus semua"; }, 4000); return; }
+    state = { v: 1, log: {} }; persist(); renderAll(); toast("Semua catatan dihapus");
+  });
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({ app: "lelono16k", ...state, exported: new Date().toISOString() }, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `lelono16k-cadangan-${TODAY}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  toast("Cadangan disimpan ke folder unduhan");
+}
+function importData(ev) {
+  const f = ev.target.files && ev.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const s = JSON.parse(r.result);
+      if (!s || typeof s.log !== "object") throw new Error();
+      state = { v: 1, log: s.log }; persist(); renderAll(); toast("Cadangan dipulihkan");
+    } catch (e) { toast("File ini bukan cadangan Lelono 16K"); }
+    ev.target.value = "";
+  };
+  r.readAsText(f);
+}
+
+/* ================= Sheet ================= */
+function openSheet(k) {
+  const d = BYKEY[k]; if (!d) return;
+  const root = document.getElementById("sheet-root");
+  const prev = document.activeElement;
+  root.innerHTML = `<div class="scrim"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(d.title)}"><div class="sheet-in">
+    <div class="grab"></div><button type="button" class="sheet-close">Tutup</button>
+    ${heroHTML(d, d.key === TODAY ? "Hari ini" : "")}<div class="x"></div></div></div>`;
+  const x = root.querySelector(".x");
+  x.outerHTML = extraFor(d);
+  root.querySelector(".sheet-in").appendChild(logForm(d, () => { renderCal(); renderProg(); renderToday(); }));
+  const close = () => { root.innerHTML = ""; document.removeEventListener("keydown", onKey); prev && prev.focus && prev.focus(); };
+  const onKey = (e) => { if (e.key === "Escape") close(); };
+  document.addEventListener("keydown", onKey);
+  root.querySelector(".scrim").addEventListener("click", close);
+  root.querySelector(".sheet-close").addEventListener("click", close);
+  root.querySelectorAll("[data-go]").forEach((b) => b.addEventListener("click", () => { close(); show(b.dataset.go); }));
+  root.querySelector(".sheet-close").focus();
+}
+
+/* ================= Tabs ================= */
+let current = "today";
+function show(v) {
+  current = v;
+  ["today", "cal", "moves", "prog"].forEach((n) => { document.getElementById("v-" + n).hidden = n !== v; });
+  document.querySelectorAll(".tab").forEach((t) => { if (t.dataset.v === v) t.setAttribute("aria-current", "page"); else t.removeAttribute("aria-current"); });
+  window.scrollTo(0, 0);
+  if (v === "cal") { const el = document.getElementById("wk-" + currentDay().week); if (el) el.scrollIntoView({ block: "start" }); }
+  try { localStorage.setItem("lelono16k-tab", v); } catch (e) {}
+}
+document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => show(t.dataset.v)));
+document.addEventListener("click", (e) => {
+  const day = e.target.closest("[data-day]"); if (day && !day.closest(".sheet")) { openSheet(day.dataset.day); return; }
+  const go = e.target.closest("[data-go]"); if (go && !go.closest(".sheet")) show(go.dataset.go);
+});
+
+function renderHeader() {
+  const diff = Math.round((RACE - todayDate()) / 86400000);
+  document.getElementById("count").textContent = diff > 0 ? diff : (diff === 0 ? "HARI H" : "✓");
+  document.getElementById("count-l").textContent = diff > 0 ? "hari lagi" : (diff === 0 ? "selamat berlari" : "selesai");
+  const d = currentDay();
+  document.getElementById("phase-label").textContent = `Minggu ${d.week + 1}/15 · ${PHASES[d.phase].name}`;
+}
+function renderAll() { renderHeader(); renderToday(); renderCal(); renderProg(); }
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && keyOf(new Date()) !== TODAY) { TODAY = keyOf(new Date()); renderAll(); }
+});
+
+/* ================= Install ================= */
+let deferred = null;
+const installBtn = document.getElementById("install-btn");
+window.addEventListener("beforeinstallprompt", (e) => { e.preventDefault(); deferred = e; installBtn.hidden = false; });
+installBtn.addEventListener("click", async () => { if (!deferred) return; deferred.prompt(); await deferred.userChoice; deferred = null; installBtn.hidden = true; });
+window.addEventListener("appinstalled", () => { installBtn.hidden = true; toast("Aplikasi terpasang"); });
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+}
+</script>
+
+<script>
+/* ================= Movement animations =================
+   Angles in degrees. Limbs from straight down (+ = toward facing direction); torso from straight up (+ = lean forward);
+   foot from horizontal (+ = toe down). l = [[thigh, shin, foot] near, far], a = [[upperArm, forearm] near, far]. */
+const LEN = { torso: 50, thigh: 42, shin: 42, ua: 28, fa: 26, foot: 14, head: 9 };
+const GROUND = 188, SW = 240, SH = 215;
+const rad = (d) => d * Math.PI / 180;
+const dn = (a, l) => [Math.sin(rad(a)) * l, Math.cos(rad(a)) * l];
+const add2 = (p, v) => [p[0] + v[0], p[1] + v[1]];
+const MOVES = [
+  { name: "Squat", dose: "3 × 12", view: "tampak samping", anchor: "ankle0", ax: 118,
+    K: { a: { t: 4, l: [[0,0,0],[0,0,0]], a: [[6,6],[6,6]] }, b: { t: 40, l: [[80,-28,0],[80,-28,0]], a: [[85,90],[85,90]] } },
+    seq: [["a",0,.5],["b",1.4,.4],["a",1.2,0]],
+    steps: ["Kaki selebar bahu, ujung kaki sedikit menghadap keluar.","Dorong pinggul ke belakang seperti mau duduk, dada tetap tegak.","Turun sampai paha sejajar lantai, atau sedalam yang masih nyaman.","Dorong lewat tumit untuk kembali berdiri."],
+    avoid: "Lutut jatuh ke dalam atau tumit terangkat." },
+  { name: "Lunges Jalan", dose: "3 × 10 / kaki", view: "tampak samping", anchor: "toe1", ax: 100,
+    K: { a: { t: 0, l: [[0,0,0],[0,0,0]], a: [[8,8],[-8,8]] }, b: { t: 2, l: [[70,-2,0],[-15,-75,30]], a: [[-20,0],[20,10]] } },
+    seq: [["a",0,.5],["b",1.2,.4],["a",1.1,0]],
+    steps: ["Langkahkan satu kaki lebar ke depan.","Turunkan badan lurus ke bawah sampai kedua lutut menekuk ±90°.","Lutut belakang hampir menyentuh lantai, lutut depan di atas pergelangan kaki.","Dorong kaki depan untuk berdiri, lalu melangkah dengan kaki lainnya."],
+    avoid: "Badan membungkuk ke depan." },
+  { name: "Step-up", dose: "3 × 10 / kaki", view: "tampak samping", box: [128, 215, 24], hx: 105,
+    K: { a: { hx: 105, t: 2, l: [[0,0,0],[0,0,0]], a: [[6,6],[-6,6]] }, b: { hx: 105, t: 15, l: [[76,-8,0],[0,0,0]], a: [[-10,10],[15,20]] }, c: { hx: 136, t: 2, l: [[0,0,0],[60,-70,10]], a: [[-20,10],[30,60]] } },
+    seq: [["a",0,.4],["b",.9,.1],["c",1.0,.4],["b",1.0,.1],["a",.8,0]],
+    steps: ["Pakai bangku atau anak tangga 30–45 cm yang kokoh.","Letakkan seluruh telapak kaki di atas pijakan.","Naik dengan tenaga kaki yang di atas, bukan menolak dengan kaki bawah.","Angkat lutut kaki lainnya, lalu turun pelan dengan urutan terbalik."],
+    avoid: "Menolak dari kaki bawah atau lutut goyang ke dalam." },
+  { name: "Calf Raise Satu Kaki", dose: "3 × 15 / kaki", view: "tampak samping", anchor: "toe0", ax: 128, wall: 174,
+    K: { a: { t: 4, l: [[0,0,0],[8,-80,10]], a: [[80,88],[0,5]] }, b: { t: 0, l: [[0,0,55],[8,-80,10]], a: [[70,80],[0,5]] } },
+    seq: [["a",0,.3],["b",.8,.5],["a",1.4,0]],
+    steps: ["Berdiri di satu kaki, tangan menyentuh dinding.","Angkat tumit setinggi mungkin.","Turunkan pelan selama 2–3 detik.","Kalau sudah mudah, lakukan di tepi anak tangga."],
+    avoid: "Memantul cepat tanpa kontrol." },
+  { name: "Plank", dose: "3 × 40 dtk", view: "tampak samping", anchor: "elbow0", ax: 150,
+    K: { a: { t: 78, l: [[-60,-90,180],[-60,-90,180]], a: [[0,90],[0,90]] }, b: { t: 84, l: [[-84,-84,90],[-84,-84,90]], a: [[0,90],[0,90]] } },
+    seq: [["a",0,.6],["b",1.0,2.6],["a",1.0,0]],
+    steps: ["Siku tepat di bawah bahu, lengan bawah di lantai.","Angkat lutut sampai badan lurus dari kepala ke tumit.","Kencangkan perut dan bokong, napas normal.","Pemula boleh mulai dengan lutut di lantai."],
+    avoid: "Pinggul turun atau terangkat terlalu tinggi." },
+  { name: "Side Plank", dose: "2 × 30 dtk / sisi", view: "tampak depan", anchor: "elbow0", ax: 168,
+    K: { a: { t: 56, l: [[-90,-90,-90],[-90,-90,-90]], a: [[0,90],[-56,-56]] }, b: { t: 78, l: [[-78,-78,-90],[-78,-78,-90]], a: [[0,90],[-180,-180]] } },
+    seq: [["a",0,.5],["b",1.0,2.4],["a",1.0,0]],
+    steps: ["Berbaring miring, siku di bawah bahu.","Kaki lurus dan bertumpuk.","Angkat pinggul sampai badan lurus.","Tahan, turunkan, lalu ganti sisi."],
+    avoid: "Pinggul melorot atau badan berputar." },
+  { name: "Single-leg Deadlift", dose: "2 × 10 / kaki", view: "tampak samping", anchor: "ankle0", ax: 140,
+    K: { a: { t: 0, l: [[0,0,0],[0,0,0]], a: [[0,0],[0,0]] }, b: { t: 80, l: [[12,0,0],[-80,-80,80]], a: [[0,0],[0,0]] } },
+    seq: [["a",0,.4],["b",1.5,.4],["a",1.3,0]],
+    steps: ["Berdiri di satu kaki, lutut sedikit ditekuk.","Condongkan badan dari pinggul, kaki lain lurus ke belakang.","Punggung lurus, turun sampai badan hampir sejajar lantai.","Kembali berdiri pelan. Bisa sambil memegang botol air."],
+    avoid: "Punggung membungkuk atau pinggul berputar terbuka." },
+  { name: "Power Hiking", dose: "Saat long run trail", trail: true, view: "tanjakan curam", hx: 115, slope: -13,
+    K: { a: { t: 35, l: [[35,5,0],[-15,-35,20]], a: [[-8,-22],[-22,-36]] }, b: { t: 35, l: [[-15,-35,20],[35,5,0]], a: [[-22,-36],[-8,-22]] } },
+    seq: [["a",0,0],["b",.75,0],["a",.75,0]],
+    steps: ["Condongkan badan ke depan dari pergelangan kaki.","Telapak tangan menekan paha di atas lutut tiap langkah.","Langkah pendek dan cepat.","Pakai di tanjakan curam: hampir secepat lari, jauh lebih hemat tenaga."],
+    avoid: "Memaksa lari di tanjakan curam sampai napas habis." },
+];
+const mix = (a, b, u) => Array.isArray(a) ? a.map((x, i) => mix(x, b[i], u)) : a + (b - a) * u;
+const ease = (u) => 0.5 - 0.5 * Math.cos(Math.PI * u);
+const mixPose = (a, b, u) => ({ t: mix(a.t, b.t, u), hx: a.hx != null ? mix(a.hx, b.hx ?? a.hx, u) : undefined, l: mix(a.l, b.l, u), a: mix(a.a, b.a, u) });
+function build(k) {
+  const P = { hip: [0, 0] };
+  P.sh = [Math.sin(rad(k.t)) * LEN.torso, -Math.cos(rad(k.t)) * LEN.torso];
+  P.head = [P.sh[0] + Math.sin(rad(k.t)) * (LEN.head + 5), P.sh[1] - Math.cos(rad(k.t)) * (LEN.head + 5)];
+  for (const i of [0, 1]) {
+    const [th, sh, ft] = k.l[i];
+    P["knee" + i] = add2(P.hip, dn(th, LEN.thigh));
+    P["ankle" + i] = add2(P["knee" + i], dn(sh, LEN.shin));
+    P["toe" + i] = add2(P["ankle" + i], [Math.cos(rad(ft)) * LEN.foot, Math.sin(rad(ft)) * LEN.foot]);
+    const [ua, fa] = k.a[i];
+    P["elbow" + i] = add2(P.sh, dn(ua, LEN.ua));
+    P["hand" + i] = add2(P["elbow" + i], dn(fa, LEN.fa));
+  }
+  return P;
+}
+function place(m, k) {
+  const P = build(k);
+  const hx = m.anchor ? m.ax - P[m.anchor][0] : (k.hx ?? m.hx ?? 120);
+  const gAt = (x) => m.box && x >= m.box[0] && x <= m.box[1] ? GROUND - m.box[2] : GROUND;
+  let hy = Infinity;
+  for (const n in P) { const y = gAt(hx + P[n][0]) - P[n][1] - (n === "head" ? LEN.head : 0) - 3; if (y < hy) hy = y; }
+  const W = {}; for (const n in P) W[n] = [hx + P[n][0], hy + P[n][1]]; return W;
+}
+function sample(m, time) {
+  const seq = m.seq; let total = 0; seq.forEach((s) => total += s[1] + s[2]);
+  let tau = time % total;
+  for (let i = 0; i < seq.length; i++) {
+    const [k, d, hold] = seq[i];
+    if (i > 0 && tau < d) return { pose: mixPose(m.K[seq[i-1][0]], m.K[k], ease(tau / d)), hold: false };
+    if (i > 0) tau -= d;
+    if (tau < hold) return { pose: m.K[k], hold: hold > 1 };
+    tau -= hold;
+  }
+  return { pose: m.K[seq[0][0]], hold: false };
+}
+const peakTime = (m) => m.seq[0][2] + m.seq[1][1] + Math.min(.2, m.seq[1][2] / 2);
+let COL = {};
+function readColors() {
+  const cs = getComputedStyle(document.documentElement), g = (n) => cs.getPropertyValue(n).trim();
+  COL = { fig: g("--figure"), far: g("--figure-far"), line: g("--line"), muted: g("--muted"), accent: g("--accent") };
+}
+readColors();
+const line = (ctx, pts) => { ctx.beginPath(); ctx.moveTo(...pts[0]); for (let i = 1; i < pts.length; i++) ctx.lineTo(...pts[i]); ctx.stroke(); };
+function render(ctx, m, W, hold, s) {
+  ctx.setTransform(s, 0, 0, s, 0, 0); ctx.clearRect(0, 0, SW, SH); ctx.save();
+  if (m.slope) { ctx.translate(120, 175); ctx.rotate(rad(m.slope)); ctx.translate(-120, -175); }
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.strokeStyle = COL.muted; ctx.lineWidth = 1.5; ctx.globalAlpha = .6; line(ctx, [[-120, GROUND], [360, GROUND]]); ctx.globalAlpha = 1;
+  if (m.box) { ctx.fillStyle = COL.line; ctx.fillRect(m.box[0], GROUND - m.box[2], m.box[1] - m.box[0], m.box[2]); ctx.strokeStyle = COL.muted; ctx.strokeRect(m.box[0], GROUND - m.box[2], m.box[1] - m.box[0], m.box[2]); }
+  if (m.wall) { ctx.fillStyle = COL.line; ctx.fillRect(m.wall, 30, 10, GROUND - 30); }
+  ctx.lineWidth = 6; ctx.strokeStyle = COL.far;
+  line(ctx, [W.hip, W.knee1, W.ankle1, W.toe1]); line(ctx, [W.sh, W.elbow1, W.hand1]);
+  ctx.strokeStyle = COL.fig; ctx.fillStyle = COL.fig; ctx.lineWidth = 7; line(ctx, [W.hip, W.sh]);
+  ctx.beginPath(); ctx.arc(W.head[0], W.head[1], LEN.head, 0, Math.PI * 2); ctx.fill();
+  ctx.lineWidth = 6; line(ctx, [W.hip, W.knee0, W.ankle0, W.toe0]); line(ctx, [W.sh, W.elbow0, W.hand0]);
+  ctx.restore();
+  if (hold) { ctx.fillStyle = COL.accent; ctx.font = '600 12px "IBM Plex Mono", ui-monospace, monospace'; ctx.fillText("TAHAN", 12, 22); }
+}
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cards = [];
+const host = document.getElementById("moves");
+MOVES.forEach((m, i) => {
+  const el = document.createElement("article");
+  el.className = "card move";
+  el.innerHTML = `<div class="stage"><canvas role="img" aria-label="Animasi ${m.name}, ${m.view}"></canvas><span class="vw">${m.view}</span><button type="button" class="play">Jeda</button></div>
+    <div class="move-b"><div class="move-t"><h3>${m.name}</h3><span class="chip ${m.trail ? "t-long" : "t-str"}">${m.dose}</span></div>
+    <ol style="margin:0;padding-left:20px;display:grid;gap:4px">${m.steps.map((s) => `<li>${s}</li>`).join("")}</ol>
+    <p class="avoid t-hill"><b>Hindari:</b> ${m.avoid}</p></div>`;
+  host.appendChild(el);
+  const canvas = el.querySelector("canvas"), btn = el.querySelector(".play");
+  const c = { m, canvas, ctx: canvas.getContext("2d"), btn, time: reduce ? peakTime(m) : i * .37, playing: !reduce, visible: false, s: 1 };
+  const toggle = () => { c.playing = !c.playing; btn.textContent = c.playing ? "Jeda" : "Putar"; };
+  btn.addEventListener("click", toggle); canvas.addEventListener("click", toggle);
+  btn.textContent = c.playing ? "Jeda" : "Putar";
+  cards.push(c);
+});
+function sizeCard(c) {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2), w = c.canvas.clientWidth; if (!w) return;
+  c.canvas.width = Math.round(w * dpr); c.canvas.height = Math.round(w * dpr * SH / SW); c.s = c.canvas.width / SW;
+}
+function drawCard(c) { const { pose, hold } = sample(c.m, c.time); render(c.ctx, c.m, place(c.m, pose), hold, c.s); }
+const ro = new ResizeObserver(() => cards.forEach((c) => { sizeCard(c); drawCard(c); }));
+cards.forEach((c) => ro.observe(c.canvas));
+const io = new IntersectionObserver((es) => es.forEach((e) => { const c = cards.find((x) => x.canvas === e.target); if (c) c.visible = e.isIntersecting; }));
+cards.forEach((c) => io.observe(c.canvas));
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { readColors(); cards.forEach(drawCard); });
+let last = performance.now();
+(function loop(t) {
+  const dt = Math.min(.1, (t - last) / 1000); last = t;
+  for (const c of cards) if (c.playing && c.visible) { c.time += dt; drawCard(c); }
+  requestAnimationFrame(loop);
+})(last);
+
+/* ================= Boot ================= */
+renderAll();
+let startTab = "today";
+try { const t = localStorage.getItem("lelono16k-tab"); if (["today","cal","moves","prog"].includes(t)) startTab = t; } catch (e) {}
+show(startTab);
+</script>
+</body>
+</html>

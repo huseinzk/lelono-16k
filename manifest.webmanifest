@@ -1,0 +1,17 @@
+{
+  "name": "Lelono 16K – Latihan",
+  "short_name": "Lelono 16K",
+  "description": "Jadwal latihan 15 minggu menuju Lelono 16K, 17 Januari 2027, dengan catatan progres.",
+  "lang": "id",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1d4a36",
+  "theme_color": "#1d4a36",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
