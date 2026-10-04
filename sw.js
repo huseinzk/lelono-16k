@@ -1,5 +1,5 @@
 // Offline support: app files are cached on install; fonts are cached the first time they load.
-const CACHE = "lelono16k-v1";
+const CACHE = "lelono16k-v2";
 const SHELL = [
   "./",
   "./index.html",
