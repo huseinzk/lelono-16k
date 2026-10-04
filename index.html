@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lelono 16K</title>
-<meta name="description" content="Jadwal latihan 15 minggu menuju Lelono 16K dengan catatan progres.">
+<title>Zein Trail</title>
+<meta name="description" content="Zein Trail Program: latihan 15 minggu menuju Lelono 16K, dengan catatan progres.">
 <meta name="theme-color" content="#1d4a36">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Lelono 16K">
+<meta name="apple-mobile-web-app-title" content="Zein Trail">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -211,11 +211,11 @@ h3 { font: 700 20px/1.1 var(--font-display); margin: 0; }
 <header class="top">
   <div class="top-in">
     <div class="grow">
-      <div class="eyebrow" id="phase-label">Lelono by Mantra</div>
-      <h1>Lelono 16K</h1>
+      <div class="eyebrow" id="phase-label">Zein Trail Program</div>
+      <h1>Zein Trail</h1>
     </div>
     <button class="install" id="install-btn" hidden>Pasang</button>
-    <div class="count"><b id="count">–</b><span id="count-l">hari lagi</span></div>
+    <div class="count"><b id="count">–</b><span id="count-l">hari ke Lelono</span></div>
   </div>
 </header>
 
@@ -543,7 +543,7 @@ function exportData() {
   const blob = new Blob([JSON.stringify({ app: "lelono16k", ...state, exported: new Date().toISOString() }, null, 2)], { type: "application/json" });
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = `lelono16k-cadangan-${TODAY}.json`;
+  a.download = `zein-trail-cadangan-${TODAY}.json`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   toast("Cadangan disimpan ke folder unduhan");
@@ -556,7 +556,7 @@ function importData(ev) {
       const s = JSON.parse(r.result);
       if (!s || typeof s.log !== "object") throw new Error();
       state = { v: 1, log: s.log }; persist(); renderAll(); toast("Cadangan dipulihkan");
-    } catch (e) { toast("File ini bukan cadangan Lelono 16K"); }
+    } catch (e) { toast("File ini bukan cadangan Zein Trail"); }
     ev.target.value = "";
   };
   r.readAsText(f);
@@ -596,13 +596,13 @@ document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () 
 document.addEventListener("click", (e) => {
   const day = e.target.closest("[data-day]"); if (day && !day.closest(".sheet")) { openSheet(day.dataset.day); return; }
   const go = e.target.closest("[data-go]"); if (go && !go.closest(".sheet")) show(go.dataset.go);
-  const ask = e.target.closest("[data-ask]"); if (ask) { show("coach"); runCoach(ask.dataset.ask); }
+  const ask = e.target.closest("[data-ask]"); if (ask) runCoach(ask.dataset.ask);
 });
 
 function renderHeader() {
   const diff = Math.round((RACE - todayDate()) / 86400000);
   document.getElementById("count").textContent = diff > 0 ? diff : (diff === 0 ? "HARI H" : "✓");
-  document.getElementById("count-l").textContent = diff > 0 ? "hari lagi" : (diff === 0 ? "selamat berlari" : "selesai");
+  document.getElementById("count-l").textContent = diff > 0 ? "hari ke Lelono" : (diff === 0 ? "selamat berlari" : "selesai");
   const d = currentDay();
   document.getElementById("phase-label").textContent = `Minggu ${d.week + 1}/15 · ${PHASES[d.phase].name}`;
 }
@@ -770,17 +770,7 @@ let last = performance.now();
   requestAnimationFrame(loop);
 })(last);
 
-/* ================= Pelatih AI ================= */
-const AI_STORE = "lelono16k-ai";
-const MODELS = [["claude-haiku-4-5-20251001", "Hemat & cepat (Haiku)"], ["claude-sonnet-5-5", "Lebih mendalam (Sonnet)"]];
-let ai = { key: "", model: MODELS[0][0], history: [], chat: [] };
-try {
-  const s = JSON.parse(localStorage.getItem(AI_STORE));
-  if (s && typeof s === "object") ai = { ...ai, ...s, history: Array.isArray(s.history) ? s.history : [], chat: Array.isArray(s.chat) ? s.chat : [] };
-} catch (e) {}
-const saveAI = () => { try { localStorage.setItem(AI_STORE, JSON.stringify(ai)); } catch (e) { toast("Gagal menyimpan data AI"); } };
-let aiBusy = null; // AbortController while a request runs
-
+/* ================= Pelatih AI (lewat aplikasi Claude) ================= */
 function missedRecent(days = 7) {
   const from = keyOf(addDays(todayDate(), -days));
   return PLAN.filter((d) => d.type !== "rest" && d.key < TODAY && d.key >= from && !entry(d.key).done);
@@ -791,7 +781,7 @@ function missedBanner() {
   return `<div class="card nudge">
     <div><b>${m.length} sesi terlewat</b> dalam 7 hari terakhir</div>
     <div class="list">${m.map((d) => `${DOW[d.dow]} ${fmt(d.date)}: ${esc(d.title)}`).join(" · ")}</div>
-    <button type="button" class="btn primary" data-ask="missed">Minta saran Pelatih AI</button>
+    <button type="button" class="btn primary" data-ask="missed">Minta saran di Claude</button>
   </div>`;
 }
 
@@ -800,24 +790,27 @@ const ASKS = {
   missed: { label: "Saran setelah bolong latihan", text: "Saya melewatkan beberapa sesi latihan. Apa yang harus saya lakukan sekarang, dan bagaimana menyesuaikan jadwal ke depan tanpa memaksakan diri atau menambah risiko cedera?" },
 };
 
-const BASE = `Kamu adalah pelatih lari trail berpengalaman yang membimbing seorang pelari amatir menuju lomba Lelono 16K by Mantra (trail run 16 km di lereng Gunung Kawi, Batu, Jawa Timur, Minggu 17 Januari 2027). Jalur 100% trail: tanjakan, turunan, hutan pinus, melewati air terjun; lomba di musim hujan sehingga jalur basah dan licin. Batas waktu (COT) edisi sebelumnya sekitar 5 jam.
+const BASE = `Tolong bertindak sebagai pelatih lari trail berpengalaman. Saya pelari amatir yang sedang berlatih untuk Lelono 16K by Mantra (trail run 16 km di lereng Gunung Kawi, Batu, Jawa Timur, Minggu 17 Januari 2027). Jalurnya 100% trail: tanjakan, turunan, hutan pinus, melewati air terjun; lomba di musim hujan sehingga jalur basah dan licin. COT edisi sebelumnya sekitar 5 jam.
 
-Rencana latihan 15 minggu (Senin 5 Okt 2026 sampai hari lomba): Fondasi (minggu 1–4), Tanjakan & Trail (minggu 5–10), Puncak (minggu 11–13, long run terpanjang 20 km), Taper (minggu 14–15). Minggu 4 dan 8 adalah minggu ringan. Hari "Kekuatan" berisi 7 gerakan: squat, lunges jalan, step-up, calf raise satu kaki, plank, side plank, single-leg deadlift. Skor "rasa" 1 = sangat ringan sampai 5 = sangat berat.
+Program saya 15 minggu (mulai Senin 5 Okt 2026): Fondasi (minggu 1–4), Tanjakan & Trail (minggu 5–10), Puncak (minggu 11–13, long run terpanjang 20 km), Taper (minggu 14–15). Minggu 4 dan 8 minggu ringan. Hari "Kekuatan" = squat, lunges jalan, step-up, calf raise satu kaki, plank, side plank, single-leg deadlift. Skor "rasa" 1 = sangat ringan sampai 5 = sangat berat.
 
-Prinsip melatih:
-- Bahasa Indonesia yang santai tapi jelas, langsung ke inti.
-- Format: judul bagian diawali "## ", poin diawali "- ", penekanan dengan **tebal**. Jangan memakai tabel.
-- Rujuk tanggal dan sesi spesifik dari data bila relevan, jangan mengarang data yang tidak ada.
-- Sesi terlewat: jangan sarankan mengganti semuanya atau menggandakan volume. Prioritaskan long run dan sesi tanjakan, naikkan volume mingguan maksimal sekitar 10%. Bolong lebih dari 7 hari berturut-turut: kembali bertahap dengan 2–3 lari santai dulu.
+Saat menjawab:
+- Bahasa Indonesia santai tapi jelas, langsung ke inti.
+- Rujuk tanggal dan sesi spesifik dari data saya, jangan mengarang data yang tidak ada.
+- Kalau ada sesi terlewat: jangan suruh mengganti semuanya atau menggandakan volume. Prioritaskan long run dan sesi tanjakan, naikkan volume mingguan maksimal sekitar 10%. Bolong lebih dari 7 hari: kembali bertahap dengan 2–3 lari santai dulu.
 - Skor rasa 4–5 berulang atau tanda kelelahan: sarankan pengurangan beban.
-- Nyeri, cedera, sakit, atau demam: utamakan istirahat dan sarankan memeriksakan diri ke tenaga kesehatan. Jangan mendiagnosis.`;
-const ANALYSIS_RULES = `\n\nIni permintaan analisis: maksimal sekitar 250 kata, dan akhiri dengan bagian "## 7 hari ke depan" berisi jadwal per tanggal (hari, tanggal, sesi) yang sudah disesuaikan.`;
-const CHAT_RULES = `\n\nIni percakapan konsultasi: jawab pertanyaan secara langsung dan ringkas (biasanya di bawah 150 kata, lebih panjang hanya jika diminta). Tidak perlu selalu memberi jadwal 7 hari kecuali ditanya. Boleh bertanya balik jika informasi kurang.`;
+- Kalau ada nyeri, cedera, sakit, atau demam: utamakan istirahat dan sarankan periksa ke tenaga kesehatan, jangan mendiagnosis.`;
+const ANALYSIS_RULES = `\n- Untuk permintaan ini: maksimal sekitar 250 kata, dan akhiri dengan jadwal 7 hari ke depan per tanggal yang sudah disesuaikan.`;
+const CHAT_RULES = `\n- Jawab pertanyaan saya secara ringkas. Boleh bertanya balik kalau informasinya kurang.`;
 
 function buildContext() {
   const td = todayDate();
-  const until = keyOf(addDays(td < START ? START : td, 7));
-  const rows = PLAN.filter((d) => d.key <= until).map((d) => {
+  const base = td < START ? START : td;
+  const from = keyOf(addDays(base, -21)), until = keyOf(addDays(base, 7));
+  const sess = PLAN.filter((d) => d.type !== "rest" && d.key <= TODAY);
+  const doneN = sess.filter((d) => entry(d.key).done).length;
+  const km = PLAN.reduce((a, d) => a + doneKm(d), 0);
+  const rows = PLAN.filter((d) => d.key >= from && d.key <= until).map((d) => {
     const e = entry(d.key);
     let st;
     if (e.done) {
@@ -826,167 +819,53 @@ function buildContext() {
       if (e.rpe) st += `, rasa ${e.rpe}/5`;
     } else if (d.key > TODAY) st = "akan datang";
     else if (d.key === TODAY) st = "hari ini, belum dicatat";
-    else st = d.type === "rest" ? "istirahat" : "TERLEWAT / tidak dicatat";
-    if (e.note) st += `, catatan: "${e.note.replace(/\s+/g, " ").slice(0, 200)}"`;
-    return `${d.key} ${DOW[d.dow]} (M${d.week + 1}) | rencana: ${d.title}${d.km ? ` (${d.km} km)` : ""} | ${st}`;
+    else st = d.type === "rest" ? "istirahat" : "TERLEWAT";
+    if (e.note) st += `, catatan: "${e.note.replace(/\s+/g, " ").slice(0, 160)}"`;
+    return `${d.key} ${DOW[d.dow]} (M${d.week + 1}): ${d.title}${d.km ? ` (${d.km} km)` : ""} → ${st}`;
   });
   const d = currentDay();
   const diff = Math.round((RACE - td) / 86400000);
-  return `Hari ini: ${DOWL[(td.getDay() + 6) % 7]}, ${TODAY}. Minggu ${d.week + 1}/15, fase ${PHASES[d.phase].name}. ${diff > 0 ? diff + " hari menuju lomba." : "Lomba sudah lewat."}\n\nData latihan (dari awal rencana sampai 7 hari ke depan):\n${rows.join("\n")}`;
+  return `Hari ini ${DOWL[(td.getDay() + 6) % 7]}, ${TODAY}. Minggu ${d.week + 1}/15, fase ${PHASES[d.phase].name}. ${diff > 0 ? diff + " hari menuju lomba." : "Lomba sudah lewat."}
+Total sejauh ini: ${doneN} dari ${sess.length} sesi selesai, ${km % 1 ? km.toFixed(1) : km} km tercatat.
+
+Data latihan saya (3 minggu terakhir sampai 7 hari ke depan):
+${rows.join("\n")}`;
+}
+function composePrompt(askText, rules) {
+  const cond = (document.getElementById("ask-cond")?.value || "").trim();
+  return `${BASE}${rules}\n\n${buildContext()}${cond ? `\n\nKondisi atau keluhan saya saat ini: ${cond}` : ""}\n\nPertanyaan saya: ${askText}`;
 }
 
-function md(src) {
-  const lines = esc(src).split("\n");
-  let out = "", inList = false;
-  const inline = (t) => t.replace(/\*\*(.+?)\*\*/g, "<b>$1</b>");
-  for (const raw of lines) {
-    const l = raw.trim();
-    if (/^[-*•]\s+/.test(l) || /^\d+[.)]\s+/.test(l)) { if (!inList) { out += "<ul>"; inList = true; } out += `<li>${inline(l.replace(/^([-*•]|\d+[.)])\s+/, ""))}</li>`; continue; }
-    if (inList) { out += "</ul>"; inList = false; }
-    if (/^#{1,4}\s+/.test(l)) out += `<h4>${inline(l.replace(/^#{1,4}\s+/, ""))}</h4>`;
-    else if (l) out += `<p>${inline(l)}</p>`;
-  }
-  if (inList) out += "</ul>";
-  return out;
+function copyText(t) {
+  try { if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t).then(() => true, () => fallbackCopy(t)); } catch (e) {}
+  return Promise.resolve(fallbackCopy(t));
 }
-const when = (iso) => new Date(iso).toLocaleString("id-ID", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-
-function aiError(status, body) {
-  if (status === 401) return "Kunci API tidak valid. Periksa lagi kunci di Pengaturan AI.";
-  if (status === 403) return "Kunci API ini tidak punya izin. Coba buat kunci baru di console.anthropic.com.";
-  if (status === 400 && /credit|balance|billing/i.test(body)) return "Saldo akun Anthropic habis. Isi saldo di console.anthropic.com → Billing.";
-  if (status === 400) return "Permintaan ditolak oleh Anthropic. Coba ganti model di Pengaturan AI.";
-  if (status === 404) return "Model tidak ditemukan. Ganti model di Pengaturan AI.";
-  if (status === 429) return "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.";
-  if (status >= 500) return "Server Anthropic sedang sibuk. Coba lagi beberapa menit lagi.";
-  return "Permintaan gagal. Coba lagi.";
+function fallbackCopy(t) {
+  const ta = document.createElement("textarea");
+  ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select();
+  let ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+  ta.remove(); return ok;
 }
-
-/* One streaming call to Claude. Resolves {text, error}. */
-async function askClaude(system, messages, onText) {
-  aiBusy = new AbortController();
-  setCoachBusy(true);
-  let text = "", error = "";
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST", signal: aiBusy.signal,
-      headers: { "content-type": "application/json", "x-api-key": ai.key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-      body: JSON.stringify({ model: ai.model, max_tokens: 1500, stream: true, system, messages }),
-    });
-    if (!res.ok) { error = aiError(res.status, await res.text().catch(() => "")); throw new Error("http"); }
-    const reader = res.body.getReader(), dec = new TextDecoder();
-    let buf = "";
-    for (;;) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      buf += dec.decode(value, { stream: true });
-      let i;
-      while ((i = buf.indexOf("\n\n")) >= 0) {
-        const evt = buf.slice(0, i); buf = buf.slice(i + 2);
-        const line = evt.split("\n").find((l) => l.startsWith("data:"));
-        if (!line) continue;
-        let j; try { j = JSON.parse(line.slice(5)); } catch (e) { continue; }
-        if (j.type === "content_block_delta" && j.delta && j.delta.type === "text_delta") { text += j.delta.text; onText(text); }
-        if (j.type === "error") error = aiError(j.error && j.error.type === "overloaded_error" ? 529 : 0, "");
-      }
-    }
-  } catch (e) {
-    if (e.name === "AbortError") error = text ? "" : "Dihentikan.";
-    else if (!error) error = "Tidak bisa terhubung ke Anthropic. Periksa koneksi internet lalu coba lagi.";
-  }
-  aiBusy = null;
-  setCoachBusy(false);
-  return { text, error };
+function openInClaude(prompt) {
+  const copying = copyText(prompt);              // start inside the tap so the browser allows it
+  const url = "https://claude.ai/new?q=" + encodeURIComponent(prompt);
+  const w = window.open(url, "_blank", "noopener");
+  if (!w) location.href = url;
+  copying.then((ok) => toast(ok ? "Claude dibuka. Kalau pertanyaannya belum terisi, tempel saja" : "Claude dibuka"));
 }
-function ready() {
-  if (aiBusy) return false;
-  if (!ai.key) { renderCoach(); toast("Masukkan kunci API dulu"); document.getElementById("ai-key")?.focus(); return false; }
-  if (!navigator.onLine) { toast("Pelatih AI butuh koneksi internet"); return false; }
-  return true;
-}
-function setCoachBusy(b) {
-  document.querySelectorAll("#v-coach [data-ask], #chat-send, .chip-q").forEach((x) => { x.disabled = b; });
-  const stop = document.getElementById("ai-stop"); if (stop) stop.hidden = !b;
-}
-
-/* Analysis: one-shot report */
-async function runCoach(kind) {
-  if (!ready()) return;
+function runCoach(kind) {
   const ask = ASKS[kind]; if (!ask) return;
-  renderCoach();
-  const box = document.getElementById("ai-result");
-  box.hidden = false;
-  box.innerHTML = `<div class="ai-meta">${esc(ask.label)} · sedang menganalisis…</div><div class="ai-out live"><p class="muted">Claude sedang membaca catatan latihanmu…</p></div>`;
-  box.scrollIntoView({ block: "start", behavior: "smooth" });
-  const out = box.querySelector(".ai-out"), meta = box.querySelector(".ai-meta");
-  const { text, error } = await askClaude(BASE + ANALYSIS_RULES, [{ role: "user", content: `${buildContext()}\n\nPermintaan saya: ${ask.text}` }], (t) => { out.innerHTML = md(t); });
-  out.classList.remove("live");
-  meta.textContent = ask.label;
-  if (text) {
-    ai.history = [{ at: new Date().toISOString(), label: ask.label, text, model: ai.model }, ...ai.history].slice(0, 12);
-    saveAI();
-    meta.textContent = `${ask.label} · ${when(new Date().toISOString())}`;
-    renderHistory();
-  }
-  if (error) { if (!text) out.innerHTML = ""; out.insertAdjacentHTML("beforeend", `<div class="err">${esc(error)}</div>`); }
-}
-
-/* Consultation: multi-turn chat */
-async function sendChat(q) {
-  q = (q || "").trim();
-  if (q.length < 2) { toast("Tulis pertanyaanmu dulu"); return; }
-  if (!ready()) return;
-  ai.chat.push({ role: "user", content: q, at: new Date().toISOString() });
-  saveAI();
-  const input = document.getElementById("chat-in"); if (input) input.value = "";
-  renderChat();
-  const list = document.getElementById("chat-list");
-  const bubble = document.createElement("div");
-  bubble.className = "msg ai ai-out live";
-  bubble.innerHTML = `<p class="muted">Sedang mengetik…</p>`;
-  list.appendChild(bubble);
-  bubble.scrollIntoView({ block: "end", behavior: "smooth" });
-  const msgs = ai.chat.slice(-20).map((m) => ({ role: m.role, content: m.content }));
-  while (msgs.length && msgs[0].role !== "user") msgs.shift();
-  const sys = `${BASE}${CHAT_RULES}\n\nData terbaru pelari (diperbarui setiap pesan):\n${buildContext()}`;
-  const { text, error } = await askClaude(sys, msgs, (t) => { bubble.innerHTML = md(t); });
-  bubble.classList.remove("live");
-  if (text) { ai.chat.push({ role: "assistant", content: text, at: new Date().toISOString() }); saveAI(); }
-  else ai.chat.pop(), saveAI(); // drop the unanswered question so the thread stays valid
-  renderChat();
-  if (error) {
-    document.getElementById("chat-list").insertAdjacentHTML("beforeend", `<div class="err">${esc(error)}</div>`);
-    if (!text) { const inp = document.getElementById("chat-in"); if (inp) inp.value = q; }
-  }
-}
-const SUGGEST = ["Kaki saya pegal setelah long run, normal tidak?", "Apa yang sebaiknya saya makan sebelum long run?", "Hujan deras hari ini, latihannya diganti apa?"];
-function renderChat() {
-  const list = document.getElementById("chat-list"); if (!list) return;
-  if (!ai.chat.length) {
-    list.innerHTML = `<p class="muted" style="margin:0;font-size:14px">Tanya apa saja seputar latihan, cedera ringan, nutrisi, perlengkapan, atau strategi lomba. Claude menjawab berdasarkan jadwal dan catatanmu.</p>
-      <div class="chips">${SUGGEST.map((s) => `<button type="button" class="chip-q">${esc(s)}</button>`).join("")}</div>`;
-    list.querySelectorAll(".chip-q").forEach((b) => b.addEventListener("click", () => sendChat(b.textContent)));
-    return;
-  }
-  list.innerHTML = ai.chat.map((m) => m.role === "user"
-    ? `<div class="msg me">${esc(m.content).replace(/\n/g, "<br>")}</div>`
-    : `<div class="msg ai ai-out">${md(m.content)}</div>`).join("");
-}
-
-function renderHistory() {
-  const h = document.getElementById("ai-hist"); if (!h) return;
-  if (!ai.history.length) { h.innerHTML = `<p class="muted" style="margin:0">Belum ada analisis. Hasilnya akan tersimpan di sini.</p>`; return; }
-  h.innerHTML = ai.history.map((x) => `<details><summary><span>${when(x.at)}</span>${esc(x.label)}</summary><div class="ai-out" style="margin-top:8px">${md(x.text)}</div></details>`).join("");
+  openInClaude(composePrompt(ask.text, ANALYSIS_RULES));
 }
 
 function renderCoach() {
-  const v = document.getElementById("v-coach");
-  if (!v || aiBusy) return;
+  const v = document.getElementById("v-coach"); if (!v) return;
   const m = missedRecent();
-  const keyed = !!ai.key;
+  const draft = document.getElementById("ask-text")?.value || "";
+  const cond = document.getElementById("ask-cond")?.value || "";
   v.innerHTML = `
-    <div><h2>Pelatih AI</h2><p class="muted" style="margin:4px 0 0">Claude membaca jadwal dan catatan latihanmu, lalu memberi analisis dan menjawab pertanyaanmu.</p></div>
-    ${keyed ? `
+    <div><h2>Pelatih AI</h2><p class="muted" style="margin:4px 0 0">Pakai langganan Claude kamu. Aplikasi menyusun ringkasan jadwal dan catatan latihanmu, lalu membukanya di Claude untuk dianalisis.</p></div>
     <div class="card">
       <h3>Analisis</h3>
       <div class="${m.length ? "" : "muted"}" style="font-size:14.5px">${m.length ? `<b>${m.length} sesi terlewat</b> dalam 7 hari terakhir.` : "Tidak ada sesi terlewat dalam 7 hari terakhir."}</div>
@@ -995,62 +874,38 @@ function renderCoach() {
         <button type="button" class="btn" data-ask="missed">Saya bolong latihan, apa yang harus saya lakukan?</button>
       </div>
     </div>
-    <div class="card" id="ai-result" hidden></div>
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><h3>Konsultasi</h3>
-        ${ai.chat.length ? `<button type="button" class="linkbtn" id="chat-new">Percakapan baru</button>` : ""}</div>
-      <div class="chat" id="chat-list" aria-live="polite"></div>
-      <div class="chat-in">
-        <label class="sr" for="chat-in">Pesan untuk pelatih</label>
-        <textarea id="chat-in" rows="2" placeholder="Tulis pertanyaanmu…"></textarea>
-        <button type="button" class="btn primary" id="chat-send">Kirim</button>
-      </div>
-      <button type="button" class="btn" id="ai-stop" hidden>Hentikan</button>
-    </div>` : `
+      <h3>Konsultasi</h3>
+      <div class="field"><label for="ask-cond">Kondisi atau keluhan saat ini <span class="muted">(opsional)</span></label>
+        <textarea id="ask-cond" placeholder="Contoh: betis kiri kaku sejak kemarin, tidur cuma 5 jam">${esc(cond)}</textarea></div>
+      <div class="field"><label for="ask-text">Pertanyaanmu</label>
+        <textarea id="ask-text" placeholder="Contoh: Kaki saya pegal setelah long run, besok tetap lari?">${esc(draft)}</textarea></div>
+      <div class="chips">${["Apa yang sebaiknya saya makan sebelum long run?", "Hujan deras hari ini, latihannya diganti apa?", "Sepatu trail seperti apa yang cocok untuk jalur basah?"].map((s) => `<button type="button" class="chip-q">${esc(s)}</button>`).join("")}</div>
+      <button type="button" class="btn primary" id="ask-send">Tanya di Claude</button>
+      <details id="preview"><summary style="cursor:pointer;font-weight:600;font-size:14px">Lihat yang akan dikirim ke Claude</summary>
+        <pre style="white-space:pre-wrap;font:13px/1.45 var(--font-mono);background:var(--bg);border-radius:8px;padding:10px;margin:8px 0 0;max-height:320px;overflow:auto" id="preview-text"></pre></details>
+    </div>
     <div class="card">
-      <h3>Aktifkan Pelatih AI</h3>
+      <h3>Cara kerjanya</h3>
       <ol class="steps">
-        <li>Buka <a href="https://console.anthropic.com" target="_blank" rel="noopener">console.anthropic.com</a> dan daftar atau masuk.</li>
-        <li>Isi saldo di menu <b>Billing</b>. Biaya dipotong per pemakaian.</li>
-        <li>Buka menu <b>API Keys</b> → <b>Create Key</b>, lalu salin kuncinya.</li>
-        <li>Tempel di bawah ini, lalu ketuk <b>Simpan</b>.</li>
+        <li>Ketuk salah satu tombol di atas.</li>
+        <li>Claude terbuka dengan pertanyaan dan data latihanmu sudah terisi. Kalau kolomnya kosong, tempel saja karena ringkasannya sudah tersalin otomatis.</li>
+        <li>Kirim. Jawaban dan obrolan lanjutannya ada di Claude, memakai langganan kamu.</li>
       </ol>
-      ${keyFields()}
-      <p class="muted" style="margin:0;font-size:13px">Kunci hanya disimpan di HP ini dan dikirim langsung ke Anthropic. Saat analisis atau konsultasi, jadwal dan catatan latihanmu dikirim ke Claude.</p>
-    </div>`}
-    <div class="card"><h3>Riwayat analisis</h3><div class="hist" id="ai-hist"></div></div>
-    ${keyed ? `<div class="card"><details><summary style="cursor:pointer;font-weight:700">Pengaturan AI</summary><div class="stack" style="margin-top:12px">${keyFields()}
-      <button type="button" class="btn danger" id="ai-remove">Hapus kunci dari HP ini</button></div></details></div>` : ""}`;
-  renderHistory();
-  renderChat();
-  v.querySelector("#ai-save")?.addEventListener("click", () => {
-    const k = v.querySelector("#ai-key").value.trim();
-    const mdl = v.querySelector("#ai-model").value;
-    if (k && !/^sk-ant-/.test(k)) { toast("Kunci API Anthropic diawali sk-ant-"); return; }
-    if (k) ai.key = k;
-    if (MODELS.some((x) => x[0] === mdl)) ai.model = mdl;
-    if (!ai.key) { toast("Tempel kunci API dulu"); return; }
-    saveAI(); renderCoach(); toast("Pengaturan AI tersimpan");
+      <button type="button" class="btn" id="copy-only">Salin ringkasan latihan saja</button>
+    </div>`;
+  v.querySelector("#ask-send").addEventListener("click", () => {
+    const t = v.querySelector("#ask-text").value.trim();
+    if (t.length < 3) { toast("Tulis pertanyaanmu dulu"); v.querySelector("#ask-text").focus(); return; }
+    openInClaude(composePrompt(t, CHAT_RULES));
   });
-  v.querySelector("#ai-remove")?.addEventListener("click", (e) => {
-    const b = e.currentTarget;
-    if (!b.classList.contains("armed")) { b.classList.add("armed"); b.textContent = "Ketuk lagi untuk menghapus"; setTimeout(() => { b.classList.remove("armed"); b.textContent = "Hapus kunci dari HP ini"; }, 4000); return; }
-    ai.key = ""; saveAI(); renderCoach(); toast("Kunci API dihapus");
+  const pv = () => { v.querySelector("#preview-text").textContent = composePrompt(v.querySelector("#ask-text").value.trim() || "(pertanyaanmu)", CHAT_RULES); };
+  v.querySelector("#preview").addEventListener("toggle", pv);
+  v.querySelectorAll("#ask-text, #ask-cond").forEach((x) => x.addEventListener("input", () => { if (v.querySelector("#preview").open) pv(); }));
+  v.querySelectorAll(".chip-q").forEach((b) => b.addEventListener("click", () => { v.querySelector("#ask-text").value = b.textContent; v.querySelector("#ask-text").focus(); }));
+  v.querySelector("#copy-only").addEventListener("click", () => {
+    copyText(composePrompt("(tulis pertanyaanmu di sini)", CHAT_RULES)).then((ok) => toast(ok ? "Ringkasan latihan disalin" : "Gagal menyalin"));
   });
-  v.querySelector("#chat-send")?.addEventListener("click", () => sendChat(v.querySelector("#chat-in").value));
-  v.querySelector("#chat-new")?.addEventListener("click", (e) => {
-    const b = e.currentTarget;
-    if (!b.dataset.armed) { b.dataset.armed = "1"; b.textContent = "Ketuk lagi untuk mulai baru"; setTimeout(() => { delete b.dataset.armed; b.textContent = "Percakapan baru"; }, 4000); return; }
-    ai.chat = []; saveAI(); renderCoach();
-  });
-  v.querySelector("#ai-stop")?.addEventListener("click", () => aiBusy && aiBusy.abort());
-}
-function keyFields() {
-  return `<div class="field"><label for="ai-key">Kunci API Anthropic${ai.key ? " (kosongkan kalau tidak diganti)" : ""}</label>
-      <input id="ai-key" type="password" autocomplete="off" spellcheck="false" placeholder="${ai.key ? "sk-ant-…" + esc(ai.key.slice(-4)) : "sk-ant-…"}"></div>
-    <div class="field"><label for="ai-model">Model</label>
-      <select id="ai-model">${MODELS.map(([id, l]) => `<option value="${id}"${id === ai.model ? " selected" : ""}>${l}</option>`).join("")}</select></div>
-    <button type="button" class="btn primary" id="ai-save">Simpan</button>`;
 }
 
 /* ================= Boot ================= */
