@@ -53,7 +53,7 @@ a { color: var(--moss); }
 svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
 
 /* ---------- Header ---------- */
-.top { position: sticky; top: 0; z-index: 5; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+.top { position: sticky; top: 0; z-index: 40; background: var(--bg); background: color-mix(in srgb, var(--bg) 88%, transparent); transform: translateZ(0); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; }
 .top-in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
 .brand { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; }
@@ -68,7 +68,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 .icon-btn .dot { position: absolute; top: 8px; right: 8px; width: 8px; height: 8px; border-radius: 50%; background: var(--dawn); }
 .install { border: 0; border-radius: 99px; background: var(--dawn); color: var(--dawn-ink); font-weight: 700; padding: 8px 12px; font-size: 13px; }
 
-main { max-width: 560px; margin: 0 auto; padding: 4px 16px calc(env(safe-area-inset-bottom, 0px) + 110px); }
+main { position: relative; z-index: 0; max-width: 560px; margin: 0 auto; padding: 4px 16px calc(env(safe-area-inset-bottom, 0px) + 120px); }
 .view { display: grid; gap: 14px; }
 .view.enter { animation: viewIn .28s cubic-bezier(.2, .8, .2, 1); }
 @keyframes viewIn { from { opacity: 0; transform: translateY(10px); } }
@@ -201,6 +201,46 @@ h3 { font: 700 20px/1.15 var(--font-display); font-stretch: 90%; margin: 0; }
 .move-b ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
 .avoid { margin: 0; padding: 9px 12px; border-radius: 12px; font-size: 14px; }
 
+.viewer { position: relative; border-radius: 26px; overflow: hidden; background: radial-gradient(120% 90% at 50% 10%, var(--surface) 0%, var(--surface-2) 60%, var(--line) 100%); box-shadow: var(--shadow); touch-action: pan-y; }
+.viewer canvas { display: block; width: 100%; aspect-ratio: 1 / 1; max-height: 62vh; cursor: grab; }
+.viewer-ui { position: absolute; left: 14px; right: 14px; bottom: 12px; display: flex; justify-content: space-between; align-items: center; gap: 8px; pointer-events: none; }
+.viewer-ui > * { pointer-events: auto; }
+.viewer-hint { font-size: 12.5px; font-weight: 600; color: var(--muted); background: var(--surface); border-radius: 99px; padding: 4px 10px; }
+.viewer .play { font-weight: 700; font-size: 13px; background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 6px 14px; }
+.hold-tag { position: absolute; top: 14px; left: 14px; background: var(--dawn); color: var(--dawn-ink); font-weight: 800; border-radius: 99px; padding: 4px 12px; font-size: 13px; }
+.move-chips { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 6px; scrollbar-width: none; scroll-snap-type: x proximity; }
+.move-chips::-webkit-scrollbar { display: none; }
+.move-chip { flex: none; scroll-snap-align: start; border: 1px solid var(--line); background: var(--surface); border-radius: 99px; padding: 8px 14px; font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+.move-chip svg { width: 16px; height: 16px; }
+.move-chip[aria-selected="true"] { background: var(--forest); color: #eef6f1; border-color: transparent; }
+#move-detail ol { margin: 0; padding-left: 20px; display: grid; gap: 5px; }
+
+/* ---------- Route ---------- */
+.map { height: 360px; border-radius: 22px; overflow: hidden; box-shadow: var(--shadow); background: var(--surface-2); z-index: 0; position: relative; }
+.map .leaflet-control-attribution { font-size: 10px; }
+.route-list { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.route-list::-webkit-scrollbar { display: none; }
+.stats4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.stats4 div { background: var(--surface); border-radius: 16px; padding: 10px; box-shadow: var(--shadow); min-width: 0; }
+.stats4 b { display: block; font: 800 19px/1.1 var(--font-display); font-variant-numeric: tabular-nums; }
+@media (max-width: 440px) { .stats4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .stats4 b { font-size: 21px; } }
+.stats4 span { font-size: 11.5px; color: var(--muted); font-weight: 600; }
+.elev svg { width: 100%; height: auto; display: block; }
+.elev .area { fill: color-mix(in srgb, var(--moss) 22%, transparent); fill: var(--easy); }
+.elev .ln { fill: none; stroke: var(--moss); stroke-width: 2; }
+.elev text { fill: var(--muted); font: 600 9px var(--font-body); }
+.elev .me { fill: var(--dawn); stroke: var(--surface); stroke-width: 2; }
+.where { background: var(--forest); color: #eef6f1; border-radius: 18px; padding: 14px 16px; display: grid; gap: 2px; }
+.where b { font: 800 22px var(--font-display); }
+.empty-map { display: grid; place-items: center; text-align: center; gap: 10px; padding: 36px 20px; }
+.empty-map svg { width: 44px; height: 44px; color: var(--moss); }
+
+/* ---------- Exit dialog ---------- */
+.exit-box { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 24px; background: var(--scrim); }
+.exit-box > div { background: var(--surface); border-radius: 24px; padding: 22px; max-width: 340px; width: 100%; display: grid; gap: 14px; box-shadow: var(--shadow); }
+.exit-box .btns { justify-content: flex-end; }
+@media (prefers-reduced-motion: no-preference) { .exit-box > div { animation: pop .22s cubic-bezier(.2, 1.2, .4, 1); } @keyframes pop { from { transform: scale(.92); opacity: 0; } } }
+
 /* ---------- Coach ---------- */
 .nudge { background: var(--hill); color: var(--hill-fg); box-shadow: none; }
 .nudge .list { font-size: 14px; }
@@ -211,18 +251,18 @@ h3 { font: 700 20px/1.15 var(--font-display); font-stretch: 90%; margin: 0; }
 pre.preview { white-space: pre-wrap; font: 13px/1.45 ui-monospace, monospace; background: var(--surface-2); border-radius: 12px; padding: 12px; margin: 8px 0 0; max-height: 320px; overflow: auto; }
 
 /* ---------- Tab bar ---------- */
-.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; padding: 0 12px calc(env(safe-area-inset-bottom, 0px) + 10px); pointer-events: none; }
-.tabs-in { pointer-events: auto; max-width: 520px; margin: 0 auto; position: relative; display: grid; grid-template-columns: repeat(5, 1fr);
-  background: color-mix(in srgb, var(--surface) 90%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+.tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; transform: translateZ(0); padding: 0 12px calc(env(safe-area-inset-bottom, 0px) + 10px); pointer-events: none; }
+.tabs-in { pointer-events: auto; max-width: 540px; margin: 0 auto; position: relative; display: grid; grid-template-columns: repeat(6, 1fr);
+  background: var(--surface); background: color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--line); border-radius: 24px; padding: 6px; box-shadow: var(--shadow); }
-.tab-ind { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / 5); border-radius: 18px; background: var(--forest); transition: transform .32s cubic-bezier(.3, 1.3, .5, 1); }
-.tab { position: relative; z-index: 1; border: 0; background: none; padding: 7px 0 6px; display: grid; justify-items: center; gap: 2px; font-size: 11px; font-weight: 700; color: var(--muted); border-radius: 18px; }
+.tab-ind { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / 6); border-radius: 18px; background: var(--forest); transition: transform .32s cubic-bezier(.3, 1.3, .5, 1); }
+.tab { position: relative; z-index: 1; border: 0; background: none; padding: 7px 0 6px; display: grid; justify-items: center; gap: 2px; font-size: 10.5px; min-width: 0; font-weight: 700; color: var(--muted); border-radius: 18px; }
 .tab svg { width: 22px; height: 22px; }
 .tab[aria-current="page"] { color: #eef6f1; }
 
 /* ---------- Sheet ---------- */
-.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 10; }
-.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 11; max-height: 90vh; overflow: auto; background: var(--bg);
+.scrim { position: fixed; inset: 0; background: var(--scrim); z-index: 50; }
+.sheet { position: fixed; left: 0; right: 0; bottom: 0; z-index: 51; max-height: 90vh; overflow: auto; background: var(--bg);
   border-radius: 26px 26px 0 0; padding: 10px 16px calc(env(safe-area-inset-bottom, 0px) + 22px); }
 .sheet-in { max-width: 560px; margin: 0 auto; display: grid; gap: 14px; }
 .grab { width: 42px; height: 5px; border-radius: 5px; background: var(--line); margin: 0 auto 2px; }
@@ -234,10 +274,10 @@ pre.preview { white-space: pre-wrap; font: 13px/1.45 ui-monospace, monospace; ba
 }
 
 /* ---------- Toast & celebration ---------- */
-.toast { position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 66px); z-index: 30; background: var(--ink); color: var(--bg);
+.toast { position: fixed; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top, 0px) + 66px); z-index: 60; background: var(--ink); color: var(--bg);
   padding: 10px 18px; border-radius: 99px; font-size: 14px; font-weight: 700; white-space: nowrap; box-shadow: var(--shadow); }
 @media (prefers-reduced-motion: no-preference) { .toast { animation: toastIn .3s cubic-bezier(.2, 1.3, .4, 1); } @keyframes toastIn { from { transform: translate(-50%, -12px); opacity: 0; } } }
-.burst { position: fixed; z-index: 25; pointer-events: none; left: 0; top: 0; }
+.burst { position: fixed; z-index: 55; pointer-events: none; left: 0; top: 0; }
 .burst i { position: absolute; width: 9px; height: 13px; border-radius: 60% 60% 60% 60% / 70% 70% 40% 40%; animation: drop 900ms cubic-bezier(.15, .7, .3, 1) forwards; }
 @keyframes drop { 0% { transform: translate(0, 0) rotate(0) scale(.6); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(1); opacity: 0; } }
 </style>
@@ -258,9 +298,15 @@ pre.preview { white-space: pre-wrap; font: 13px/1.45 ui-monospace, monospace; ba
 <main>
   <section class="view" id="v-today" aria-label="Hari ini"></section>
   <section class="view" id="v-cal" aria-label="Kalender" hidden></section>
+  <section class="view" id="v-route" aria-label="Rute" hidden></section>
   <section class="view" id="v-moves" aria-label="Gerakan" hidden>
-    <div><h2>Panduan gerakan</h2><p class="lede">Untuk hari Kekuatan: kerjakan semua gerakan, istirahat 45–60 detik antar set. Ketuk animasi untuk menjeda.</p></div>
-    <div class="view" id="moves"></div>
+    <div><h2>Panduan gerakan</h2><p class="lede">Untuk hari Kekuatan: kerjakan semua gerakan, istirahat 45–60 detik antar set. Geser model 3D untuk melihat dari sisi lain.</p></div>
+    <div class="viewer" id="viewer">
+      <canvas id="viewer-canvas" role="img" aria-label="Animasi 3D gerakan"></canvas>
+      <div class="viewer-ui"><span class="viewer-hint" id="viewer-hint">Memuat model 3D…</span><button type="button" class="play" id="viewer-play">Jeda</button></div>
+    </div>
+    <div class="move-chips" id="move-chips" role="tablist" aria-label="Pilih gerakan"></div>
+    <article class="card" id="move-detail"></article>
   </section>
   <section class="view" id="v-prog" aria-label="Progres" hidden></section>
   <section class="view" id="v-coach" aria-label="Pelatih AI" hidden></section>
@@ -271,6 +317,7 @@ pre.preview { white-space: pre-wrap; font: 13px/1.45 ui-monospace, monospace; ba
     <span class="tab-ind" id="tab-ind" aria-hidden="true"></span>
     <button class="tab" data-v="today" aria-current="page"><svg class="i" viewBox="0 0 24 24"><path d="M3 20l6-10 4 6 3-4 5 8z"/><circle cx="17" cy="5" r="2"/></svg>Hari Ini</button>
     <button class="tab" data-v="cal"><svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Kalender</button>
+    <button class="tab" data-v="route"><svg class="i" viewBox="0 0 24 24"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>Rute</button>
     <button class="tab" data-v="moves"><svg class="i" viewBox="0 0 24 24"><circle cx="14" cy="4" r="2"/><path d="M7 21l3-6 3 3v3M10 15l1.5-6 4 3h3M11.5 9 8 10l-2 3"/></svg>Gerakan</button>
     <button class="tab" data-v="prog"><svg class="i" viewBox="0 0 24 24"><path d="M4 20V11M10 20V5M16 20v-6M22 20H2"/></svg>Progres</button>
     <button class="tab" data-v="coach"><svg class="i" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg>Pelatih</button>
@@ -297,29 +344,29 @@ const R = ["rest","Istirahat","Jalan santai atau peregangan",0];
 const S = (n) => ["str","Kekuatan",n || "7 gerakan, lihat tab Gerakan",0];
 const E = (km, n) => ["easy",`Easy ${km} km`,n || "Road, pace ngobrol",km];
 const H = (t, n, km) => ["hill",t,n,km];
-const L = (km, t, n) => ["long",t || `Long run ${km} km`,n,km];
+const LR = (km, t, n) => ["long",t || `Long run ${km} km`,n,km];
 const PHASES = [
   { name: "Fondasi", weeks: [
-    [R, E(5), S(), E(5), R, E(4,"Tambah 4× strides 20 detik"), L(8,null,"Santai, boleh di road")],
-    [R, E(6), S(), E(5,"Tambah 4× strides 20 detik"), R, E(5), L(10,null,"Santai, coba sebagian di tanah")],
-    [R, E(6), S(), H("Tempo 20 mnt","Total ±7 km dengan pemanasan",7), R, E(5), L(12,null,"Pace santai, latih minum")],
-    [R, E(5), S("Versi ringan, 2 set per gerakan"), E(5), R, E(4), L(9,"Long run 9 km","Minggu ringan, pemulihan")],
+    [R, E(5), S(), E(5), R, E(4,"Tambah 4× strides 20 detik"), LR(8,null,"Santai, boleh di road")],
+    [R, E(6), S(), E(5,"Tambah 4× strides 20 detik"), R, E(5), LR(10,null,"Santai, coba sebagian di tanah")],
+    [R, E(6), S(), H("Tempo 20 mnt","Total ±7 km dengan pemanasan",7), R, E(5), LR(12,null,"Pace santai, latih minum")],
+    [R, E(5), S("Versi ringan, 2 set per gerakan"), E(5), R, E(4), LR(9,"Long run 9 km","Minggu ringan, pemulihan")],
   ]},
   { name: "Tanjakan & Trail", weeks: [
-    [R, H("Hill 6× 1 mnt","Turun jalan kaki sebagai pemulihan",6), S(), E(6), R, E(5), L(12,"Trail 12 km","Jalur tanah, kenali sepatu trail")],
-    [R, H("Hill 8× 1 mnt","Usaha kuat tapi terkontrol",7), S(), E(6), R, E(5), L(13,"Trail 13 km","Latih turunan: langkah pendek, cepat")],
-    [R, H("Hill 6× 2 mnt","Jaga usaha stabil tiap repetisi",7), S(), H("Tempo 25 mnt","Total ±8 km",8), R, E(5), L(14,"Trail 14 km","Power hiking di tanjakan curam")],
-    [R, E(5), S("Versi ringan, 2 set per gerakan"), E(5), R, E(4), L(10,"Trail 10 km","Minggu ringan, pace santai")],
-    [R, H("Hill 8× 2 mnt","Tanjakan lebih panjang bila ada",8), S(), E(7), R, E(5), L(15,"Trail 15 km","Bawa rompi hidrasi + gel")],
-    [R, H("Hill 10× 1,5 mnt","Fokus postur saat lelah",8), S(), H("Tempo 30 mnt","Total ±9 km",9), R, E(5), L(16,"Trail 16 km","Jarak lomba, santai saja")],
+    [R, H("Hill 6× 1 mnt","Turun jalan kaki sebagai pemulihan",6), S(), E(6), R, E(5), LR(12,"Trail 12 km","Jalur tanah, kenali sepatu trail")],
+    [R, H("Hill 8× 1 mnt","Usaha kuat tapi terkontrol",7), S(), E(6), R, E(5), LR(13,"Trail 13 km","Latih turunan: langkah pendek, cepat")],
+    [R, H("Hill 6× 2 mnt","Jaga usaha stabil tiap repetisi",7), S(), H("Tempo 25 mnt","Total ±8 km",8), R, E(5), LR(14,"Trail 14 km","Power hiking di tanjakan curam")],
+    [R, E(5), S("Versi ringan, 2 set per gerakan"), E(5), R, E(4), LR(10,"Trail 10 km","Minggu ringan, pace santai")],
+    [R, H("Hill 8× 2 mnt","Tanjakan lebih panjang bila ada",8), S(), E(7), R, E(5), LR(15,"Trail 15 km","Bawa rompi hidrasi + gel")],
+    [R, H("Hill 10× 1,5 mnt","Fokus postur saat lelah",8), S(), H("Tempo 30 mnt","Total ±9 km",9), R, E(5), LR(16,"Trail 16 km","Jarak lomba, santai saja")],
   ]},
   { name: "Puncak", weeks: [
-    [R, H("Hill 8× 2 mnt","Pemanasan 15 mnt dulu",8), S(), E(7), R, E(5), L(18,"Simulasi 18 km","Sepatu, rompi, dan gel hari H")],
-    [R, H("Hill 10× 2 mnt","Sesi tanjakan terberat",9), S(), H("Tempo 30 mnt","Total ±9 km",9), R, E(5), L(20,"Trail 20 km","Long run terpanjang, boleh banyak jalan")],
-    [R, E(6), S(), H("Hill 6× 2 mnt","Pemanasan 15 mnt dulu",7), ["rest","Istirahat","Tahun baru, nikmati",0], E(5), L(16,"Trail 16 km","Sebaiknya saat/sesudah hujan")],
+    [R, H("Hill 8× 2 mnt","Pemanasan 15 mnt dulu",8), S(), E(7), R, E(5), LR(18,"Simulasi 18 km","Sepatu, rompi, dan gel hari H")],
+    [R, H("Hill 10× 2 mnt","Sesi tanjakan terberat",9), S(), H("Tempo 30 mnt","Total ±9 km",9), R, E(5), LR(20,"Trail 20 km","Long run terpanjang, boleh banyak jalan")],
+    [R, E(6), S(), H("Hill 6× 2 mnt","Pemanasan 15 mnt dulu",7), ["rest","Istirahat","Tahun baru, nikmati",0], E(5), LR(16,"Trail 16 km","Sebaiknya saat/sesudah hujan")],
   ]},
   { name: "Taper", weeks: [
-    [R, E(6,"Tambah 6× strides 20 detik"), S("Versi ringan, 1–2 set per gerakan"), H("Tempo 15 mnt","Total ±6 km",6), R, E(4), L(10,"Trail 10 km","Santai, cek perlengkapan")],
+    [R, E(6,"Tambah 6× strides 20 detik"), S("Versi ringan, 1–2 set per gerakan"), H("Tempo 15 mnt","Total ±6 km",6), R, E(4), LR(10,"Trail 10 km","Santai, cek perlengkapan")],
     [R, E(5,"Tambah 4× strides 20 detik"), R, E(4,"Tambah 4× strides, lalu selesai"), R, ["easy","Shakeout 15–20 mnt","Siapkan perlengkapan, tidur cukup",3], ["race","Lelono 16K","Hari lomba di Kusuma Agrowisata, Batu",16]],
   ]},
 ];
@@ -658,12 +705,14 @@ function importData(ev) {
 }
 
 /* ================= Sheet ================= */
+let sheetClose = null;
 function openSheet(html, label, after) {
   const root = document.getElementById("sheet-root");
   const prev = document.activeElement;
   root.innerHTML = `<div class="scrim"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(label)}"><div class="sheet-in">
     <div class="grab"></div><button type="button" class="sheet-close">Tutup</button>${html}</div></div>`;
-  const close = () => { root.innerHTML = ""; document.removeEventListener("keydown", onKey); prev && prev.focus && prev.focus(); };
+  const close = () => { root.innerHTML = ""; sheetClose = null; document.removeEventListener("keydown", onKey); prev && prev.focus && prev.focus(); };
+  sheetClose = close;
   const onKey = (e) => { if (e.key === "Escape") close(); };
   document.addEventListener("keydown", onKey);
   root.querySelector(".scrim").addEventListener("click", close);
@@ -680,7 +729,8 @@ function openDay(k) {
 }
 
 /* ================= Tabs ================= */
-const TABS = ["today", "cal", "moves", "prog", "coach"];
+const TABS = ["today", "cal", "route", "moves", "prog", "coach"];
+let currentTab = "today";
 function show(v) {
   TABS.forEach((n) => {
     const el = document.getElementById("v-" + n);
@@ -693,6 +743,9 @@ function show(v) {
   window.scrollTo(0, 0);
   if (v === "cal") { const el = document.getElementById("wk-" + currentDay().week); if (el) el.scrollIntoView({ block: "start" }); }
   if (window.Runner3D) Runner3D.setActive(v === "today");
+  if (typeof Viewer3D !== "undefined" && Viewer3D) Viewer3D.setActive(v === "moves");
+  if (typeof routeShown === "function") routeShown(v === "route");
+  currentTab = v;
   try { localStorage.setItem("lelono16k-tab", v); } catch (e) {}
 }
 document.querySelectorAll(".tab").forEach((t) => t.addEventListener("click", () => show(t.dataset.v)));
@@ -714,6 +767,36 @@ function renderAll() { renderHeader(); renderToday(); renderCal(); renderProg();
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible" && keyOf(new Date()) !== TODAY) { TODAY = keyOf(new Date()); renderAll(); }
 });
+
+/* ================= Konfirmasi keluar (aplikasi terpasang) =================
+   Android's back button walks: close sheet → back to Hari Ini → ask before leaving. */
+const STANDALONE = matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+let leaving = false;
+function closeExitBox() { document.querySelector(".exit-box")?.remove(); }
+function askExit() {
+  if (document.querySelector(".exit-box")) return;
+  const box = document.createElement("div");
+  box.className = "exit-box"; box.setAttribute("role", "alertdialog"); box.setAttribute("aria-modal", "true"); box.setAttribute("aria-labelledby", "exit-t");
+  box.innerHTML = `<div><h3 id="exit-t">Keluar dari Zein Trail?</h3><p class="muted" style="margin:0">Progres dan catatanmu sudah tersimpan di HP ini.</p>
+    <div class="btns"><button type="button" class="btn ghost" id="exit-stay">Tetap di sini</button><button type="button" class="btn primary" id="exit-go">Keluar</button></div></div>`;
+  document.body.appendChild(box);
+  box.addEventListener("click", (e) => { if (e.target === box) closeExitBox(); });
+  box.querySelector("#exit-stay").addEventListener("click", closeExitBox);
+  box.querySelector("#exit-go").addEventListener("click", () => { leaving = true; closeExitBox(); history.go(-2); });
+  box.querySelector("#exit-stay").focus();
+}
+if (STANDALONE && history.pushState) {
+  history.replaceState({ zt: "root" }, "");
+  history.pushState({ zt: "guard" }, "");
+  window.addEventListener("popstate", () => {
+    if (leaving) return;
+    history.pushState({ zt: "guard" }, "");
+    if (document.querySelector(".exit-box")) { closeExitBox(); return; }
+    if (sheetClose) { sheetClose(); return; }
+    if (currentTab !== "today") { show("today"); return; }
+    askExit();
+  });
+}
 
 /* ================= Install ================= */
 let deferred = null;
@@ -960,7 +1043,235 @@ function renderCoach() {
 }
 </script>
 
+<link rel="stylesheet" href="vendor/leaflet.css">
+<script src="vendor/leaflet.js"></script>
+<script>
+/* ================= Rute (GPX) =================
+   Routes live in IndexedDB on the phone. The track line, elevation profile and GPS position
+   work without signal; the map picture underneath needs internet (tiles are not bulk-downloaded). */
+const RouteDB = (() => {
+  let dbp = null;
+  const open = () => dbp || (dbp = new Promise((res, rej) => {
+    const r = indexedDB.open("zeintrail", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("routes", { keyPath: "id" });
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  }));
+  const tx = (mode, fn) => open().then((db) => new Promise((res, rej) => {
+    const t = db.transaction("routes", mode), req = fn(t.objectStore("routes"));
+    t.oncomplete = () => res(req && "result" in req ? req.result : undefined);
+    t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
+  }));
+  return { all: () => tx("readonly", (s) => s.getAll()), put: (r) => tx("readwrite", (s) => s.put(r)), del: (id) => tx("readwrite", (s) => s.delete(id)) };
+})();
+const ACTIVE_KEY = "zeintrail-route";
+let routes = [], activeRoute = null, lmap = null, meMarker = null, watchId = null, mePos = null, routeVisible = false;
+
+function hav(a, b) {
+  const R = 6371000, toR = Math.PI / 180;
+  const dLat = (b[0] - a[0]) * toR, dLon = (b[1] - a[1]) * toR;
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * toR) * Math.cos(b[0] * toR) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+function enrich(r) {
+  const cum = [0];
+  for (let i = 1; i < r.pts.length; i++) cum.push(cum[i - 1] + hav(r.pts[i - 1], r.pts[i]));
+  let gain = 0, loss = 0, ref = null, maxE = -Infinity, minE = Infinity;
+  const hasEle = r.pts.some((p) => Number.isFinite(p[2]));
+  const climbAfter = new Array(r.pts.length).fill(0);
+  if (hasEle) {
+    r.pts.forEach((p) => { const e = p[2]; if (!Number.isFinite(e)) return; maxE = Math.max(maxE, e); minE = Math.min(minE, e);
+      if (ref === null) ref = e; const d = e - ref; if (d >= 3) { gain += d; ref = e; } else if (d <= -3) { loss -= d; ref = e; } });
+    let acc = 0, prev = null;
+    for (let i = r.pts.length - 1; i >= 0; i--) { const e = r.pts[i][2]; if (Number.isFinite(e)) { if (prev !== null && prev > e) acc += prev - e; prev = e; } climbAfter[i] = acc; }
+  }
+  return { ...r, cum, dist: cum[cum.length - 1], gain, loss, maxE, minE, hasEle, climbAfter };
+}
+function parseGPX(text, fileName) {
+  const xml = new DOMParser().parseFromString(text, "application/xml");
+  if (xml.getElementsByTagName("parsererror").length) throw new Error("bad");
+  let nodes = [...xml.getElementsByTagName("trkpt")];
+  if (nodes.length < 2) nodes = [...xml.getElementsByTagName("rtept")];
+  let pts = nodes.map((n) => {
+    const e = n.getElementsByTagName("ele")[0];
+    return [parseFloat(n.getAttribute("lat")), parseFloat(n.getAttribute("lon")), e ? parseFloat(e.textContent) : NaN];
+  }).filter((p) => Number.isFinite(p[0]) && Number.isFinite(p[1]));
+  if (pts.length < 2) throw new Error("empty");
+  const step = Math.ceil(pts.length / 4000);
+  if (step > 1) pts = pts.filter((_, i) => i % step === 0 || i === pts.length - 1);
+  pts = pts.map((p) => [+p[0].toFixed(6), +p[1].toFixed(6), Number.isFinite(p[2]) ? Math.round(p[2] * 10) / 10 : null]);
+  const nm = xml.querySelector("trk > name") || xml.querySelector("metadata > name") || xml.querySelector("rte > name");
+  const name = (nm && nm.textContent.trim()) || fileName.replace(/\.gpx$/i, "") || "Rute";
+  return { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name: name.slice(0, 60), pts, added: new Date().toISOString() };
+}
+async function loadRoutes() {
+  try { routes = (await RouteDB.all()).map(enrich).sort((a, b) => a.added < b.added ? 1 : -1); } catch (e) { routes = []; }
+  let want = null; try { want = localStorage.getItem(ACTIVE_KEY); } catch (e) {}
+  activeRoute = routes.find((r) => r.id === want) || routes[0] || null;
+  renderRoute();
+}
+async function importGPX(file) {
+  if (!file) return;
+  if (file.size > 25 * 1024 * 1024) { toast("File terlalu besar (maks 25 MB)"); return; }
+  try {
+    const r = parseGPX(await file.text(), file.name);
+    await RouteDB.put(r);
+    try { localStorage.setItem(ACTIVE_KEY, r.id); } catch (e) {}
+    await loadRoutes();
+    toast("Rute diimpor");
+  } catch (e) {
+    toast(e && e.message === "empty" ? "File GPX ini tidak berisi titik rute" : "File ini bukan GPX yang valid");
+  }
+}
+const fmtKm = (m) => (m / 1000).toFixed(m < 10000 ? 2 : 1).replace(".", ",");
+
+function elevSVG(r, meIdx) {
+  const W = 340, H = 130, X0 = 30, X1 = 334, Y0 = 8, Y1 = 108;
+  if (!r.hasEle) return `<p class="muted" style="margin:0">File ini tidak menyimpan data ketinggian.</p>`;
+  const lo = Math.floor(r.minE / 50) * 50, hi = Math.max(lo + 50, Math.ceil(r.maxE / 50) * 50);
+  const x = (d) => X0 + (d / r.dist) * (X1 - X0), y = (e) => Y1 - ((e - lo) / (hi - lo)) * (Y1 - Y0);
+  const step = Math.max(1, Math.floor(r.pts.length / 300));
+  const pts = []; for (let i = 0; i < r.pts.length; i += step) if (Number.isFinite(r.pts[i][2])) pts.push([x(r.cum[i]), y(r.pts[i][2])]);
+  const lastI = r.pts.length - 1; if (Number.isFinite(r.pts[lastI][2])) pts.push([x(r.cum[lastI]), y(r.pts[lastI][2])]);
+  const line = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1)).join(" ");
+  const area = `${line} L${pts[pts.length - 1][0].toFixed(1)} ${Y1} L${pts[0][0].toFixed(1)} ${Y1} Z`;
+  const kmStep = r.dist > 30000 ? 5000 : r.dist > 12000 ? 2000 : 1000;
+  let ticks = "";
+  for (let d = 0; d <= r.dist + 1; d += kmStep) ticks += `<text x="${x(d)}" y="${Y1 + 14}" text-anchor="middle">${d / 1000}</text>`;
+  const grid = [lo, Math.round((lo + hi) / 2), hi].map((e) => `<line class="grid" x1="${X0}" x2="${X1}" y1="${y(e)}" y2="${y(e)}"/><text x="${X0 - 4}" y="${y(e) + 3}" text-anchor="end">${e}</text>`).join("");
+  const me = meIdx != null && Number.isFinite(r.pts[meIdx][2]) ? `<circle class="me" cx="${x(r.cum[meIdx])}" cy="${y(r.pts[meIdx][2])}" r="6"/>` : "";
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Profil ketinggian, ${Math.round(r.minE)} sampai ${Math.round(r.maxE)} meter">${grid}<path class="area" d="${area}"/><path class="ln" d="${line}"/>${ticks}${me}</svg>
+    <div class="legend"><span>km</span><span>ketinggian dalam meter</span></div>`;
+}
+
+function renderRoute() {
+  const v = document.getElementById("v-route"); if (!v) return;
+  stopLocate(true);
+  if (lmap) { lmap.remove(); lmap = null; meMarker = null; }
+  const r = activeRoute;
+  v.innerHTML = `
+    <div><h2>Rute</h2><p class="lede">Impor file GPX rute lomba atau rute latihanmu. Rute disimpan di HP, dan garis rute serta posisimu tetap tampil tanpa sinyal.</p></div>
+    <div class="btns"><label class="btn amber" for="gpx-in">${icon("long")}Impor file GPX</label>
+      <input id="gpx-in" type="file" accept=".gpx,application/gpx+xml,application/xml,text/xml" class="sr"></div>
+    ${routes.length > 1 ? `<div class="route-list">${routes.map((x) => `<button type="button" class="move-chip" data-rid="${x.id}" aria-selected="${r && x.id === r.id}">${esc(x.name)}</button>`).join("")}</div>` : ""}
+    ${r ? `
+    <h3 style="margin-top:4px">${esc(r.name)}</h3>
+    <div class="map" id="map" role="region" aria-label="Peta rute"></div>
+    <div class="btns"><button type="button" class="btn primary" id="locate">Lacak posisiku di rute</button><button type="button" class="btn" id="fit">Lihat seluruh rute</button></div>
+    <div class="where" id="where" hidden aria-live="polite"></div>
+    <div class="stats4">
+      <div><b>${fmtKm(r.dist)} km</b><span>jarak</span></div>
+      <div><b>${r.hasEle ? "+" + Math.round(r.gain) : "–"} m</b><span>total naik</span></div>
+      <div><b>${r.hasEle ? "−" + Math.round(r.loss) : "–"} m</b><span>total turun</span></div>
+      <div><b>${r.hasEle ? Math.round(r.maxE) : "–"} m</b><span>titik tertinggi</span></div>
+    </div>
+    <div class="card elev"><h3>Profil ketinggian</h3><div id="elev">${elevSVG(r, null)}</div></div>
+    <div class="card">
+      <h3>Tanpa sinyal di jalur</h3>
+      <p style="margin:0;font-size:15px">Garis rute, profil ketinggian, dan posisimu dari GPS tetap jalan tanpa internet. Gambar peta di belakangnya butuh internet, tapi bagian yang pernah kamu buka biasanya masih tersimpan sementara. Untuk peta offline penuh, impor file GPX yang sama ke aplikasi peta offline seperti Organic Maps.</p>
+      <div class="btns"><button type="button" class="btn" id="exp-gpx">Simpan file GPX</button><button type="button" class="btn danger" id="del-route">Hapus rute ini</button></div>
+    </div>` : `
+    <div class="card empty-map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
+      <h3>Belum ada rute</h3><p class="muted" style="margin:0">Ambil file GPX rute Lelono dari panitia, atau ekspor rute latihan dari Strava, Garmin, atau aplikasi jam larimu, lalu impor di sini.</p></div>`}`;
+  v.querySelector("#gpx-in").addEventListener("change", (e) => { importGPX(e.target.files[0]); e.target.value = ""; });
+  v.querySelectorAll("[data-rid]").forEach((b) => b.addEventListener("click", () => {
+    activeRoute = routes.find((x) => x.id === b.dataset.rid) || activeRoute;
+    try { localStorage.setItem(ACTIVE_KEY, activeRoute.id); } catch (e) {}
+    renderRoute();
+  }));
+  if (!r) return;
+  v.querySelector("#locate").addEventListener("click", () => watchId === null ? startLocate() : stopLocate());
+  v.querySelector("#fit").addEventListener("click", fitRoute);
+  v.querySelector("#exp-gpx").addEventListener("click", () => downloadFile(`${r.name.replace(/[^\w\- ]+/g, "").trim() || "rute"}.gpx`, toGPX(r), "application/gpx+xml"));
+  const del = v.querySelector("#del-route");
+  del.addEventListener("click", async () => {
+    if (!del.classList.contains("armed")) { del.classList.add("armed"); del.textContent = "Ketuk lagi untuk menghapus"; setTimeout(() => { del.classList.remove("armed"); del.textContent = "Hapus rute ini"; }, 4000); return; }
+    await RouteDB.del(r.id).catch(() => {}); activeRoute = null; try { localStorage.removeItem(ACTIVE_KEY); } catch (e) {}
+    await loadRoutes(); toast("Rute dihapus");
+  });
+  if (routeVisible) initMap();
+}
+function initMap() {
+  const el = document.getElementById("map");
+  if (!el || lmap || !activeRoute) return;
+  if (!window.L) { el.innerHTML = `<div class="empty-map muted">Peta belum bisa dimuat.</div>`; return; }
+  const r = activeRoute;
+  lmap = L.map(el, { zoomControl: true, attributionControl: true, preferCanvas: true });
+  L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
+    maxZoom: 17, subdomains: "abc", crossOrigin: true,
+    attribution: 'Peta: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, SRTM | Gaya: © <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a> (CC-BY-SA)',
+  }).addTo(lmap);
+  const ll = r.pts.map((p) => [p[0], p[1]]);
+  L.polyline(ll, { color: "#10261d", weight: 8, opacity: .55 }).addTo(lmap);
+  L.polyline(ll, { color: "#f0a43a", weight: 4.5, opacity: 1 }).addTo(lmap);
+  L.circleMarker(ll[0], { radius: 7, color: "#fff", weight: 2, fillColor: "#2f6b4f", fillOpacity: 1 }).bindTooltip("Start").addTo(lmap);
+  L.circleMarker(ll[ll.length - 1], { radius: 7, color: "#fff", weight: 2, fillColor: "#d4472a", fillOpacity: 1 }).bindTooltip("Finish").addTo(lmap);
+  fitRoute();
+}
+function fitRoute() { if (lmap && activeRoute) lmap.fitBounds(activeRoute.pts.map((p) => [p[0], p[1]]), { padding: [24, 24] }); }
+function nearest(r, pos) {
+  let best = 0, bd = Infinity;
+  for (let i = 0; i < r.pts.length; i++) { const d = hav(pos, r.pts[i]); if (d < bd) { bd = d; best = i; } }
+  return { i: best, off: bd };
+}
+function startLocate() {
+  if (!("geolocation" in navigator)) { toast("GPS tidak tersedia di perangkat ini"); return; }
+  const btn = document.getElementById("locate"); if (btn) btn.textContent = "Mencari sinyal GPS…";
+  watchId = navigator.geolocation.watchPosition((pos) => {
+    mePos = [pos.coords.latitude, pos.coords.longitude];
+    const r = activeRoute; if (!r) return;
+    const n = nearest(r, mePos);
+    if (lmap) {
+      if (!meMarker) { meMarker = L.circleMarker(mePos, { radius: 9, color: "#fff", weight: 3, fillColor: "#3f97be", fillOpacity: 1 }).addTo(lmap); lmap.setView(mePos, Math.max(lmap.getZoom(), 15)); }
+      else meMarker.setLatLng(mePos);
+    }
+    const w = document.getElementById("where");
+    if (w) {
+      w.hidden = false;
+      const left = r.dist - r.cum[n.i];
+      w.innerHTML = n.off > 150
+        ? `<span>Kamu sekitar ${n.off >= 1000 ? fmtKm(n.off) + " km" : Math.round(n.off) + " m"} dari jalur</span><b>Titik terdekat: km ${fmtKm(r.cum[n.i])}</b>`
+        : `<span>Posisimu di rute</span><b>km ${fmtKm(r.cum[n.i])} dari ${fmtKm(r.dist)}</b><span>Sisa ${fmtKm(left)} km${r.hasEle ? `, masih naik ${Math.round(r.climbAfter[n.i])} m` : ""}${Number.isFinite(r.pts[n.i][2]) ? `. Ketinggian ${Math.round(r.pts[n.i][2])} m` : ""}</span>`;
+    }
+    const el = document.getElementById("elev"); if (el) el.innerHTML = elevSVG(r, n.i);
+    const b = document.getElementById("locate"); if (b) b.textContent = "Berhenti melacak";
+  }, (err) => {
+    toast(err.code === 1 ? "Izin lokasi ditolak. Aktifkan di pengaturan browser." : "Sinyal GPS belum didapat. Coba di tempat terbuka.");
+    stopLocate();
+  }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 30000 });
+}
+function stopLocate(silent) {
+  if (watchId !== null) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+  const b = document.getElementById("locate"); if (b) b.textContent = "Lacak posisiku di rute";
+  if (meMarker && lmap) { lmap.removeLayer(meMarker); } meMarker = null;
+  if (!silent) { const w = document.getElementById("where"); if (w) w.hidden = true; }
+}
+function toGPX(r) {
+  const x = (s) => String(s).replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c]));
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Zein Trail" xmlns="http://www.topografix.com/GPX/1/1">\n<trk><name>${x(r.name)}</name><trkseg>\n` +
+    r.pts.map((p) => `<trkpt lat="${p[0]}" lon="${p[1]}">${p[2] != null ? `<ele>${p[2]}</ele>` : ""}</trkpt>`).join("\n") + `\n</trkseg></trk>\n</gpx>\n`;
+}
+function routeShown(on) {
+  routeVisible = on;
+  if (!on) { stopLocate(true); return; }
+  if (!lmap) initMap(); else setTimeout(() => lmap.invalidateSize(), 50);
+}
+loadRoutes();
+</script>
+
 <script src="vendor/three.min.js"></script>
+<script src="vendor/GLTFLoader.js"></script>
+<script>
+/* One download of the rigged human; each caller gets its own parsed copy. */
+window.ZTModel = (() => {
+  let buf = null;
+  function get() {
+    if (!window.THREE || !THREE.GLTFLoader) return Promise.reject(new Error("no loader"));
+    buf = buf || fetch("models/runner.glb").then((r) => { if (!r.ok) throw new Error("http"); return r.arrayBuffer(); });
+    return buf.then((b) => new Promise((res, rej) => new THREE.GLTFLoader().parse(b.slice(0), "", res, rej)));
+  }
+  return { get };
+})();
+</script>
 <script>
 /* ================= 3D trail runner (three.js) =================
    Low-poly runner jogging in place while the trail, pines and mist stream past.
@@ -968,7 +1279,7 @@ function renderCoach() {
 window.Runner3D = (() => {
   if (!window.THREE) return null;
   let renderer, scene, camera, host = null, active = true, raf = 0, t0 = performance.now(), visible = true;
-  let runner, parts = {}, trees = [], rain, ground, pathMarks = [], mats = {};
+  let runner, parts = {}, trees = [], rain, ground, pathMarks = [], mats = {}, mixer = null, gen = 0;
   const dark = matchMedia("(prefers-color-scheme: dark)");
 
   function palette() {
@@ -1053,13 +1364,27 @@ window.Runner3D = (() => {
     rain = new THREE.Points(rg, new THREE.PointsMaterial({ color: P.rain, size: .035, transparent: true, opacity: .55 }));
     scene.add(rain);
     runner = buildRunner(P); scene.add(runner);
+    const myGen = ++gen;
+    if (window.ZTModel) ZTModel.get().then((g) => {
+      if (myGen !== gen || !scene) return;
+      const clip = g.animations.find((a) => a.name === "run");
+      if (!clip) return;
+      const body = dark.matches ? 0xc5d3cb : 0xeef2ef;
+      g.scene.traverse((o) => { if (o.isMesh || o.isSkinnedMesh) { o.frustumCulled = false; const j = /joint/i.test(o.material.name);
+        o.material = new THREE.MeshLambertMaterial({ color: j ? 0x2f6b4f : body, skinning: true }); } });
+      g.scene.rotation.y = Math.PI / 2;           // the rig faces +Z; the trail runs toward +X
+      scene.remove(runner); runner = g.scene; scene.add(runner);
+      mixer = new THREE.AnimationMixer(runner);
+      mixer.clipAction(clip).play();
+      if (reduceMotion) { mixer.update(.2); loop(); }
+    }).catch(() => {});
     dark.addEventListener?.("change", () => { const was = host; teardown(); init(); if (was) attach(was); });
     document.addEventListener("visibilitychange", () => { visible = document.visibilityState === "visible"; loop(); });
   }
   function teardown() {
     cancelAnimationFrame(raf); raf = 0;
     if (renderer) { renderer.dispose(); renderer.domElement.remove(); }
-    trees = []; pathMarks = []; parts = {};
+    trees = []; pathMarks = []; parts = {}; mixer = null; gen++;
   }
   function size() {
     if (!host) return;
@@ -1082,7 +1407,7 @@ window.Runner3D = (() => {
   }
   function frame(now) {
     const t = (now - t0) / 1000, dt = Math.min(.05, (now - (frame.last || now)) / 1000); frame.last = now;
-    pose(t);
+    if (mixer) mixer.update(dt); else pose(t);
     const speed = 3.2 * dt;
     trees.forEach((tr) => { tr.position.x -= speed; if (tr.position.x < -14) tr.position.x += 28; });
     pathMarks.forEach((s) => { s.position.x -= speed; if (s.position.x < -14) s.position.x += 28; });
@@ -1154,7 +1479,7 @@ const MOVES = [
     seq: [["a",0,.6],["b",1.0,2.6],["a",1.0,0]],
     steps: ["Siku tepat di bawah bahu, lengan bawah di lantai.","Angkat lutut sampai badan lurus dari kepala ke tumit.","Kencangkan perut dan bokong, napas normal.","Pemula boleh mulai dengan lutut di lantai."],
     avoid: "Pinggul turun atau terangkat terlalu tinggi." },
-  { name: "Side plank", dose: "2 × 30 dtk / sisi", view: "tampak depan", anchor: "elbow0", ax: 168, hold: true,
+  { name: "Side plank", dose: "2 × 30 dtk / sisi", view: "tampak depan", plane: "front", anchor: "elbow0", ax: 168, hold: true,
     K: { a: { t: 56, l: [[-90,-90,-90],[-90,-90,-90]], a: [[0,90],[-56,-56]] }, b: { t: 78, l: [[-78,-78,-90],[-78,-78,-90]], a: [[0,90],[-180,-180]] } },
     seq: [["a",0,.5],["b",1.0,2.4],["a",1.0,0]],
     steps: ["Berbaring miring, siku di bawah bahu.","Kaki lurus dan bertumpuk.","Angkat pinggul sampai badan lurus.","Tahan, turunkan, lalu ganti sisi."],
@@ -1209,61 +1534,203 @@ function sample(m, time) {
   return { pose: m.K[seq[0][0]], hold: false };
 }
 const peakTime = (m) => m.seq[0][2] + m.seq[1][1] + Math.min(.2, m.seq[1][2] / 2);
-let COL = {};
-function readColors() {
-  const cs = getComputedStyle(document.documentElement), g = (n) => cs.getPropertyValue(n).trim();
-  COL = { fig: g("--figure"), far: g("--figure-far"), line: g("--line"), muted: g("--muted"), accent: g("--dawn"), moss: g("--moss") };
-}
-readColors();
-const line = (ctx, pts) => { ctx.beginPath(); ctx.moveTo(...pts[0]); for (let i = 1; i < pts.length; i++) ctx.lineTo(...pts[i]); ctx.stroke(); };
-function render(ctx, m, W, hold, s) {
-  ctx.setTransform(s, 0, 0, s, 0, 0); ctx.clearRect(0, 0, SW, SH); ctx.save();
-  if (m.slope) { ctx.translate(120, 175); ctx.rotate(rad(m.slope)); ctx.translate(-120, -175); }
-  ctx.lineCap = "round"; ctx.lineJoin = "round";
-  ctx.strokeStyle = COL.muted; ctx.lineWidth = 1.5; ctx.globalAlpha = .5; line(ctx, [[-120, GROUND], [360, GROUND]]); ctx.globalAlpha = 1;
-  if (m.box) { ctx.fillStyle = COL.line; ctx.fillRect(m.box[0], GROUND - m.box[2], m.box[1] - m.box[0], m.box[2]); }
-  if (m.wall) { ctx.fillStyle = COL.line; ctx.fillRect(m.wall, 30, 10, GROUND - 30); }
-  ctx.lineWidth = 7; ctx.strokeStyle = COL.far;
-  line(ctx, [W.hip, W.knee1, W.ankle1, W.toe1]); line(ctx, [W.sh, W.elbow1, W.hand1]);
-  ctx.strokeStyle = COL.moss; ctx.lineWidth = 9; line(ctx, [W.hip, W.sh]);
-  ctx.fillStyle = COL.fig; ctx.beginPath(); ctx.arc(W.head[0], W.head[1], LEN.head, 0, Math.PI * 2); ctx.fill();
-  ctx.strokeStyle = COL.fig; ctx.lineWidth = 7; line(ctx, [W.hip, W.knee0, W.ankle0, W.toe0]); line(ctx, [W.sh, W.elbow0, W.hand0]);
-  ctx.restore();
-  if (hold) { ctx.fillStyle = COL.accent; ctx.font = '800 13px "Figtree", system-ui, sans-serif'; ctx.fillText("Tahan", 14, 24); }
-}
-const cards = [];
-const hostEl = document.getElementById("moves");
-MOVES.forEach((m, i) => {
-  const el = document.createElement("article");
-  el.className = "card move";
-  el.innerHTML = `<div class="stage"><canvas role="img" aria-label="Animasi ${m.name}, ${m.view}"></canvas><span class="vw">${m.view}</span><button type="button" class="play">Jeda</button></div>
-    <div class="move-b"><div class="split"><h3>${m.name}</h3><span class="badge ${m.trail ? "t-long" : "t-str"}">${icon(m.trail ? "hill" : "str")}${m.dose}</span></div>
+/* ================= Gerakan 3D (model manusia ber-rangka) =================
+   The 2D pose engine above (build/place/sample) gives joint positions per frame;
+   here they are turned into bone directions on a rigged human and rendered with shadows. */
+const Viewer3D = (() => {
+  const cv = document.getElementById("viewer-canvas");
+  const hint = document.getElementById("viewer-hint");
+  const playBtn = document.getElementById("viewer-play");
+  if (!window.THREE || !cv) return null;
+  const V3 = THREE.Vector3, Q = THREE.Quaternion;
+  const S = 0.888 / 84;                       // canvas units → metres (thigh+shin of the rig)
+  let renderer, scene, camera, group, model, ground, boxMesh, wallMesh, holdTag;
+  const B = {}, rest = new Map();
+  let ready = false, active = false, visible = true, raf = 0, last = 0;
+  let cur = 0, time = 0, playing = !reduceMotion, yaw = 1.15, target = new V3(0, .8, 0), dist = 3.4, dragging = null;
+
+  const map = (p, pl) => pl === "front" ? new V3((p[0] - 120) * S, (GROUND - p[1]) * S, 0) : new V3(0, (GROUND - p[1]) * S, (p[0] - 120) * S);
+  const dirP = (a, b, pl) => map(b, pl).sub(map(a, pl)).normalize();
+  function footDir(a, b) { // the rig's ankle→ball bone points ~39° below the sole line
+    const dx = b[0] - a[0], dy = b[1] - a[1], t = rad(39);
+    const r = [dx * Math.cos(t) - dy * Math.sin(t), dx * Math.sin(t) + dy * Math.cos(t)];
+    return new V3(0, -r[1], r[0]).normalize();
+  }
+  const _a = new V3(), _b = new V3(), _q = new Q(), _w = new Q(), _p = new Q();
+  function aim(bone, child, t) {
+    bone.updateWorldMatrix(true, false); child.updateWorldMatrix(false, false);
+    _a.setFromMatrixPosition(bone.matrixWorld); _b.setFromMatrixPosition(child.matrixWorld);
+    const d = _b.sub(_a); if (d.lengthSq() < 1e-10) return; d.normalize();
+    _q.setFromUnitVectors(d, t);
+    bone.getWorldQuaternion(_w); bone.parent.getWorldQuaternion(_p);
+    bone.quaternion.copy(_p.invert().multiply(_q.multiply(_w)));
+    bone.updateMatrixWorld(true);
+  }
+  const world = (o) => new V3().setFromMatrixPosition(o.matrixWorld);
+
+  function cssColors() {
+    const cs = getComputedStyle(document.documentElement), g = (n) => cs.getPropertyValue(n).trim();
+    const darkMode = matchMedia("(prefers-color-scheme: dark)").matches;
+    return { ground: g("--surface-2") || "#f5f9f6", line: g("--line") || "#d5e2da", body: darkMode ? "#c5d3cb" : "#eef2ef", joints: "#2f6b4f", accent: g("--dawn") || "#f0a43a" };
+  }
+  function init(gltf) {
+    const C = cssColors();
+    renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: "low-power" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(34, 1, .05, 40);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x4a5a50, .75));
+    const sun = new THREE.DirectionalLight(0xfff3e0, 1.0);
+    sun.position.set(2.5, 5, 3); sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    Object.assign(sun.shadow.camera, { left: -2.5, right: 2.5, top: 2.5, bottom: -2.5, near: .5, far: 15 });
+    scene.add(sun);
+    group = new THREE.Group(); scene.add(group);
+    ground = new THREE.Mesh(new THREE.CircleGeometry(3.2, 48), new THREE.MeshStandardMaterial({ color: C.line, roughness: 1 }));
+    ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; group.add(ground);
+    boxMesh = new THREE.Mesh(new THREE.BoxGeometry(.8, 1, 1), new THREE.MeshStandardMaterial({ color: 0x8a7a66, roughness: .9 }));
+    boxMesh.castShadow = boxMesh.receiveShadow = true; group.add(boxMesh);
+    wallMesh = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, .08), new THREE.MeshStandardMaterial({ color: C.line, roughness: 1 }));
+    wallMesh.receiveShadow = true; group.add(wallMesh);
+    model = gltf.scene;
+    model.traverse((o) => {
+      if (o.isMesh || o.isSkinnedMesh) {
+        o.castShadow = true; o.frustumCulled = false;
+        const joints = /joint/i.test(o.material.name);
+        o.material = new THREE.MeshStandardMaterial({ color: joints ? C.joints : C.body, roughness: joints ? .45 : .6, metalness: joints ? .1 : 0, skinning: true });
+      }
+    });
+    const get = (n) => model.getObjectByName("mixamorig" + n);
+    Object.assign(B, { hips: get("Hips"), spine: get("Spine"), spine1: get("Spine1"), neck: get("Neck"), head: get("Head"), headTop: get("HeadTop_End") });
+    for (const [k, side] of [["L", "Left"], ["R", "Right"]]) {
+      B[k] = { up: get(side + "UpLeg"), leg: get(side + "Leg"), foot: get(side + "Foot"), toe: get(side + "ToeBase"), arm: get(side + "Arm"), fore: get(side + "ForeArm"), hand: get(side + "Hand") };
+    }
+    model.traverse((o) => { if (o.isBone) rest.set(o, o.quaternion.clone()); });
+    group.add(model);
+    holdTag = document.createElement("span"); holdTag.className = "hold-tag"; holdTag.textContent = "Tahan"; holdTag.hidden = true;
+    cv.parentElement.appendChild(holdTag);
+    // drag to orbit
+    cv.addEventListener("pointerdown", (e) => { dragging = { x: e.clientX, yaw }; cv.setPointerCapture(e.pointerId); cv.style.cursor = "grabbing"; });
+    cv.addEventListener("pointermove", (e) => { if (!dragging) return; yaw = dragging.yaw - (e.clientX - dragging.x) * .01; if (!raf) frame(performance.now()); });
+    const end = () => { dragging = null; cv.style.cursor = ""; };
+    cv.addEventListener("pointerup", end); cv.addEventListener("pointercancel", end);
+    ready = true;
+    hint.textContent = "Geser untuk memutar";
+    setMove(cur, true);
+    new ResizeObserver(size).observe(cv);
+    new IntersectionObserver((es) => { visible = es[0].isIntersecting; loop(); }).observe(cv);
+    document.addEventListener("visibilitychange", loop);
+    size(); loop();
+  }
+
+  const CONTACT = () => [[B.L.foot, .075], [B.R.foot, .075], [B.L.toe, .025], [B.R.toe, .025], [B.L.hand, .03], [B.R.hand, .03],
+    [B.L.fore, .05], [B.R.fore, .05], [B.L.leg, .06], [B.R.leg, .06], [B.hips, .1], [B.head, .11]];
+
+  function applyPose(m, W) {
+    const pl = m.plane || "sag";
+    rest.forEach((q, b) => b.quaternion.copy(q));
+    group.rotation.x = 0; model.position.set(0, 0, 0); group.updateMatrixWorld(true);
+    const torso = dirP(W.hip, W.sh, pl);
+    aim(B.hips, B.spine1, torso); aim(B.spine, B.neck, torso); aim(B.neck, B.headTop, torso);
+    [["L", 0], ["R", 1]].forEach(([k, i]) => {
+      const b = B[k];
+      aim(b.up, b.leg, dirP(W.hip, W["knee" + i], pl));
+      aim(b.leg, b.foot, dirP(W["knee" + i], W["ankle" + i], pl));
+      if (pl === "sag") aim(b.foot, b.toe, footDir(W["ankle" + i], W["toe" + i]));
+      aim(b.arm, b.fore, dirP(W.sh, W["elbow" + i], pl));
+      aim(b.fore, b.hand, pl === "front" && i === 0 ? new V3(0, 0, 1) : dirP(W["elbow" + i], W["hand" + i], pl));
+    });
+    model.updateMatrixWorld(true);
+    model.position.add(map(W.hip, pl).sub(world(B.hips)));
+    model.updateMatrixWorld(true);
+    const box = m.box && pl === "sag" ? [(m.box[0] - 120) * S, (m.box[1] - 120) * S, m.box[2] * S] : null;
+    let minY = Infinity;
+    for (const [bone, r] of CONTACT()) {
+      const p = world(bone);
+      const g = box && p.z >= box[0] && p.z <= box[1] ? box[2] : 0;
+      minY = Math.min(minY, p.y - r - g);
+    }
+    model.position.y -= minY;
+    group.rotation.x = rad(m.slope || 0);
+    group.updateMatrixWorld(true);
+  }
+
+  function setMove(i, keepYaw) {
+    cur = i; time = reduceMotion ? peakTime(MOVES[i]) : 0;
+    if (!ready) return;
+    const m = MOVES[i], pl = m.plane || "sag";
+    boxMesh.visible = !!m.box; wallMesh.visible = !!m.wall;
+    if (m.box) { const z0 = (m.box[0] - 120) * S, z1 = (m.box[1] - 120) * S, h = m.box[2] * S; boxMesh.scale.set(1, h, z1 - z0); boxMesh.position.set(0, h / 2, (z0 + z1) / 2); }
+    if (m.wall) { wallMesh.position.set(0, 1.1, (m.wall - 120) * S + .04); }
+    // frame the move: centre on the joints across its keyframes
+    const pts = [];
+    Object.values(m.K).forEach((k) => { const W = place(m, k); ["hip", "sh", "head", "toe0", "toe1", "hand0", "hand1"].forEach((n) => pts.push(map(W[n], pl))); });
+    const bb = new THREE.Box3().setFromPoints(pts);
+    bb.getCenter(target); target.x = 0;
+    const ext = Math.max(bb.max.y - bb.min.y, bb.max.z - bb.min.z, bb.max.x - bb.min.x, 1);
+    dist = 1.6 + ext * 1.9;
+    if (!keepYaw) yaw = pl === "front" ? .3 : 1.15;
+    if (!raf) frame(performance.now());
+  }
+  function size() {
+    const w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    if (!raf) frame(performance.now());
+  }
+  function frame(now) {
+    const dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
+    if (playing && !dragging) time += dt;
+    const m = MOVES[cur];
+    const { pose, hold } = sample(m, time);
+    applyPose(m, place(m, pose));
+    holdTag.hidden = !hold;
+    const cy = target.y + .35;
+    camera.position.set(Math.sin(yaw) * dist, cy + .25, target.z + Math.cos(yaw) * dist);
+    camera.lookAt(target.x, target.y, target.z);
+    renderer.render(scene, camera);
+  }
+  function loop() {
+    cancelAnimationFrame(raf); raf = 0; last = 0;
+    if (!ready || !active || !visible || document.visibilityState !== "visible") return;
+    if (!playing) { frame(performance.now()); return; }
+    const tick = (now) => { frame(now); raf = requestAnimationFrame(tick); };
+    raf = requestAnimationFrame(tick);
+  }
+  playBtn.addEventListener("click", () => { playing = !playing; playBtn.textContent = playing ? "Jeda" : "Putar"; loop(); });
+  playBtn.textContent = playing ? "Jeda" : "Putar";
+  let loading = false;
+  function setActive(on) {
+    active = on;
+    if (on && !ready && !loading) {
+      loading = true;
+      ZTModel.get().then(init).catch(() => { hint.textContent = "Model 3D gagal dimuat. Buka sekali saat online."; });
+    }
+    loop();
+  }
+  return { setMove: (i) => setMove(i), setActive };
+})();
+
+/* Move picker + details */
+function renderMoveDetail(i) {
+  const m = MOVES[i];
+  document.querySelectorAll(".move-chip[data-move]").forEach((c) => c.setAttribute("aria-selected", String(Number(c.dataset.move) === i)));
+  document.getElementById("move-detail").innerHTML = `
+    <div class="split"><h3>${m.name}</h3><span class="badge ${m.trail ? "t-long" : "t-str"}">${icon(m.trail ? "hill" : "str")}${m.dose}</span></div>
     <ol>${m.steps.map((s) => `<li>${s}</li>`).join("")}</ol>
-    <p class="avoid t-hill"><b>Hindari:</b> ${m.avoid}</p></div>`;
-  hostEl.appendChild(el);
-  const canvas = el.querySelector("canvas"), btn = el.querySelector(".play");
-  const c = { m, canvas, ctx: canvas.getContext("2d"), btn, time: reduceMotion ? peakTime(m) : i * .37, playing: !reduceMotion, visible: false, s: 1 };
-  const toggle = () => { c.playing = !c.playing; btn.textContent = c.playing ? "Jeda" : "Putar"; };
-  btn.addEventListener("click", toggle); canvas.addEventListener("click", toggle);
-  btn.textContent = c.playing ? "Jeda" : "Putar";
-  cards.push(c);
-});
-function sizeCard(c) {
-  const dpr = Math.min(window.devicePixelRatio || 1, 2), w = c.canvas.clientWidth; if (!w) return;
-  c.canvas.width = Math.round(w * dpr); c.canvas.height = Math.round(w * dpr * SH / SW); c.s = c.canvas.width / SW;
+    <p class="avoid t-hill"><b>Hindari:</b> ${m.avoid}</p>`;
 }
-function drawCard(c) { const { pose, hold } = sample(c.m, c.time); render(c.ctx, c.m, place(c.m, pose), hold, c.s); }
-const ro2 = new ResizeObserver(() => cards.forEach((c) => { sizeCard(c); drawCard(c); }));
-cards.forEach((c) => ro2.observe(c.canvas));
-const io2 = new IntersectionObserver((es) => es.forEach((e) => { const c = cards.find((x) => x.canvas === e.target); if (c) c.visible = e.isIntersecting; }));
-cards.forEach((c) => io2.observe(c.canvas));
-matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => { readColors(); cards.forEach(drawCard); });
-let last = performance.now();
-(function loop(t) {
-  const dt = Math.min(.1, (t - last) / 1000); last = t;
-  for (const c of cards) if (c.playing && c.visible) { c.time += dt; drawCard(c); }
-  requestAnimationFrame(loop);
-})(last);
+document.getElementById("move-chips").innerHTML = MOVES.map((m, i) =>
+  `<button type="button" class="move-chip" role="tab" data-move="${i}" aria-selected="${i === 0}">${icon(m.trail ? "hill" : "str")}${m.name}</button>`).join("");
+document.getElementById("move-chips").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-move]"); if (!b) return;
+  const i = Number(b.dataset.move);
+  renderMoveDetail(i);
+  if (Viewer3D) Viewer3D.setMove(i);
+  b.scrollIntoView({ inline: "nearest", block: "nearest", behavior: reduceMotion ? "auto" : "smooth" });
+});
+renderMoveDetail(0);
 
 /* ================= Boot ================= */
 renderAll();
