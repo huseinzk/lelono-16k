@@ -55,7 +55,7 @@ svg.i { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-widt
 /* ---------- Header ---------- */
 .top { position: sticky; top: 0; z-index: 40; background: var(--bg); background: color-mix(in srgb, var(--bg) 88%, transparent); transform: translateZ(0); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   padding: calc(env(safe-area-inset-top, 0px) + 10px) 16px 10px; }
-.top-in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 10px; }
+.top-in { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 8px; }
 .brand { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; }
 .mark { width: 34px; height: 34px; border-radius: 10px; background: var(--forest); display: grid; place-items: center; flex: none; }
 .mark svg { width: 22px; height: 22px; }
@@ -235,6 +235,83 @@ h3 { font: 700 20px/1.15 var(--font-display); font-stretch: 90%; margin: 0; }
 .empty-map { display: grid; place-items: center; text-align: center; gap: 10px; padding: 36px 20px; }
 .empty-map svg { width: 44px; height: 44px; color: var(--moss); }
 
+/* ---------- Settings ---------- */
+.char-stage { border-radius: 18px; background: radial-gradient(120% 90% at 50% 15%, var(--surface) 0%, var(--surface-2) 60%, var(--line) 100%); overflow: hidden; }
+.char-stage canvas { display: block; width: 100%; height: 240px; }
+.char-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.char-card { border: 2px solid var(--line); background: var(--surface-2); border-radius: 16px; padding: 12px; text-align: left; display: grid; gap: 2px; min-width: 0; }
+.char-card b { font: 800 17px var(--font-display); }
+.char-card span { font-size: 12.5px; color: var(--muted); line-height: 1.3; }
+.char-card[aria-checked="true"] { border-color: var(--moss); background: var(--easy); }
+.custom { display: grid; gap: 14px; }
+.tog[aria-pressed="true"] { background: var(--forest); color: #eef6f1; border-color: transparent; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; }
+.sw { width: 34px; height: 34px; border-radius: 50%; border: 2px solid var(--line); }
+.sw[aria-checked="true"] { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--moss); }
+.switch { display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 15px; }
+.switch input { width: 20px; height: 20px; accent-color: var(--moss); }
+
+/* ---------- Guided session ---------- */
+.session { position: fixed; inset: 0; z-index: 65; background: var(--bg); display: grid; grid-template-rows: auto auto 1fr; overflow: auto;
+  padding: calc(env(safe-area-inset-top, 0px) + 8px) 16px calc(env(safe-area-inset-bottom, 0px) + 16px); }
+.ses-top { display: flex; align-items: center; gap: 10px; max-width: 560px; width: 100%; margin: 0 auto; }
+.ses-top .btn { padding: 8px 12px; }
+.ses-top span { font-size: 13px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.ses-prog { flex: 1; height: 8px; border-radius: 8px; background: var(--line); overflow: hidden; }
+.ses-prog i { display: block; height: 100%; width: 0; background: var(--moss); border-radius: 8px; transition: width .4s; }
+.ses-stage { max-width: 560px; width: 100%; margin: 10px auto 0; }
+.ses-stage .viewer canvas { aspect-ratio: 4 / 3; max-height: 38vh; }
+.ses-body { max-width: 560px; width: 100%; margin: 0 auto; display: grid; gap: 14px; align-content: start; padding-top: 14px; }
+.ses-what { display: grid; gap: 6px; justify-items: start; }
+.ses-what h2 { font-size: 34px; margin: 0; }
+.ses-big { margin: 0; font: 800 64px/1 var(--font-display); font-stretch: 80%; }
+.ses-big small { font: 600 18px var(--font-body); color: var(--muted); }
+.ses-main { width: 100%; padding: 16px; font-size: 17px; border-radius: 16px; }
+.ses-ring { position: relative; width: 190px; height: 190px; justify-self: center; }
+.ses-ring svg { width: 190px; height: 190px; transform: rotate(-90deg); }
+.ses-ring .tr { fill: none; stroke: var(--line); stroke-width: 12; }
+.ses-ring .br { fill: none; stroke: var(--dawn); stroke-width: 12; stroke-linecap: round; transition: stroke-dashoffset .25s linear; }
+.ses-ring > div { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.ses-ring b { font: 800 48px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.ses-ring span { font-size: 13px; color: var(--muted); font-weight: 700; }
+.ses-ctl { justify-content: center; }
+.ses-next { margin: 0; color: var(--muted); font-size: 14.5px; text-align: center; }
+
+/* ---------- Run mode ---------- */
+.runmode { grid-template-rows: auto auto auto 1fr auto; gap: 12px; }
+.runmode > * { max-width: 560px; width: 100%; margin: 0 auto; }
+.run-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--race); }
+@media (prefers-reduced-motion: no-preference) { .run-dot { animation: blink 1.2s infinite; } @keyframes blink { 50% { opacity: .25; } } }
+.run-cue { background: var(--forest); color: #eef6f1; border-radius: 18px; padding: 14px 16px; font-size: 16px; font-weight: 600; line-height: 1.4; }
+.run-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.run-grid > div { background: var(--surface); border-radius: 16px; padding: 10px 12px; box-shadow: var(--shadow); min-width: 0; }
+.run-grid b { display: block; font: 800 30px/1.05 var(--font-display); font-variant-numeric: tabular-nums; }
+.run-grid span { font-size: 12.5px; color: var(--muted); font-weight: 600; }
+.run-grid .run-main { grid-column: 1 / -1; text-align: center; }
+.run-grid .run-main b { font-size: 56px; }
+.run-map { min-height: 200px; }
+.run-map .map { height: 100%; min-height: 220px; }
+
+/* ---------- Route actions, history, builder ---------- */
+.route-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.route-actions .btn:first-child { grid-column: 1 / -1; padding: 15px; font-size: 17px; }
+.runs { list-style: none; margin: 0; padding: 0; display: grid; }
+.runs li { display: grid; gap: 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.runs li:last-child { border-bottom: 0; }
+.runs li b { font: 800 20px var(--font-display); display: block; }
+.runs li span { font-size: 13.5px; color: var(--muted); }
+.runs .btn { padding: 7px 12px; font-size: 13.5px; }
+.splits { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 6px; }
+.splits li { background: var(--surface-2); border-radius: 10px; padding: 6px 10px; display: grid; }
+.splits li span { font-size: 12px; color: var(--muted); font-weight: 600; }
+.splits li b { font: 800 18px var(--font-display); font-variant-numeric: tabular-nums; }
+.builder { grid-template-rows: auto auto minmax(280px, 46vh) auto auto auto; gap: 12px; }
+.builder > * { max-width: 560px; width: 100%; margin: 0 auto; }
+.builder .map { height: 100%; min-height: 280px; }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px; gap: 4px; }
+.seg button { border: 0; background: none; border-radius: 10px; padding: 9px; font-weight: 700; color: var(--muted); }
+.seg button[aria-selected="true"] { background: var(--forest); color: #eef6f1; }
+
 /* ---------- Exit dialog ---------- */
 .exit-box { position: fixed; inset: 0; z-index: 70; display: grid; place-items: center; padding: 24px; background: var(--scrim); }
 .exit-box > div { background: var(--surface); border-radius: 24px; padding: 22px; max-width: 340px; width: 100%; display: grid; gap: 14px; box-shadow: var(--shadow); }
@@ -291,6 +368,7 @@ pre.preview { white-space: pre-wrap; font: 13px/1.45 ui-monospace, monospace; ba
     </div>
     <button class="install" id="install-btn" hidden>Pasang</button>
     <button class="icon-btn" id="remind-btn" aria-label="Pengingat latihan"><svg class="i" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="dot" id="remind-dot" hidden></span></button>
+    <button class="icon-btn" id="settings-btn" aria-label="Pengaturan"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     <div class="pill-count" title="Hari menuju Lelono 16K"><b id="count">–</b><span id="count-l">hari lagi</span></div>
   </div>
 </header>
@@ -300,7 +378,8 @@ pre.preview { white-space: pre-wrap; font: 13px/1.45 ui-monospace, monospace; ba
   <section class="view" id="v-cal" aria-label="Kalender" hidden></section>
   <section class="view" id="v-route" aria-label="Rute" hidden></section>
   <section class="view" id="v-moves" aria-label="Gerakan" hidden>
-    <div><h2>Panduan gerakan</h2><p class="lede">Untuk hari Kekuatan: kerjakan semua gerakan, istirahat 45–60 detik antar set. Geser model 3D untuk melihat dari sisi lain.</p></div>
+    <div><h2>Panduan gerakan</h2><p class="lede">Untuk hari Kekuatan. Geser model 3D untuk melihat dari sisi lain, atau mulai latihan terpandu dengan timer istirahat.</p></div>
+    <button type="button" class="btn amber" data-session="1">Mulai latihan terpandu</button>
     <div class="viewer" id="viewer">
       <canvas id="viewer-canvas" role="img" aria-label="Animasi 3D gerakan"></canvas>
       <div class="viewer-ui"><span class="viewer-hint" id="viewer-hint">Memuat model 3D…</span><button type="button" class="play" id="viewer-play">Jeda</button></div>
@@ -451,10 +530,12 @@ function celebrate(fromEl) {
 }
 
 function extraFor(d) {
+  const runBtn = `<button type="button" class="btn amber" data-free-run="1">Mulai lari dan rekam</button>`;
   if (d.type === "str") return `<div class="extra"><b>Gerakan hari ini</b><ul>
       <li>Squat 3×12</li><li>Lunges jalan 3×10 per kaki</li><li>Step-up 3×10 per kaki</li>
       <li>Calf raise satu kaki 3×15 per kaki</li><li>Plank 3×40 detik</li><li>Side plank 2×30 detik per sisi</li>
       <li>Single-leg deadlift 2×10 per kaki</li></ul>
+      <button type="button" class="btn amber" data-session="1">Mulai latihan terpandu</button>
       <button class="linkbtn" data-go="moves">Lihat animasi gerakan</button></div>`;
   if (d.type === "hill" && d.title.startsWith("Hill")) return `<div class="extra"><b>Cara melakukan</b><ol>
       <li>Pemanasan 10–15 menit lari santai.</li><li>Lari menanjak dengan usaha kuat tapi terkontrol sesuai durasi.</li>
@@ -466,9 +547,9 @@ function extraFor(d) {
   if (d.type === "long") return `<div class="extra"><b>Tips</b><ul>
       <li>Pakai sepatu trail di jalur tanah.</li><li>Minum atau makan gel tiap ±45 menit.</li>
       <li>Tanjakan curam: power hiking. Turunan: langkah pendek dan cepat.</li></ul>
-      <button class="linkbtn" data-go="moves">Lihat teknik power hiking</button></div>`;
+      <button class="linkbtn" data-go="moves">Lihat teknik power hiking</button></div>${runBtn}`;
   if (d.type === "easy" && /strides/i.test(d.note)) return `<div class="extra"><b>Strides</b><p style="margin:0">Di akhir lari: 20 detik cepat tapi rileks, hampir sprint, lalu jalan 40 detik. Ulangi sesuai jumlah.</p></div>`;
-  if (d.type === "easy") return `<div class="extra muted">Pakai sepatu road kalau di aspal. Pace santai, masih bisa ngobrol.</div>`;
+  if (d.type === "easy") return `<div class="extra muted">Pakai sepatu road kalau di aspal. Pace santai, masih bisa ngobrol.</div>${runBtn}`;
   if (d.type === "race") return `<div class="extra"><b>Checklist hari H</b><ul>
       <li>BIB, rompi hidrasi terisi, gel yang sudah biasa dipakai.</li><li>Sepatu trail dengan grip kuat, jalur basah.</li>
       <li>Sarapan 2–3 jam sebelum start.</li><li>Mulai pelan, nikmati air terjunnya.</li></ul></div>`;
@@ -706,12 +787,12 @@ function importData(ev) {
 
 /* ================= Sheet ================= */
 let sheetClose = null;
-function openSheet(html, label, after) {
+function openSheet(html, label, after, onClose) {
   const root = document.getElementById("sheet-root");
   const prev = document.activeElement;
   root.innerHTML = `<div class="scrim"></div><div class="sheet" role="dialog" aria-modal="true" aria-label="${esc(label)}"><div class="sheet-in">
     <div class="grab"></div><button type="button" class="sheet-close">Tutup</button>${html}</div></div>`;
-  const close = () => { root.innerHTML = ""; sheetClose = null; document.removeEventListener("keydown", onKey); prev && prev.focus && prev.focus(); };
+  const close = () => { if (onClose) { const f = onClose; onClose = null; f(); } root.innerHTML = ""; sheetClose = null; document.removeEventListener("keydown", onKey); prev && prev.focus && prev.focus(); };
   sheetClose = close;
   const onKey = (e) => { if (e.key === "Escape") close(); };
   document.addEventListener("keydown", onKey);
@@ -753,6 +834,8 @@ document.addEventListener("click", (e) => {
   const day = e.target.closest("[data-day]"); if (day && !day.closest(".sheet")) { openDay(day.dataset.day); return; }
   const go = e.target.closest("[data-go]"); if (go && !go.closest(".sheet")) show(go.dataset.go);
   const ask = e.target.closest("[data-ask]"); if (ask) runCoach(ask.dataset.ask);
+  if (e.target.closest("[data-session]")) startSession();
+  if (e.target.closest("[data-free-run]")) { if (sheetClose) sheetClose(); startRun(null); }
 });
 
 function renderHeader() {
@@ -792,6 +875,9 @@ if (STANDALONE && history.pushState) {
     if (leaving) return;
     history.pushState({ zt: "guard" }, "");
     if (document.querySelector(".exit-box")) { closeExitBox(); return; }
+    if (typeof ses !== "undefined" && ses) { endSession(); return; }
+    if (typeof run !== "undefined" && run) { toast("Ketuk Selesai untuk mengakhiri lari"); return; }
+    if (typeof bld !== "undefined" && bld) { closeBuilder(); return; }
     if (sheetClose) { sheetClose(); return; }
     if (currentTab !== "today") { show("today"); return; }
     askExit();
@@ -1052,16 +1138,20 @@ function renderCoach() {
 const RouteDB = (() => {
   let dbp = null;
   const open = () => dbp || (dbp = new Promise((res, rej) => {
-    const r = indexedDB.open("zeintrail", 1);
-    r.onupgradeneeded = () => r.result.createObjectStore("routes", { keyPath: "id" });
+    const r = indexedDB.open("zeintrail", 2);
+    r.onupgradeneeded = () => { const db = r.result;
+      if (!db.objectStoreNames.contains("routes")) db.createObjectStore("routes", { keyPath: "id" });
+      if (!db.objectStoreNames.contains("runs")) db.createObjectStore("runs", { keyPath: "id" }); };
     r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
   }));
-  const tx = (mode, fn) => open().then((db) => new Promise((res, rej) => {
-    const t = db.transaction("routes", mode), req = fn(t.objectStore("routes"));
+  const tx = (mode, fn, store = "routes") => open().then((db) => new Promise((res, rej) => {
+    const t = db.transaction(store, mode), req = fn(t.objectStore(store));
     t.oncomplete = () => res(req && "result" in req ? req.result : undefined);
     t.onerror = () => rej(t.error); t.onabort = () => rej(t.error);
   }));
-  return { all: () => tx("readonly", (s) => s.getAll()), put: (r) => tx("readwrite", (s) => s.put(r)), del: (id) => tx("readwrite", (s) => s.delete(id)) };
+  const api = (store) => ({ all: () => tx("readonly", (s) => s.getAll(), store), put: (r) => tx("readwrite", (s) => s.put(r), store), del: (id) => tx("readwrite", (s) => s.delete(id), store) });
+  window.RunDB = api("runs");
+  return api("routes");
 })();
 const ACTIVE_KEY = "zeintrail-route";
 let routes = [], activeRoute = null, lmap = null, meMarker = null, watchId = null, mePos = null, routeVisible = false;
@@ -1149,14 +1239,17 @@ function renderRoute() {
   if (lmap) { lmap.remove(); lmap = null; meMarker = null; }
   const r = activeRoute;
   v.innerHTML = `
-    <div><h2>Rute</h2><p class="lede">Impor file GPX rute lomba atau rute latihanmu. Rute disimpan di HP, dan garis rute serta posisimu tetap tampil tanpa sinyal.</p></div>
-    <div class="btns"><label class="btn amber" for="gpx-in">${icon("long")}Impor file GPX</label>
+    <div><h2>Rute & lari</h2><p class="lede">Rekam larimu, buat rute di sekitarmu, atau ikuti rute GPX dengan panduan suara. Garis rute dan posisimu tetap tampil tanpa sinyal.</p></div>
+    <div class="route-actions">
+      <button type="button" class="btn amber" id="free-run">${icon("easy")}Lari bebas</button>
+      <button type="button" class="btn primary" id="build-route">${icon("long")}Buat rute</button>
+      <label class="btn" for="gpx-in">Impor GPX</label>
       <input id="gpx-in" type="file" accept=".gpx,application/gpx+xml,application/xml,text/xml" class="sr"></div>
     ${routes.length > 1 ? `<div class="route-list">${routes.map((x) => `<button type="button" class="move-chip" data-rid="${x.id}" aria-selected="${r && x.id === r.id}">${esc(x.name)}</button>`).join("")}</div>` : ""}
     ${r ? `
     <h3 style="margin-top:4px">${esc(r.name)}</h3>
     <div class="map" id="map" role="region" aria-label="Peta rute"></div>
-    <div class="btns"><button type="button" class="btn primary" id="locate">Lacak posisiku di rute</button><button type="button" class="btn" id="fit">Lihat seluruh rute</button></div>
+    <div class="btns map-actions"><button type="button" class="btn amber" id="run-start">${icon("easy")}Mulai lari ikuti rute</button><button type="button" class="btn primary" id="locate">Lacak posisiku</button><button type="button" class="btn" id="fit">Seluruh rute</button></div>
     <div class="where" id="where" hidden aria-live="polite"></div>
     <div class="stats4">
       <div><b>${fmtKm(r.dist)} km</b><span>jarak</span></div>
@@ -1171,7 +1264,11 @@ function renderRoute() {
       <div class="btns"><button type="button" class="btn" id="exp-gpx">Simpan file GPX</button><button type="button" class="btn danger" id="del-route">Hapus rute ini</button></div>
     </div>` : `
     <div class="card empty-map"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6-5.3-6-10a6 6 0 1 1 12 0c0 4.7-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>
-      <h3>Belum ada rute</h3><p class="muted" style="margin:0">Ambil file GPX rute Lelono dari panitia, atau ekspor rute latihan dari Strava, Garmin, atau aplikasi jam larimu, lalu impor di sini.</p></div>`}`;
+      <h3>Belum ada rute</h3><p class="muted" style="margin:0">Buat putaran di sekitar lokasimu, atau impor file GPX rute Lelono dari panitia, Strava, Garmin, atau aplikasi jam larimu.</p></div>`}
+    <div class="card" id="run-history"></div>`;
+  if (typeof renderRunHistory === "function") renderRunHistory();
+  v.querySelector("#free-run").addEventListener("click", () => startRun(null));
+  v.querySelector("#build-route").addEventListener("click", openBuilder);
   v.querySelector("#gpx-in").addEventListener("change", (e) => { importGPX(e.target.files[0]); e.target.value = ""; });
   v.querySelectorAll("[data-rid]").forEach((b) => b.addEventListener("click", () => {
     activeRoute = routes.find((x) => x.id === b.dataset.rid) || activeRoute;
@@ -1181,6 +1278,7 @@ function renderRoute() {
   if (!r) return;
   v.querySelector("#locate").addEventListener("click", () => watchId === null ? startLocate() : stopLocate());
   v.querySelector("#fit").addEventListener("click", fitRoute);
+  v.querySelector("#run-start").addEventListener("click", () => startRun(activeRoute));
   v.querySelector("#exp-gpx").addEventListener("click", () => downloadFile(`${r.name.replace(/[^\w\- ]+/g, "").trim() || "rute"}.gpx`, toGPX(r), "application/gpx+xml"));
   const del = v.querySelector("#del-route");
   del.addEventListener("click", async () => {
@@ -1272,6 +1370,194 @@ window.ZTModel = (() => {
   return { get };
 })();
 </script>
+<script src="vendor/OutlineEffect.js"></script>
+<script>
+/* ================= Karakter =================
+   One rigged body, dressed four ways. Clothes are painted per vertex from each vertex's
+   dominant bone (torso → shirt, thighs → shorts, feet → shoes …); accessories ride on bones. */
+window.ZTChar = (() => {
+  const KEY = "zeintrail-char";
+  const SKINS = ["#e6b48f", "#c98f62", "#9a6440", "#6e4529"];
+  const SHIRTS = ["#2f6b4f", "#f0a43a", "#3f97be", "#d4472a", "#eef2ef", "#1d2b24"];
+  const SHORTS = ["#1d2b24", "#2f6b4f", "#6b5a43", "#2c3e66", "#eef2ef"];
+  const HAIRS = ["#15110f", "#4a2f1d", "#8a5a2b", "#c9c2b8", "#f0a43a"];
+  const PRESETS = {
+    mannequin: { name: "Mannequin", desc: "Model 3D polos seperti sebelumnya", style: "mannequin" },
+    zein: { name: "Zein", desc: "Rambut berantakan, ikat kepala, rompi hidrasi", style: "toon", skin: SKINS[1], shirt: "#2f6b4f", shorts: "#1d2b24", shoes: "#f3f6f4",
+      hair: "spiky", hairColor: "#15110f", face: true, headband: true, cap: false, buff: false, vest: true, poles: false, glasses: false },
+    hiker: { name: "Pendaki", desc: "Topi trucker, buff, tongkat trail", style: "toon", skin: SKINS[2], shirt: "#f0a43a", shorts: "#6b5a43", shoes: "#3b3f3d",
+      hair: "short", hairColor: "#4a2f1d", face: true, headband: false, cap: true, buff: true, vest: false, poles: true, glasses: false },
+  };
+  const CUSTOM_BASE = { name: "Custom", desc: "Karakter polos, tambah aksesorismu sendiri", style: "toon", skin: SKINS[1], shirt: "#eef2ef", shorts: "#eef2ef", shoes: "#eef2ef",
+    hair: "none", hairColor: "#15110f", face: false, headband: false, cap: false, buff: false, vest: false, poles: false, glasses: false };
+  let saved = { pick: "mannequin", custom: { ...CUSTOM_BASE } };
+  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s) saved = { pick: s.pick || "mannequin", custom: { ...CUSTOM_BASE, ...(s.custom || {}) } }; } catch (e) {}
+  const listeners = [];
+  function config() { return saved.pick === "custom" ? saved.custom : (PRESETS[saved.pick] || PRESETS.mannequin); }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} listeners.forEach((f) => f()); }
+  function pick(id) { saved.pick = id; save(); }
+  function setCustom(patch) { saved.custom = { ...saved.custom, ...patch }; saved.pick = "custom"; save(); }
+
+  let gradient = null;
+  function gradientMap() {
+    if (gradient) return gradient;
+    gradient = new THREE.DataTexture(new Uint8Array([70, 150, 255]), 3, 1, THREE.LuminanceFormat);
+    gradient.minFilter = gradient.magFilter = THREE.NearestFilter; gradient.generateMipmaps = false; gradient.needsUpdate = true;
+    return gradient;
+  }
+  function category(name) {
+    if (/Head|Eye|Neck/.test(name)) return "skin";
+    if (/ForeArm|Hand/.test(name)) return "skin";
+    if (/Arm|Shoulder|Spine/.test(name)) return "shirt";
+    if (/UpLeg|Hips/.test(name)) return "shorts";
+    if (/Foot|Toe/.test(name)) return "shoes";
+    if (/Leg/.test(name)) return "skin";
+    return "shirt";
+  }
+  function paint(mesh, cfg) {
+    const g = mesh.geometry, si = g.attributes.skinIndex, sw = g.attributes.skinWeight;
+    if (!si || !sw) return;
+    const bones = mesh.skeleton.bones.map((b) => category(b.name));
+    const col = { skin: new THREE.Color(cfg.skin), shirt: new THREE.Color(cfg.shirt), shorts: new THREE.Color(cfg.shorts), shoes: new THREE.Color(cfg.shoes) };
+    const arr = new Float32Array(si.count * 3);
+    for (let i = 0; i < si.count; i++) {
+      let best = 0, bw = -1;
+      const W = [sw.getX(i), sw.getY(i), sw.getZ(i), sw.getW(i)], I = [si.getX(i), si.getY(i), si.getZ(i), si.getW(i)];
+      for (let k = 0; k < 4; k++) { if (W[k] > bw) { bw = W[k]; best = I[k]; } }
+      const c = col[bones[best]] || col.shirt;
+      arr[i * 3] = c.r; arr[i * 3 + 1] = c.g; arr[i * 3 + 2] = c.b;
+    }
+    g.setAttribute("color", new THREE.BufferAttribute(arr, 3));
+  }
+  function mk(geo, color, toon) {
+    const m = toon ? new THREE.MeshToonMaterial({ color, gradientMap: gradientMap() }) : new THREE.MeshLambertMaterial({ color });
+    const mesh = new THREE.Mesh(geo, m); mesh.castShadow = true; return mesh;
+  }
+  /* Accessories are placed in rest-pose world space (metres, figure faces +Z), then parented to a bone. */
+  function accessories(root, cfg, toon) {
+    root.updateMatrixWorld(true);
+    const bone = (n) => root.getObjectByName("mixamorig" + n);
+    const put = (boneName, obj) => { root.add(obj); obj.updateMatrixWorld(true); bone(boneName).attach(obj); };
+    const HC = new THREE.Vector3(0, 1.685, .022), HR = .108; // head centre & radius (rest pose)
+    const at = (o, x, y, z) => { o.position.set(x, y, z); return o; };
+    if (cfg.hair && cfg.hair !== "none") {
+      const g = new THREE.Group();
+      const cap = mk(new THREE.SphereGeometry(HR + .008, 18, 10, 0, Math.PI * 2, 0, Math.PI * .55), cfg.hairColor, toon);
+      cap.position.copy(HC); cap.rotation.x = -.25; g.add(cap);
+      if (cfg.hair === "spiky") {
+        let seed = 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+        for (let i = 0; i < 26; i++) {
+          const th = rnd() * Math.PI * 2, ph = .15 + rnd() * .95;
+          const dir = new THREE.Vector3(Math.sin(ph) * Math.cos(th), Math.cos(ph), Math.sin(ph) * Math.sin(th));
+          if (dir.z > .55 && dir.y < .55) continue;               // keep the face clear
+          const cone = mk(new THREE.ConeGeometry(.034, .085 + rnd() * .05, 5), cfg.hairColor, toon);
+          cone.position.copy(HC).addScaledVector(dir, HR * .95);
+          cone.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().add(new THREE.Vector3((rnd() - .5) * .5, .2, -.25)).normalize());
+          g.add(cone);
+        }
+        for (let i = -2; i <= 2; i++) {                            // fringe
+          const c = mk(new THREE.ConeGeometry(.026, .08, 5), cfg.hairColor, toon);
+          c.position.set(HC.x + i * .03, HC.y + .06, HC.z + .085);
+          c.rotation.set(2.2 + i * .05, 0, i * .25); g.add(c);
+        }
+      }
+      put("Head", g);
+    }
+    if (cfg.face) {
+      const g = new THREE.Group(), ey = HC.y + .005, ez = HC.z + .094;
+      for (const s of [-1, 1]) {
+        const eye = new THREE.Group();
+        const white = mk(new THREE.CircleGeometry(.021, 20), 0xffffff, toon); white.scale.y = 1.35;
+        const iris = mk(new THREE.CircleGeometry(.0145, 20), 0x1d2b24, toon); iris.position.set(s * -.002, -.003, .002); iris.scale.y = 1.25;
+        const hi = new THREE.Mesh(new THREE.CircleGeometry(.0055, 12), new THREE.MeshBasicMaterial({ color: 0xffffff })); hi.position.set(s * .005, .008, .004);
+        const brow = mk(new THREE.BoxGeometry(.034, .007, .006), cfg.hairColor || 0x15110f, toon); brow.position.set(0, .04, .004); brow.rotation.z = s * -.28;
+        eye.add(white, iris, hi, brow);
+        eye.position.set(s * .04, ey, ez); eye.rotation.y = s * .36;
+        g.add(eye);
+      }
+      const mouth = mk(new THREE.TorusGeometry(.016, .0035, 6, 14, Math.PI), 0x6e2b22, toon);
+      mouth.position.set(0, HC.y - .052, HC.z + .1); mouth.rotation.z = Math.PI; g.add(mouth);
+      put("Head", g);
+    }
+    if (cfg.headband) {
+      const band = mk(new THREE.TorusGeometry(HR + .006, .012, 8, 28), 0xf0a43a, toon);
+      band.position.set(HC.x, HC.y + .045, HC.z); band.rotation.x = Math.PI / 2 - .25; put("Head", band);
+      const tail = mk(new THREE.BoxGeometry(.012, .09, .02), 0xf0a43a, toon); tail.position.set(.03, HC.y + .0, HC.z - .12); tail.rotation.z = .4; put("Head", tail);
+    }
+    if (cfg.cap) {
+      const g = new THREE.Group();
+      const crown = mk(new THREE.SphereGeometry(HR + .016, 18, 9, 0, Math.PI * 2, 0, Math.PI * .5), 0x163d2e, toon);
+      crown.position.set(HC.x, HC.y + .02, HC.z - .005); crown.rotation.x = -.22;
+      const front = mk(new THREE.SphereGeometry(HR + .019, 12, 6, -Math.PI * .3, Math.PI * .6, .25, .8), 0xeef2ef, toon);
+      front.position.copy(crown.position); front.rotation.x = -.22;
+      const brim = mk(new THREE.CylinderGeometry(.085, .085, .012, 18, 1, false, -Math.PI / 2, Math.PI), 0x163d2e, toon);
+      brim.position.set(HC.x, HC.y + .03, HC.z + .1); brim.rotation.x = .18;
+      g.add(crown, front, brim); put("Head", g);
+    }
+    if (cfg.glasses) {
+      const g = new THREE.Group();
+      const lens = mk(new THREE.BoxGeometry(.15, .032, .012), 0x1d2b24, toon); lens.position.set(HC.x, HC.y + .006, HC.z + .1);
+      const shine = new THREE.Mesh(new THREE.BoxGeometry(.03, .006, .002), new THREE.MeshBasicMaterial({ color: 0x9fd5ea })); shine.position.set(.03, HC.y + .014, HC.z + .107);
+      const arm = mk(new THREE.BoxGeometry(.006, .008, .11), 0x1d2b24, toon);
+      const a1 = arm.clone(); a1.position.set(.075, HC.y + .006, HC.z + .045); const a2 = arm.clone(); a2.position.set(-.075, HC.y + .006, HC.z + .045);
+      g.add(lens, shine, a1, a2); put("Head", g);
+    }
+    if (cfg.buff) {
+      const buff = mk(new THREE.CylinderGeometry(.062, .072, .085, 16, 1, true), 0x3f97be, toon);
+      buff.material.side = THREE.DoubleSide; buff.position.set(0, 1.535, -.012); put("Neck", buff);
+    }
+    if (cfg.vest) {
+      const g = new THREE.Group(), dark = 0x163d2e;
+      const pack = mk(new THREE.BoxGeometry(.24, .3, .07), dark, toon); pack.position.set(0, 1.3, -.135);
+      const trim = mk(new THREE.BoxGeometry(.245, .03, .075), 0xf0a43a, toon); trim.position.set(0, 1.4, -.135);
+      g.add(pack, trim);
+      for (const s of [-1, 1]) {
+        const strap = mk(new THREE.BoxGeometry(.05, .3, .03), dark, toon); strap.position.set(s * .075, 1.33, .1); strap.rotation.x = -.12;
+        const flask = mk(new THREE.CylinderGeometry(.022, .022, .1, 10), 0x9fd5ea, toon); flask.position.set(s * .075, 1.33, .13);
+        const capf = mk(new THREE.CylinderGeometry(.012, .012, .02, 8), 0xf0a43a, toon); capf.position.set(s * .075, 1.39, .13);
+        g.add(strap, flask, capf);
+      }
+      put("Spine2", g);
+    }
+    if (cfg.poles) {
+      const g = new THREE.Group();
+      for (const s of [-1, 1]) {
+        const pole = mk(new THREE.CylinderGeometry(.008, .008, .85, 6), 0xc9c2b8, toon);
+        pole.position.set(s * .02, 1.3, -.19); pole.rotation.z = s * .55; g.add(pole);
+        const grip = mk(new THREE.CylinderGeometry(.014, .014, .1, 8), 0x1d2b24, toon);
+        grip.position.set(s * -.205, 1.66, -.19); grip.rotation.z = s * .55; g.add(grip);
+      }
+      put("Spine2", g);
+    }
+  }
+  /* Dress a freshly parsed copy. lit: "standard" (exercise viewer) or "lambert" (hero). Returns true if toon. */
+  function dress(root, lit) {
+    const cfg = config();
+    const toon = cfg.style === "toon";
+    root.traverse((o) => {
+      if (!(o.isMesh || o.isSkinnedMesh)) return;
+      o.castShadow = true; o.frustumCulled = false;
+      const joints = /joint/i.test(o.material.name);
+      if (!toon) {
+        const color = joints ? 0x2f6b4f : (matchMedia("(prefers-color-scheme: dark)").matches ? 0xc5d3cb : 0xeef2ef);
+        o.material = lit === "standard"
+          ? new THREE.MeshStandardMaterial({ color, roughness: joints ? .45 : .6, metalness: joints ? .1 : 0, skinning: true })
+          : new THREE.MeshLambertMaterial({ color, skinning: true });
+        return;
+      }
+      paint(o, cfg);
+      o.material = new THREE.MeshToonMaterial({ vertexColors: true, gradientMap: gradientMap(), skinning: true });
+      o.material.userData.outlineParameters = { thickness: .006, color: [.06, .1, .08], alpha: 1, visible: true };
+    });
+    if (toon) accessories(root, cfg, true);
+    return toon;
+  }
+  /* Keep scenery out of the outline pass. */
+  function noOutline(obj) { obj.traverse((o) => { if (o.material) [].concat(o.material).forEach((m) => { m.userData.outlineParameters = { visible: false }; }); }); }
+  return { dress, noOutline, config, pick, setCustom, get saved() { return saved; }, PRESETS, CUSTOM_BASE, SKINS, SHIRTS, SHORTS, HAIRS, onChange: (f) => listeners.push(f) };
+})();
+</script>
+
 <script>
 /* ================= 3D trail runner (three.js) =================
    Low-poly runner jogging in place while the trail, pines and mist stream past.
@@ -1279,7 +1565,7 @@ window.ZTModel = (() => {
 window.Runner3D = (() => {
   if (!window.THREE) return null;
   let renderer, scene, camera, host = null, active = true, raf = 0, t0 = performance.now(), visible = true;
-  let runner, parts = {}, trees = [], rain, ground, pathMarks = [], mats = {}, mixer = null, gen = 0;
+  let runner, parts = {}, trees = [], rain, ground, pathMarks = [], mats = {}, mixer = null, gen = 0, effect = null;
   const dark = matchMedia("(prefers-color-scheme: dark)");
 
   function palette() {
@@ -1369,22 +1655,25 @@ window.Runner3D = (() => {
       if (myGen !== gen || !scene) return;
       const clip = g.animations.find((a) => a.name === "run");
       if (!clip) return;
-      const body = dark.matches ? 0xc5d3cb : 0xeef2ef;
-      g.scene.traverse((o) => { if (o.isMesh || o.isSkinnedMesh) { o.frustumCulled = false; const j = /joint/i.test(o.material.name);
-        o.material = new THREE.MeshLambertMaterial({ color: j ? 0x2f6b4f : body, skinning: true }); } });
+      scene.remove(runner);
+      ZTChar.noOutline(scene);
+      const toon = ZTChar.dress(g.scene, "lambert");
+      effect = toon && THREE.OutlineEffect ? new THREE.OutlineEffect(renderer, { defaultThickness: .004 }) : null;
       g.scene.rotation.y = Math.PI / 2;           // the rig faces +Z; the trail runs toward +X
-      scene.remove(runner); runner = g.scene; scene.add(runner);
+      runner = g.scene; scene.add(runner);
       mixer = new THREE.AnimationMixer(runner);
       mixer.clipAction(clip).play();
       if (reduceMotion) { mixer.update(.2); loop(); }
     }).catch(() => {});
-    dark.addEventListener?.("change", () => { const was = host; teardown(); init(); if (was) attach(was); });
+    dark.addEventListener?.("change", rebuild);
     document.addEventListener("visibilitychange", () => { visible = document.visibilityState === "visible"; loop(); });
   }
+  function rebuild() { const was = host; teardown(); renderer = null; init(); if (was) attach(was); }
+  if (window.ZTChar) ZTChar.onChange(() => { if (renderer) rebuild(); });
   function teardown() {
     cancelAnimationFrame(raf); raf = 0;
     if (renderer) { renderer.dispose(); renderer.domElement.remove(); }
-    trees = []; pathMarks = []; parts = {}; mixer = null; gen++;
+    trees = []; pathMarks = []; parts = {}; mixer = null; effect = null; gen++;
   }
   function size() {
     if (!host) return;
@@ -1421,7 +1710,7 @@ window.Runner3D = (() => {
     const sway = Math.sin(t * .25) * .9;
     camera.position.set(1.4 + sway, 1.45, 5.6);
     camera.lookAt(-1.35, 1.15, 0);
-    renderer.render(scene, camera);
+    (effect || renderer).render(scene, camera);
   }
   function loop() {
     cancelAnimationFrame(raf); raf = 0;
@@ -1444,6 +1733,121 @@ window.Runner3D = (() => {
   function setActive(on) { active = on; loop(); }
   return { attach, detach, setActive };
 })();
+</script>
+
+<script>
+/* ================= Pengaturan: karakter, timer, pengingat ================= */
+const PREFS_KEY = "zeintrail-prefs";
+let prefs = { rest: 60, sound: true, voice: true };
+try { const s = JSON.parse(localStorage.getItem(PREFS_KEY)); if (s) prefs = { ...prefs, ...s }; } catch (e) {}
+const savePrefs = () => { try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch (e) {} };
+
+/* Small live preview of the chosen character (only while the settings sheet is open). */
+const CharPreview = (() => {
+  let renderer, scene, camera, mixer, model, raf = 0, effect = null, cv = null, last = 0, gen = 0;
+  function build(canvas) {
+    cv = canvas;
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(30, 1, .05, 20);
+    camera.position.set(1.4, 1.35, 3.2); camera.lookAt(0, .95, 0);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x4a5a50, .85));
+    const sun = new THREE.DirectionalLight(0xfff3e0, .9); sun.position.set(2, 4, 3); scene.add(sun);
+    const floor = new THREE.Mesh(new THREE.CircleGeometry(.8, 40), new THREE.MeshStandardMaterial({ color: 0xd5e2da }));
+    floor.rotation.x = -Math.PI / 2; scene.add(floor);
+    ZTChar.noOutline(scene);
+    load();
+    const tick = (now) => {
+      const dt = Math.min(.05, (now - (last || now)) / 1000); last = now;
+      if (mixer) mixer.update(dt);
+      if (model) model.rotation.y += dt * .5;
+      const w = cv.clientWidth, h = cv.clientHeight;
+      if (w && h && (cv.width !== Math.round(w * renderer.getPixelRatio()))) { renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+      (effect || renderer).render(scene, camera);
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+  }
+  function load() {
+    const my = ++gen;
+    ZTModel.get().then((g) => {
+      if (my !== gen || !scene) return;
+      if (model) scene.remove(model);
+      model = g.scene;
+      const toon = ZTChar.dress(model, "standard");
+      effect = toon && THREE.OutlineEffect ? new THREE.OutlineEffect(renderer, { defaultThickness: .005 }) : null;
+      scene.add(model);
+      mixer = new THREE.AnimationMixer(model);
+      const clip = g.animations.find((a) => a.name === (reduceMotion ? "idle" : "run")) || g.animations[0];
+      mixer.clipAction(clip).play();
+      if (reduceMotion) mixer.update(.3);
+    }).catch(() => {});
+  }
+  function dispose() { cancelAnimationFrame(raf); raf = 0; gen++; if (renderer) renderer.dispose(); renderer = scene = model = mixer = effect = null; }
+  return { build, reload: () => { if (scene) load(); }, dispose };
+})();
+ZTChar.onChange(() => CharPreview.reload());
+
+function swatches(list, cur, key) {
+  return `<div class="swatches" role="radiogroup">${list.map((c) => `<button type="button" class="sw" role="radio" aria-checked="${c === cur}" aria-label="${c}" data-k="${key}" data-c="${c}" style="background:${c}"></button>`).join("")}</div>`;
+}
+function settingsHTML() {
+  const sv = ZTChar.saved, c = sv.custom;
+  const cards = [...Object.entries(ZTChar.PRESETS), ["custom", ZTChar.CUSTOM_BASE]].map(([id, p]) =>
+    `<button type="button" class="char-card" role="radio" aria-checked="${sv.pick === id}" data-char="${id}"><b>${p.name}</b><span>${p.desc}</span></button>`).join("");
+  const acc = [["face", "Wajah anime"], ["headband", "Ikat kepala"], ["cap", "Topi trucker"], ["glasses", "Kacamata"], ["buff", "Buff leher"], ["vest", "Rompi hidrasi"], ["poles", "Tongkat trail"]];
+  return `
+    <div><h2>Pengaturan</h2><p class="lede">Atur karakter, timer latihan, dan pengingat.</p></div>
+    <div class="card">
+      <h3>Karakter</h3>
+      <div class="char-stage"><canvas id="char-canvas" aria-label="Pratinjau karakter"></canvas></div>
+      <div class="char-grid" role="radiogroup" aria-label="Pilih karakter">${cards}</div>
+      ${sv.pick === "custom" ? `
+      <div class="custom">
+        <div class="field"><span class="lbl">Aksesoris</span>
+          <div class="chips">${acc.map(([k, l]) => `<button type="button" class="chip-q tog" aria-pressed="${!!c[k]}" data-acc="${k}">${l}</button>`).join("")}</div></div>
+        <div class="field"><span class="lbl">Rambut</span>
+          <div class="chips">${[["none", "Tanpa rambut"], ["short", "Pendek"], ["spiky", "Berantakan"]].map(([k, l]) => `<button type="button" class="chip-q tog" aria-pressed="${c.hair === k}" data-hair="${k}">${l}</button>`).join("")}</div>
+          ${swatches(ZTChar.HAIRS, c.hairColor, "hairColor")}</div>
+        <div class="field"><span class="lbl">Warna kulit</span>${swatches(ZTChar.SKINS, c.skin, "skin")}</div>
+        <div class="field"><span class="lbl">Kaus</span>${swatches(ZTChar.SHIRTS, c.shirt, "shirt")}</div>
+        <div class="field"><span class="lbl">Celana</span>${swatches(ZTChar.SHORTS, c.shorts, "shorts")}</div>
+        <div class="field"><span class="lbl">Sepatu</span>${swatches(["#f3f6f4", "#3b3f3d", "#f0a43a", "#3f97be", "#d4472a"], c.shoes, "shoes")}</div>
+      </div>` : ""}
+    </div>
+    <div class="card">
+      <h3>Latihan terpandu</h3>
+      <div class="field"><span class="lbl">Istirahat antar set</span>
+        <div class="chips">${[45, 60, 90].map((n) => `<button type="button" class="chip-q tog" aria-pressed="${prefs.rest === n}" data-rest="${n}">${n} detik</button>`).join("")}</div></div>
+      <label class="switch"><input type="checkbox" id="pf-sound" ${prefs.sound ? "checked" : ""}><span>Bunyi saat timer habis</span></label>
+      <label class="switch"><input type="checkbox" id="pf-voice" ${prefs.voice ? "checked" : ""}><span>Panduan suara saat lari mengikuti rute</span></label>
+    </div>
+    <div class="card"><h3>Pengingat latihan</h3><button type="button" class="btn" id="open-remind">Atur pengingat</button></div>`;
+}
+function openSettings() {
+  openSheet(settingsHTML(), "Pengaturan", (inner, close) => {
+    CharPreview.build(inner.querySelector("#char-canvas"));
+    const reopen = () => { const y = inner.closest(".sheet").scrollTop; CharPreview.dispose(); close(); openSettings(); requestAnimationFrame(() => { const sh = document.querySelector(".sheet"); if (sh) sh.scrollTop = y; }); };
+    inner.querySelectorAll("[data-char]").forEach((b) => b.addEventListener("click", () => { ZTChar.pick(b.dataset.char); reopen(); }));
+    inner.querySelectorAll("[data-acc]").forEach((b) => b.addEventListener("click", () => {
+      const k = b.dataset.acc, v = !ZTChar.saved.custom[k]; b.setAttribute("aria-pressed", String(v)); ZTChar.setCustom({ [k]: v });
+    }));
+    inner.querySelectorAll("[data-hair]").forEach((b) => b.addEventListener("click", () => {
+      inner.querySelectorAll("[data-hair]").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); ZTChar.setCustom({ hair: b.dataset.hair });
+    }));
+    inner.querySelectorAll(".sw").forEach((b) => b.addEventListener("click", () => {
+      inner.querySelectorAll(`.sw[data-k="${b.dataset.k}"]`).forEach((x) => x.setAttribute("aria-checked", String(x === b))); ZTChar.setCustom({ [b.dataset.k]: b.dataset.c });
+    }));
+    inner.querySelectorAll("[data-rest]").forEach((b) => b.addEventListener("click", () => {
+      prefs.rest = Number(b.dataset.rest); savePrefs(); inner.querySelectorAll("[data-rest]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    }));
+    inner.querySelector("#pf-sound").addEventListener("change", (e) => { prefs.sound = e.target.checked; savePrefs(); });
+    inner.querySelector("#pf-voice").addEventListener("change", (e) => { prefs.voice = e.target.checked; savePrefs(); });
+    inner.querySelector("#open-remind").addEventListener("click", () => { CharPreview.dispose(); close(); openReminders(); });
+  }, () => CharPreview.dispose());
+}
+document.getElementById("settings-btn").addEventListener("click", openSettings);
 </script>
 
 <script>
@@ -1544,7 +1948,7 @@ const Viewer3D = (() => {
   if (!window.THREE || !cv) return null;
   const V3 = THREE.Vector3, Q = THREE.Quaternion;
   const S = 0.888 / 84;                       // canvas units → metres (thigh+shin of the rig)
-  let renderer, scene, camera, group, model, ground, boxMesh, wallMesh, holdTag;
+  let renderer, scene, camera, group, model, ground, boxMesh, wallMesh, holdTag, effect = null;
   const B = {}, rest = new Map();
   let ready = false, active = false, visible = true, raf = 0, last = 0;
   let cur = 0, time = 0, playing = !reduceMotion, yaw = 1.15, target = new V3(0, .8, 0), dist = 3.4, dragging = null;
@@ -1577,7 +1981,6 @@ const Viewer3D = (() => {
     const C = cssColors();
     renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true, powerPreference: "low-power" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(34, 1, .05, 40);
@@ -1594,21 +1997,8 @@ const Viewer3D = (() => {
     boxMesh.castShadow = boxMesh.receiveShadow = true; group.add(boxMesh);
     wallMesh = new THREE.Mesh(new THREE.BoxGeometry(1.6, 2.2, .08), new THREE.MeshStandardMaterial({ color: C.line, roughness: 1 }));
     wallMesh.receiveShadow = true; group.add(wallMesh);
-    model = gltf.scene;
-    model.traverse((o) => {
-      if (o.isMesh || o.isSkinnedMesh) {
-        o.castShadow = true; o.frustumCulled = false;
-        const joints = /joint/i.test(o.material.name);
-        o.material = new THREE.MeshStandardMaterial({ color: joints ? C.joints : C.body, roughness: joints ? .45 : .6, metalness: joints ? .1 : 0, skinning: true });
-      }
-    });
-    const get = (n) => model.getObjectByName("mixamorig" + n);
-    Object.assign(B, { hips: get("Hips"), spine: get("Spine"), spine1: get("Spine1"), neck: get("Neck"), head: get("Head"), headTop: get("HeadTop_End") });
-    for (const [k, side] of [["L", "Left"], ["R", "Right"]]) {
-      B[k] = { up: get(side + "UpLeg"), leg: get(side + "Leg"), foot: get(side + "Foot"), toe: get(side + "ToeBase"), arm: get(side + "Arm"), fore: get(side + "ForeArm"), hand: get(side + "Hand") };
-    }
-    model.traverse((o) => { if (o.isBone) rest.set(o, o.quaternion.clone()); });
-    group.add(model);
+    ZTChar.noOutline(scene);
+    bind(gltf);
     holdTag = document.createElement("span"); holdTag.className = "hold-tag"; holdTag.textContent = "Tahan"; holdTag.hidden = true;
     cv.parentElement.appendChild(holdTag);
     // drag to orbit
@@ -1622,7 +2012,22 @@ const Viewer3D = (() => {
     new ResizeObserver(size).observe(cv);
     new IntersectionObserver((es) => { visible = es[0].isIntersecting; loop(); }).observe(cv);
     document.addEventListener("visibilitychange", loop);
+    ZTChar.onChange(() => { ZTModel.get().then((g) => { bind(g); setMove(cur, true); }).catch(() => {}); });
     size(); loop();
+  }
+  function bind(gltf) {
+    if (model) group.remove(model);
+    model = gltf.scene;
+    const toon = ZTChar.dress(model, "standard");
+    effect = toon && THREE.OutlineEffect ? new THREE.OutlineEffect(renderer, { defaultThickness: .005 }) : null;
+    const get = (n) => model.getObjectByName("mixamorig" + n);
+    Object.assign(B, { hips: get("Hips"), spine: get("Spine"), spine1: get("Spine1"), neck: get("Neck"), head: get("Head"), headTop: get("HeadTop_End") });
+    for (const [k, side] of [["L", "Left"], ["R", "Right"]]) {
+      B[k] = { up: get(side + "UpLeg"), leg: get(side + "Leg"), foot: get(side + "Foot"), toe: get(side + "ToeBase"), arm: get(side + "Arm"), fore: get(side + "ForeArm"), hand: get(side + "Hand") };
+    }
+    rest.clear();
+    model.traverse((o) => { if (o.isBone) rest.set(o, o.quaternion.clone()); });
+    group.add(model);
   }
 
   const CONTACT = () => [[B.L.foot, .075], [B.R.foot, .075], [B.L.toe, .025], [B.R.toe, .025], [B.L.hand, .03], [B.R.hand, .03],
@@ -1689,7 +2094,7 @@ const Viewer3D = (() => {
     const cy = target.y + .35;
     camera.position.set(Math.sin(yaw) * dist, cy + .25, target.z + Math.cos(yaw) * dist);
     camera.lookAt(target.x, target.y, target.z);
-    renderer.render(scene, camera);
+    (effect || renderer).render(scene, camera);
   }
   function loop() {
     cancelAnimationFrame(raf); raf = 0; last = 0;
@@ -1709,7 +2114,7 @@ const Viewer3D = (() => {
     }
     loop();
   }
-  return { setMove: (i) => setMove(i), setActive };
+  return { setMove: (i) => setMove(i), setActive, setPlaying: (p) => { playing = p; playBtn.textContent = p ? "Jeda" : "Putar"; loop(); } };
 })();
 
 /* Move picker + details */
@@ -1739,5 +2144,667 @@ let startTab = "today";
 try { const t = localStorage.getItem("lelono16k-tab"); if (TABS.includes(t)) startTab = t; } catch (e) {}
 show(startTab);
 </script>
+<script>
+/* ================= Suara: bunyi timer & panduan suara ================= */
+const Sound = (() => {
+  let ac = null;
+  function unlock() { try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === "suspended") ac.resume(); } catch (e) {} }
+  function tone(freq, dur, when = 0, vol = .25) {
+    if (!ac || !prefs.sound) return;
+    const t = ac.currentTime + when, o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sine"; o.frequency.value = freq;
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(ac.destination); o.start(t); o.stop(t + dur + .05);
+  }
+  const tick = () => tone(880, .12);
+  const done = () => { tone(988, .18, 0); tone(988, .18, .25); tone(1319, .45, .5, .3); if (navigator.vibrate) try { navigator.vibrate([200, 100, 200, 100, 400]); } catch (e) {} };
+  const chime = () => { tone(660, .15, 0); tone(880, .3, .16); };
+  return { unlock, tick, done, chime };
+})();
+const Voice = (() => {
+  let idVoice = null;
+  function pickVoice() {
+    if (!("speechSynthesis" in window)) return;
+    const vs = speechSynthesis.getVoices();
+    idVoice = vs.find((v) => /^id(-|_)/i.test(v.lang)) || vs.find((v) => /indones/i.test(v.name)) || null;
+  }
+  if ("speechSynthesis" in window) { pickVoice(); speechSynthesis.addEventListener?.("voiceschanged", pickVoice); }
+  function say(text, force) {
+    if (!("speechSynthesis" in window) || (!prefs.voice && !force)) return;
+    try {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "id-ID"; if (idVoice) u.voice = idVoice; u.rate = 1.02;
+      speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  return { say, available: () => "speechSynthesis" in window, cancel: () => { try { speechSynthesis.cancel(); } catch (e) {} } };
+})();
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && "wakeLock" in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request("screen"); wakeLock.addEventListener("release", () => { wakeLock = null; }); }
+    if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch (e) {}
+}
+
+/* ================= Latihan terpandu (hari Kekuatan) ================= */
+const SESSION_PLAN = [
+  { m: 0, sets: 3, reps: 12 },
+  { m: 1, sets: 3, reps: 10, perLeg: true },
+  { m: 2, sets: 3, reps: 10, perLeg: true },
+  { m: 3, sets: 3, reps: 15, perLeg: true },
+  { m: 4, sets: 3, secs: 40 },
+  { m: 5, sets: 2, secs: 30, sides: true },
+  { m: 6, sets: 2, reps: 10, perLeg: true },
+];
+let ses = null;
+function buildSteps(maxSets) {
+  const steps = [];
+  SESSION_PLAN.forEach((ex, ei) => {
+    const sets = Math.min(ex.sets, maxSets || ex.sets);
+    for (let s = 1; s <= sets; s++) {
+      if (ex.secs) {
+        const sides = ex.sides ? ["kiri", "kanan"] : [null];
+        sides.forEach((side, k) => {
+          if (k > 0) steps.push({ kind: "switch", ex, ei, set: s, sets, secs: 5 });
+          steps.push({ kind: "hold", ex, ei, set: s, sets, secs: ex.secs, side });
+        });
+      } else steps.push({ kind: "reps", ex, ei, set: s, sets, reps: ex.reps });
+      steps.push({ kind: "rest", ex, ei, set: s, sets, secs: prefs.rest });
+    }
+  });
+  steps.pop(); // no rest after the very last set
+  return steps;
+}
+function sessionDay() { const d = currentDay(); return d.type === "str" ? d : null; }
+function startSession() {
+  if (sheetClose) sheetClose();
+  Sound.unlock();
+  const day = sessionDay();
+  const m = day && day.note.match(/(\d)\s*set/);
+  const maxSets = m ? Number(m[1]) + (/1–2/.test(day.note) ? 1 : 0) : null;
+  ses = { steps: buildSteps(maxSets), i: -1, endAt: 0, paused: 0, started: Date.now(), day, timer: 0, lastBeep: null };
+  const wrap = document.createElement("div");
+  wrap.className = "session"; wrap.setAttribute("role", "dialog"); wrap.setAttribute("aria-modal", "true"); wrap.setAttribute("aria-label", "Latihan terpandu");
+  wrap.innerHTML = `
+    <div class="ses-top"><button type="button" class="btn ghost" id="ses-quit">Akhiri</button><div class="ses-prog"><i id="ses-bar"></i></div><span id="ses-count"></span></div>
+    <div class="ses-stage" id="ses-stage"></div>
+    <div class="ses-body" id="ses-body" aria-live="polite"></div>`;
+  document.body.appendChild(wrap);
+  document.body.style.overflow = "hidden";
+  const viewer = document.getElementById("viewer");
+  ses.viewerHome = viewer.nextElementSibling;
+  wrap.querySelector("#ses-stage").appendChild(viewer);
+  if (Viewer3D) { Viewer3D.setActive(true); Viewer3D.setPlaying(true); }
+  wrap.querySelector("#ses-quit").addEventListener("click", () => endSession(false));
+  keepAwake(true);
+  ses.timer = setInterval(tickSession, 200);
+  document.addEventListener("visibilitychange", onSesVisible);
+  Voice.say("Latihan kekuatan dimulai. Ikuti aba-aba ya.");
+  next();
+}
+function onSesVisible() { if (document.visibilityState === "visible" && ses) { keepAwake(true); tickSession(); } }
+const mmss = (sec) => `${Math.floor(sec / 60)}:${String(Math.max(0, sec) % 60).padStart(2, "0")}`;
+function next() {
+  ses.i++;
+  const st = ses.steps[ses.i];
+  if (!st) { finishSession(); return; }
+  ses.endAt = st.secs ? Date.now() + st.secs * 1000 : 0;
+  ses.waiting = st.kind === "hold";   // a hold starts when the runner taps "Mulai"
+  if (ses.waiting) ses.endAt = 0;
+  ses.paused = 0; ses.lastBeep = null;
+  const mv = MOVES[st.ex.m];
+  if (Viewer3D && st.kind !== "rest") { Viewer3D.setMove(st.ex.m); renderMoveDetail(st.ex.m); }
+  if (st.kind === "rest") {
+    const nx = ses.steps[ses.i + 1];
+    Voice.say(`Istirahat ${st.secs} detik.${nx && nx.ei !== st.ei ? " Berikutnya " + MOVES[nx.ex.m].name + "." : ""}`);
+    if (Viewer3D && nx) { Viewer3D.setMove(nx.ex.m); renderMoveDetail(nx.ex.m); }
+  } else if (st.kind === "reps") {
+    Voice.say(`${mv.name}. Set ${st.set} dari ${st.sets}. ${st.reps} repetisi${st.ex.perLeg ? " per kaki" : ""}.`);
+  } else if (st.kind === "hold") {
+    Voice.say(`${mv.name}${st.side ? " sisi " + st.side : ""}. Set ${st.set}. Ketuk mulai kalau sudah siap.`);
+  } else if (st.kind === "switch") {
+    Voice.say("Ganti sisi.");
+  }
+  renderSession();
+}
+function remaining() { return ses.paused ? ses.paused : Math.max(0, Math.ceil((ses.endAt - Date.now()) / 1000)); }
+function tickSession() {
+  if (!ses) return;
+  const st = ses.steps[ses.i]; if (!st || !ses.endAt || ses.paused) return;
+  const r = remaining();
+  const el = document.getElementById("ses-time"); if (el) el.textContent = mmss(r);
+  const ring = document.getElementById("ses-ring"); if (ring) ring.style.strokeDashoffset = String(RING_C * (1 - r / st.secs));
+  if (r <= 3 && r > 0 && ses.lastBeep !== r) { ses.lastBeep = r; Sound.tick(); }
+  if (r <= 0) {
+    ses.endAt = 0;
+    Sound.done();
+    if (st.kind === "hold") Voice.say("Selesai. Bagus!");
+    else if (st.kind === "rest") { const nx = ses.steps[ses.i + 1]; if (nx) Voice.say(nx.kind === "hold" ? "Waktunya lanjut." : "Ayo lanjut. " + MOVES[nx.ex.m].name + "."); }
+    next();
+  }
+}
+const RING_C = 2 * Math.PI * 70;
+function renderSession() {
+  const st = ses.steps[ses.i], body = document.getElementById("ses-body"); if (!st || !body) return;
+  const total = ses.steps.filter((s) => s.kind !== "rest" && s.kind !== "switch").length;
+  const doneN = ses.steps.slice(0, ses.i).filter((s) => s.kind !== "rest" && s.kind !== "switch").length;
+  document.getElementById("ses-bar").style.width = (doneN / total * 100) + "%";
+  document.getElementById("ses-count").textContent = `Gerakan ${st.ei + 1} dari ${SESSION_PLAN.length}`;
+  const mv = MOVES[st.ex.m];
+  const nx = ses.steps.slice(ses.i + 1).find((s) => s.kind !== "rest" && s.kind !== "switch");
+  const ring = (secs, label) => `<div class="ses-ring"><svg viewBox="0 0 160 160"><circle cx="80" cy="80" r="70" class="tr"/><circle id="ses-ring" cx="80" cy="80" r="70" class="br" stroke-dasharray="${RING_C}" stroke-dashoffset="0"/></svg>
+      <div><b id="ses-time">${mmss(secs)}</b><span>${label}</span></div></div>`;
+  let html = "";
+  if (st.kind === "reps") {
+    html = `<div class="ses-what"><span class="badge t-str">${icon("str")}Set ${st.set} dari ${st.sets}</span><h2>${mv.name}</h2>
+      <p class="ses-big">${st.reps}<small> repetisi${st.ex.perLeg ? " per kaki" : ""}</small></p></div>
+      <button type="button" class="btn primary ses-main" id="ses-next">Set selesai, mulai istirahat</button>`;
+  } else if (st.kind === "hold") {
+    html = `<div class="ses-what"><span class="badge t-str">${icon("str")}Set ${st.set} dari ${st.sets}${st.side ? ", sisi " + st.side : ""}</span><h2>${mv.name}</h2></div>
+      ${ring(st.secs, "tahan")}
+      ${ses.waiting ? `<button type="button" class="btn amber ses-main" id="ses-start">Mulai ${st.secs} detik</button>` : `<div class="btns ses-ctl"><button type="button" class="btn" id="ses-pause">${ses.paused ? "Lanjutkan" : "Jeda"}</button><button type="button" class="btn ghost" id="ses-skip">Lewati</button></div>`}`;
+  } else if (st.kind === "switch") {
+    html = `<div class="ses-what"><h2>Ganti sisi</h2><p class="muted" style="margin:0">Siapkan posisi untuk sisi berikutnya.</p></div>${ring(st.secs, "bersiap")}`;
+  } else {
+    html = `<div class="ses-what"><span class="badge t-easy">${icon("rest")}Istirahat</span><h2>Tarik napas dulu</h2></div>
+      ${ring(st.secs, "istirahat")}
+      <div class="btns ses-ctl"><button type="button" class="btn" id="ses-add">+15 detik</button><button type="button" class="btn" id="ses-pause">${ses.paused ? "Lanjutkan" : "Jeda"}</button><button type="button" class="btn primary" id="ses-skip">Lewati</button></div>`;
+  }
+  if (nx) html += `<p class="ses-next">Berikutnya: <b>${MOVES[nx.ex.m].name}</b>, set ${nx.set}${nx.side ? " sisi " + nx.side : ""}</p>`;
+  body.innerHTML = html;
+  body.querySelector("#ses-next")?.addEventListener("click", () => { Sound.chime(); next(); });
+  body.querySelector("#ses-start")?.addEventListener("click", () => { Sound.unlock(); ses.waiting = false; ses.endAt = Date.now() + st.secs * 1000; Voice.say("Mulai!"); renderSession(); });
+  body.querySelector("#ses-skip")?.addEventListener("click", () => { Voice.cancel(); next(); });
+  body.querySelector("#ses-add")?.addEventListener("click", () => {
+    if (ses.paused) ses.paused += 15; else ses.endAt += 15000;
+    st.secs += 15; tickSession();
+  });
+  body.querySelector("#ses-pause")?.addEventListener("click", () => {
+    if (ses.paused) { ses.endAt = Date.now() + ses.paused * 1000; ses.paused = 0; } else { ses.paused = remaining(); }
+    renderSession(); tickSession();
+  });
+  tickSession();
+}
+function finishSession() {
+  const mins = Math.max(1, Math.round((Date.now() - ses.started) / 60000));
+  Sound.done(); Voice.say("Latihan kekuatan selesai. Kerja bagus!");
+  let marked = false;
+  if (ses.day && !entry(ses.day.key).done) { setEntry(ses.day.key, { done: true }); marked = true; renderAll(); }
+  const body = document.getElementById("ses-body");
+  body.innerHTML = `<div class="ses-what"><span class="badge t-easy">${icon("check")}Selesai</span><h2>Kerja bagus!</h2>
+      <p class="muted" style="margin:0">${SESSION_PLAN.length} gerakan dalam ${mins} menit.${marked ? " Sesi Kekuatan hari ini sudah ditandai selesai." : ""}</p></div>
+    <div class="btns ses-ctl">${ses.day ? `<button type="button" class="btn" id="ses-note">Isi catatan</button>` : ""}<button type="button" class="btn primary" id="ses-close">Tutup</button></div>`;
+  document.getElementById("ses-bar").style.width = "100%";
+  celebrate(body.querySelector(".badge"));
+  body.querySelector("#ses-close").addEventListener("click", () => endSession(true));
+  body.querySelector("#ses-note")?.addEventListener("click", () => { const k = ses.day.key; endSession(true); openDay(k); });
+  clearInterval(ses.timer);
+}
+function endSession() {
+  if (!ses) return;
+  clearInterval(ses.timer); Voice.cancel(); keepAwake(false);
+  document.removeEventListener("visibilitychange", onSesVisible);
+  const viewer = document.getElementById("viewer");
+  const home = document.getElementById("move-chips");
+  home.parentElement.insertBefore(viewer, home);
+  document.querySelector(".session")?.remove();
+  document.body.style.overflow = "";
+  if (Viewer3D) Viewer3D.setActive(currentTab === "moves");
+  ses = null;
+}
+</script>
+
+<script>
+/* ================= Mode lari ikuti rute (GPX) =================
+   GPS + the imported route: voice cues per km, before turns and climbs, when leaving the trail,
+   and at the finish. Screen is kept awake because phones pause GPS for web apps in the background. */
+let run = null;
+function bearing(a, b) {
+  const toR = Math.PI / 180, y = Math.sin((b[1] - a[1]) * toR) * Math.cos(b[0] * toR);
+  const x = Math.cos(a[0] * toR) * Math.sin(b[0] * toR) - Math.sin(a[0] * toR) * Math.cos(b[0] * toR) * Math.cos((b[1] - a[1]) * toR);
+  return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+}
+const angDiff = (a, b) => ((b - a + 540) % 360) - 180;   // + = right turn
+function idxAt(r, d) { let lo = 0, hi = r.cum.length - 1; while (lo < hi) { const m = (lo + hi) >> 1; if (r.cum[m] < d) lo = m + 1; else hi = m; } return lo; }
+function planCues(r) {
+  const turns = [], climbs = [];
+  const seg = 30;
+  for (let d = seg; d < r.dist - seg; d += 10) {
+    const i0 = idxAt(r, d - seg), i1 = idxAt(r, d), i2 = idxAt(r, d + seg);
+    if (i0 === i1 || i1 === i2) continue;
+    const t = angDiff(bearing(r.pts[i0], r.pts[i1]), bearing(r.pts[i1], r.pts[i2]));
+    if (Math.abs(t) >= 50) {
+      const last = turns[turns.length - 1];
+      if (last && d - last.d < 45) { if (Math.abs(t) > Math.abs(last.t)) { last.t = t; last.d = d; } }
+      else turns.push({ d, t, said: false });
+    }
+  }
+  if (r.hasEle) {
+    let i = 0;
+    while (i < r.pts.length - 1) {
+      const e0 = r.pts[i][2];
+      if (!Number.isFinite(e0)) { i++; continue; }
+      let j = i, best = i, maxE = e0;
+      while (j < r.pts.length - 1 && r.cum[j] - r.cum[i] < 2000) {
+        j++; const e = r.pts[j][2];
+        if (Number.isFinite(e)) { if (e > maxE) { maxE = e; best = j; } if (maxE - e > 25) break; }
+      }
+      if (maxE - e0 >= 40 && r.cum[best] - r.cum[i] > 150) { climbs.push({ d: r.cum[i], len: r.cum[best] - r.cum[i], up: Math.round(maxE - e0), said: false }); i = best; }
+      else i += Math.max(1, Math.floor((j - i) / 2));
+    }
+  }
+  return { turns, climbs };
+}
+const spokenKm = (m) => { const k = m / 1000; return k >= 10 ? Math.round(k) + " kilometer" : (Math.round(k * 10) / 10).toString().replace(".", " koma ") + " kilometer"; };
+const spokenTime = (s) => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), sec = Math.floor(s % 60); return (h ? h + " jam " : "") + (m ? m + " menit " : "") + (h ? "" : sec + " detik"); };
+const paceStr = (secPerKm) => !Number.isFinite(secPerKm) || secPerKm <= 0 || secPerKm > 3600 ? "–" : `${Math.floor(secPerKm / 60)}:${String(Math.round(secPerKm % 60)).padStart(2, "0")}`;
+const hms = (s) => { s = Math.floor(s); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? h + ":" + String(m).padStart(2, "0") : m) + ":" + String(x).padStart(2, "0"); };
+
+function startRun(r) {
+  r = r || null;
+  if (!("geolocation" in navigator)) { toast("GPS tidak tersedia di perangkat ini"); return; }
+  Sound.unlock(); stopLocate(true);
+  const cues = r ? planCues(r) : { turns: [], climbs: [] };
+  run = { r, cues, track: [], dist: 0, moving: 0, startT: Date.now(), pausedAt: 0, pauseTotal: 0, idx: 0, off: 0, offCount: 0, offSaidAt: 0, onRoute: true,
+    nextKm: 1000, finished: false, watch: null, ui: 0, splits: [], lastSplitT: Date.now(), heading: null, gain: 0, eleRef: null, ownMap: null, line: null };
+  const wrap = document.createElement("div");
+  wrap.className = "session runmode"; wrap.setAttribute("role", "dialog"); wrap.setAttribute("aria-modal", "true"); wrap.setAttribute("aria-label", "Mode lari");
+  wrap.innerHTML = `
+    <div class="ses-top"><span class="run-dot" aria-hidden="true"></span><b style="flex:1;font-size:15px">${r ? esc(r.name) : "Lari bebas"}</b><span id="run-gps">Mencari GPS…</span></div>
+    <div class="run-cue" id="run-cue" aria-live="polite">${r ? "Mulai berlari. Panduan suara akan memberi tahu belokan, tanjakan, dan setiap kilometer." : "Mulai berlari. Rute, jarak, dan pace-mu direkam. Panduan suara memberi kabar setiap kilometer."}</div>
+    <div class="run-grid">
+      <div class="run-main"><b id="run-time">0:00</b><span>waktu</span></div>
+      <div><b id="run-dist">0,00</b><span>km</span></div>
+      <div><b id="run-pace">–</b><span>pace sekarang /km</span></div>
+      ${r ? `<div><b id="run-prog">0,0</b><span>km dari ${fmtKm(r.dist)} rute</span></div>
+      <div><b id="run-up">${r.hasEle ? Math.round(r.gain) : "–"}</b><span>sisa naik (m)</span></div>`
+      : `<div><b id="run-avg">–</b><span>pace rata-rata /km</span></div>
+      <div><b id="run-gain">0</b><span>total naik (m)</span></div>`}
+    </div>
+    <div class="run-map" id="run-map-slot"></div>
+    <div class="btns ses-ctl"><button type="button" class="btn" id="run-pause">Jeda</button><button type="button" class="btn danger" id="run-stop">Selesai</button></div>`;
+  document.body.appendChild(wrap);
+  document.body.style.overflow = "hidden";
+  const mapEl = r ? document.getElementById("map") : null;
+  if (mapEl) { wrap.querySelector("#run-map-slot").appendChild(mapEl); setTimeout(() => lmap && lmap.invalidateSize(), 60); }
+  else if (window.L) {
+    const slot = wrap.querySelector("#run-map-slot"); slot.innerHTML = `<div class="map" id="run-own-map"></div>`;
+    run.ownMap = L.map("run-own-map", { zoomControl: false, attributionControl: true });
+    L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, subdomains: "abc",
+      attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a>' }).addTo(run.ownMap);
+    run.ownMap.setView([-7.88, 112.52], 15);
+    run.line = L.polyline([], { color: "#f0a43a", weight: 5 }).addTo(run.ownMap);
+  }
+  wrap.querySelector("#run-pause").addEventListener("click", togglePause);
+  const stopBtn = wrap.querySelector("#run-stop");
+  stopBtn.addEventListener("click", () => {
+    if (!stopBtn.classList.contains("armed")) { stopBtn.classList.add("armed"); stopBtn.textContent = "Ketuk lagi untuk selesai"; setTimeout(() => { stopBtn.classList.remove("armed"); stopBtn.textContent = "Selesai"; }, 4000); return; }
+    finishRun();
+  });
+  keepAwake(true);
+  document.addEventListener("visibilitychange", onRunVisible);
+  Voice.say(r ? `Mode lari dimulai. Rute ${r.name}, ${spokenKm(r.dist)}${r.hasEle ? ", total naik " + Math.round(r.gain) + " meter" : ""}.` : "Lari bebas dimulai. Selamat berlari!", true);
+  run.watch = navigator.geolocation.watchPosition(onFix, (err) => {
+    document.getElementById("run-gps").textContent = err.code === 1 ? "Izin lokasi ditolak" : "Sinyal GPS lemah";
+    if (err.code === 1) toast("Izin lokasi ditolak. Aktifkan di pengaturan browser.");
+  }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 30000 });
+  run.ui = setInterval(updateRunUI, 1000);
+}
+function onRunVisible() { if (document.visibilityState === "visible" && run) keepAwake(true); }
+const elapsed = () => ((run.pausedAt || Date.now()) - run.startT - run.pauseTotal) / 1000;
+function togglePause() {
+  const b = document.getElementById("run-pause");
+  if (run.pausedAt) { run.pauseTotal += Date.now() - run.pausedAt; run.pausedAt = 0; b.textContent = "Jeda"; Voice.say("Lanjut lari.", true); }
+  else { run.pausedAt = Date.now(); b.textContent = "Lanjutkan"; Voice.say("Lari dijeda.", true); }
+}
+function cue(text, speak = true) { const el = document.getElementById("run-cue"); if (el) el.textContent = text; if (speak) Voice.say(text); }
+function onFix(pos) {
+  if (!run) return;
+  const c = pos.coords, p = [c.latitude, c.longitude, Number.isFinite(c.altitude) ? c.altitude : null, Date.now()];
+  const gps = document.getElementById("run-gps"); if (gps) gps.textContent = `GPS ±${Math.round(c.accuracy)} m`;
+  if (c.accuracy > 50) return;                                       // too vague to use
+  const r = run.r, last = run.track[run.track.length - 1];
+  if (last) {
+    const step = hav(last, p);
+    if (step < 3) return;                                            // jitter while standing
+    if (!run.pausedAt && step < 200) run.dist += step;
+    run.heading = bearing(last, p);
+  }
+  run.track.push(p);
+  if (run.pausedAt) return;
+  if (p[2] != null && c.altitudeAccuracy != null && c.altitudeAccuracy < 30) {
+    if (run.eleRef == null) run.eleRef = p[2];
+    else if (p[2] - run.eleRef >= 4) { run.gain += p[2] - run.eleRef; run.eleRef = p[2]; }
+    else if (p[2] - run.eleRef <= -4) run.eleRef = p[2];
+  }
+  if (!r) {
+    const map2 = run.ownMap;
+    if (map2) {
+      run.line.addLatLng([p[0], p[1]]);
+      if (!meMarker) meMarker = L.circleMarker([p[0], p[1]], { radius: 9, color: "#fff", weight: 3, fillColor: "#3f97be", fillOpacity: 1 }).addTo(map2);
+      else meMarker.setLatLng([p[0], p[1]]);
+      map2.setView([p[0], p[1]], Math.max(map2.getZoom(), 16), { animate: false });
+    }
+    kmCue(null, 0);
+    updateRunUI();
+    return;
+  }
+  // where on the route? search near the last match first so loops don't jump ahead
+  let best = run.idx, bd = Infinity;
+  const lo = Math.max(0, run.idx - 30), hi = Math.min(r.pts.length - 1, run.idx + 600);
+  for (let i = lo; i <= hi; i++) { const d = hav(p, r.pts[i]); if (d < bd) { bd = d; best = i; } }
+  if (bd > 250) { const n = nearest(r, p); best = n.i; bd = n.off; }
+  run.idx = Math.max(best, bd < 60 ? best : run.idx); run.off = bd;
+  if (lmap) {
+    if (!meMarker) meMarker = L.circleMarker([p[0], p[1]], { radius: 9, color: "#fff", weight: 3, fillColor: "#3f97be", fillOpacity: 1 }).addTo(lmap);
+    else meMarker.setLatLng([p[0], p[1]]);
+    lmap.setView([p[0], p[1]], Math.max(lmap.getZoom(), 16), { animate: false });
+  }
+  const along = r.cum[run.idx];
+  // off route
+  if (bd > 60) {
+    run.offCount++;
+    if (run.offCount >= 2 && Date.now() - run.offSaidAt > 30000) {
+      run.offSaidAt = Date.now(); run.onRoute = false;
+      let side = "";
+      if (run.heading != null) { const t = angDiff(run.heading, bearing(p, r.pts[run.idx])); side = Math.abs(t) > 150 ? " Jalur ada di belakangmu." : t > 0 ? " Jalur ada di sebelah kanan." : " Jalur ada di sebelah kiri."; }
+      cue(`Kamu keluar jalur sekitar ${Math.round(bd / 10) * 10} meter.${side}`);
+    }
+  } else {
+    if (!run.onRoute) cue("Kembali di jalur. Mantap.");
+    run.onRoute = true; run.offCount = 0;
+    // turns ahead
+    for (const t of run.cues.turns) {
+      const ahead = t.d - along;
+      if (!t.said && ahead > 0 && ahead <= 70) {
+        t.said = true;
+        const dir = t.t > 0 ? "kanan" : "kiri", sharp = Math.abs(t.t) > 110 ? " tajam" : "";
+        cue(`Dalam ${Math.max(10, Math.round(ahead / 10) * 10)} meter, belok ${dir}${sharp}.`);
+        break;
+      }
+      if (ahead < -20) t.said = true;
+    }
+    // climbs ahead
+    for (const c2 of run.cues.climbs) {
+      const ahead = c2.d - along;
+      if (!c2.said && ahead > 0 && ahead <= 200) {
+        c2.said = true;
+        cue(`Tanjakan di depan. Naik sekitar ${c2.up} meter sepanjang ${c2.len >= 1000 ? spokenKm(c2.len) : Math.round(c2.len / 10) * 10 + " meter"}. Siapkan power hiking.`);
+      }
+      if (ahead < -50) c2.said = true;
+    }
+  }
+  kmCue(r, along);
+  // finish
+  if (!run.finished && hav(p, r.pts[r.pts.length - 1]) < 35 && along > r.dist * .85) {
+    run.finished = true;
+    cue(`Selamat, kamu sampai finish! Total ${spokenKm(run.dist)} dalam ${spokenTime(elapsed())}.`);
+    Sound.done();
+  }
+  updateRunUI();
+}
+function kmCue(r, along) {
+  if (run.dist < run.nextKm) return;
+  const t = elapsed(), splitSec = (Date.now() - run.lastSplitT) / 1000;
+  run.splits.push(splitSec); run.lastSplitT = Date.now();
+  const km = Math.round(run.nextKm / 1000);
+  cue(`Kilometer ${km}. Waktu ${spokenTime(t)}. Pace kilometer terakhir ${spokenTime(splitSec)}.` + (r ? ` Sisa rute ${spokenKm(Math.max(0, r.dist - along))}.` : ""));
+  run.nextKm += 1000;
+}
+function updateRunUI() {
+  if (!run) return;
+  const r = run.r, t = elapsed();
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set("run-time", hms(t));
+  set("run-dist", fmtKm(run.dist));
+  // pace over the last ~500 m of track
+  let pace = NaN;
+  for (let i = run.track.length - 1, d = 0; i > 0; i--) {
+    d += hav(run.track[i - 1], run.track[i]);
+    if (d >= 400) { pace = (run.track[run.track.length - 1][3] - run.track[i - 1][3]) / 1000 / (d / 1000); break; }
+  }
+  if (!Number.isFinite(pace) && run.dist > 200) pace = t / (run.dist / 1000);
+  set("run-pace", paceStr(pace));
+  if (r) { set("run-prog", fmtKm(r.cum[run.idx])); if (r.hasEle) set("run-up", String(Math.round(r.climbAfter[run.idx]))); }
+  else { set("run-avg", run.dist > 200 ? paceStr(t / (run.dist / 1000)) : "–"); set("run-gain", String(Math.round(run.gain))); }
+}
+function toRunGPX() {
+  const pts = run.track.map((p) => `<trkpt lat="${p[0].toFixed(6)}" lon="${p[1].toFixed(6)}">${p[2] != null ? `<ele>${p[2].toFixed(1)}</ele>` : ""}<time>${new Date(p[3]).toISOString()}</time></trkpt>`).join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Zein Trail" xmlns="http://www.topografix.com/GPX/1/1">\n<trk><name>Lari ${TODAY}</name><trkseg>\n${pts}\n</trkseg></trk>\n</gpx>\n`;
+}
+function finishRun() {
+  if (!run) return;
+  navigator.geolocation.clearWatch(run.watch); clearInterval(run.ui);
+  if (run.pausedAt) { run.pauseTotal += Date.now() - run.pausedAt; run.pausedAt = 0; }
+  const t = elapsed(), km = Math.round(run.dist / 100) / 10;
+  Voice.say(`Lari selesai. ${spokenKm(run.dist)} dalam ${spokenTime(t)}.`, true);
+  const day = BYKEY[TODAY];
+  const canLog = day && day.type !== "rest" && day.type !== "str" && km >= .3;
+  const wrap = document.querySelector(".runmode");
+  if (run.dist >= 100 && run.track.length > 1) saveRunHistory(t);
+  const splits = run.splits.length ? `<ol class="splits">${run.splits.map((sec, i) => `<li><span>Km ${i + 1}</span><b>${paceStr(sec)}</b></li>`).join("")}</ol>` : "";
+  wrap.querySelector(".run-grid").insertAdjacentHTML("beforebegin", `<div class="card"><h3>Lari selesai</h3>
+    <p style="margin:0">${fmtKm(run.dist)} km dalam ${hms(t)}${run.dist > 200 ? `, pace rata-rata ${paceStr(t / (run.dist / 1000))} per km` : ""}${run.gain >= 5 ? `, naik ${Math.round(run.gain)} m` : ""}. Tersimpan di riwayat lari.</p>${splits}
+    <div class="btns">${canLog ? `<button type="button" class="btn primary" id="run-log">Catat ke sesi hari ini (${String(km).replace(".", ",")} km)</button>` : ""}
+      ${run.track.length > 1 ? `<button type="button" class="btn" id="run-gpx">Simpan rekaman GPX</button>` : ""}
+      <button type="button" class="btn" id="run-close">Tutup</button></div></div>`);
+  wrap.querySelector(".ses-ctl").remove();
+  wrap.querySelector("#run-cue").remove();
+  wrap.querySelector("#run-log")?.addEventListener("click", (e) => {
+    setEntry(day.key, { done: true, km }); renderAll(); celebrate(e.currentTarget); toast("Tercatat di sesi hari ini");
+    e.currentTarget.disabled = true; e.currentTarget.textContent = "Sudah dicatat";
+  });
+  const gpxText = toRunGPX();
+  wrap.querySelector("#run-gpx")?.addEventListener("click", () => downloadFile(`lari-${TODAY}.gpx`, gpxText, "application/gpx+xml"));
+  wrap.querySelector("#run-close").addEventListener("click", closeRun);
+}
+function closeRun() {
+  if (!run) return;
+  navigator.geolocation.clearWatch(run.watch); clearInterval(run.ui);
+  keepAwake(false); Voice.cancel();
+  document.removeEventListener("visibilitychange", onRunVisible);
+  const mapEl = document.getElementById("map");
+  const slotHome = document.querySelector("#v-route .btns.map-actions");
+  if (mapEl && slotHome) slotHome.parentElement.insertBefore(mapEl, slotHome);
+  if (meMarker && lmap && !run.ownMap) lmap.removeLayer(meMarker);
+  meMarker = null;
+  if (run.ownMap) run.ownMap.remove();
+  document.querySelector(".runmode")?.remove();
+  document.body.style.overflow = "";
+  run = null;
+  setTimeout(() => { if (lmap) { lmap.invalidateSize(); fitRoute(); } }, 60);
+  renderRunHistory();
+}
+
+/* ================= Riwayat lari ================= */
+function saveRunHistory(t) {
+  let pts = run.track.map((p) => [+p[0].toFixed(6), +p[1].toFixed(6), p[2] != null ? Math.round(p[2] * 10) / 10 : null, p[3]]);
+  const step = Math.ceil(pts.length / 3000); if (step > 1) pts = pts.filter((_, i) => i % step === 0 || i === pts.length - 1);
+  const item = { id: "run" + Date.now().toString(36), date: new Date(run.startT).toISOString(), day: TODAY, dist: run.dist, time: t, gain: run.gain,
+    splits: run.splits, route: run.r ? run.r.name : null, pts };
+  RunDB.put(item).then(renderRunHistory).catch(() => toast("Riwayat lari gagal disimpan"));
+}
+async function renderRunHistory() {
+  const box = document.getElementById("run-history"); if (!box) return;
+  let list = [];
+  try { list = (await RunDB.all()).sort((a, b) => a.date < b.date ? 1 : -1); } catch (e) {}
+  if (!list.length) { box.innerHTML = `<h3>Riwayat lari</h3><p class="muted" style="margin:0">Belum ada lari yang direkam. Ketuk <b>Lari bebas</b> untuk mulai merekam rute dan pace-mu.</p>`; return; }
+  box.innerHTML = `<h3>Riwayat lari</h3><ul class="runs">${list.slice(0, 30).map((x) => {
+    const d = new Date(x.date);
+    return `<li><div><b>${fmtKm(x.dist)} km</b><span>${DOWL[(d.getDay() + 6) % 7]} ${fmt(d)}, ${hms(x.time)}, pace ${paceStr(x.time / (x.dist / 1000))}${x.gain >= 5 ? `, naik ${Math.round(x.gain)} m` : ""}${x.route ? `<br>Rute: ${esc(x.route)}` : ""}</span></div>
+      <div class="btns"><button type="button" class="btn" data-run-route="${x.id}">Jadikan rute</button><button type="button" class="btn" data-run-gpx="${x.id}">GPX</button><button type="button" class="btn ghost" data-run-del="${x.id}" aria-label="Hapus">Hapus</button></div></li>`;
+  }).join("")}</ul>`;
+  const byId = (id) => list.find((x) => x.id === id);
+  box.querySelectorAll("[data-run-route]").forEach((b) => b.addEventListener("click", async () => {
+    const x = byId(b.dataset.runRoute); const d = new Date(x.date);
+    const route = { id: "r" + Date.now().toString(36), name: `Lari ${fmt(d)} (${fmtKm(x.dist)} km)`, pts: x.pts.map((p) => [p[0], p[1], p[2]]), added: new Date().toISOString() };
+    await RouteDB.put(route); try { localStorage.setItem(ACTIVE_KEY, route.id); } catch (e) {}
+    await loadRoutes(); toast("Disimpan sebagai rute"); window.scrollTo(0, 0);
+  }));
+  box.querySelectorAll("[data-run-gpx]").forEach((b) => b.addEventListener("click", () => {
+    const x = byId(b.dataset.runGpx);
+    const pts = x.pts.map((p) => `<trkpt lat="${p[0]}" lon="${p[1]}">${p[2] != null ? `<ele>${p[2]}</ele>` : ""}${p[3] ? `<time>${new Date(p[3]).toISOString()}</time>` : ""}</trkpt>`).join("\n");
+    downloadFile(`lari-${x.day}.gpx`, `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Zein Trail" xmlns="http://www.topografix.com/GPX/1/1">\n<trk><name>Lari ${x.day}</name><trkseg>\n${pts}\n</trkseg></trk>\n</gpx>\n`, "application/gpx+xml");
+  }));
+  box.querySelectorAll("[data-run-del]").forEach((b) => b.addEventListener("click", async () => {
+    if (!b.classList.contains("armed")) { b.classList.add("armed", "danger"); b.textContent = "Yakin?"; setTimeout(() => { b.classList.remove("armed", "danger"); b.textContent = "Hapus"; }, 4000); return; }
+    await RunDB.del(b.dataset.runDel).catch(() => {}); renderRunHistory();
+  }));
+}
+</script>
+<script>
+/* ================= Buat rute di sekitar lokasi =================
+   Auto loop of a chosen length from where you stand, or tap-to-draw.
+   Paths follow trails/roads through the free BRouter service when it is reachable;
+   otherwise the points are joined with straight lines. */
+let bld = null;
+function destPoint(p, brngDeg, dist) {
+  const R = 6371000, d = dist / R, b = brngDeg * Math.PI / 180, la = p[0] * Math.PI / 180, lo = p[1] * Math.PI / 180;
+  const la2 = Math.asin(Math.sin(la) * Math.cos(d) + Math.cos(la) * Math.sin(d) * Math.cos(b));
+  const lo2 = lo + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(la), Math.cos(d) - Math.sin(la) * Math.sin(la2));
+  return [la2 * 180 / Math.PI, lo2 * 180 / Math.PI];
+}
+async function routeVia(points, follow) {
+  if (points.length < 2) return { pts: points.map((p) => [p[0], p[1], null]), snapped: false };
+  if (follow && navigator.onLine) {
+    try {
+      const url = `https://brouter.de/brouter?lonlats=${points.map((p) => p[1].toFixed(6) + "," + p[0].toFixed(6)).join("|")}&profile=hiking-mountain&alternativeidx=0&format=geojson`;
+      const ctl = new AbortController(); const to = setTimeout(() => ctl.abort(), 20000);
+      const res = await fetch(url, { signal: ctl.signal }); clearTimeout(to);
+      if (res.ok) {
+        const gj = await res.json();
+        const coords = gj.features && gj.features[0] && gj.features[0].geometry.coordinates;
+        if (coords && coords.length > 1) return { pts: coords.map((c) => [+c[1].toFixed(6), +c[0].toFixed(6), c[2] != null ? Math.round(c[2] * 10) / 10 : null]), snapped: true };
+      }
+    } catch (e) {}
+  }
+  return { pts: points.map((p) => [p[0], p[1], null]), snapped: false };
+}
+function openBuilder() {
+  if (!window.L) { toast("Peta belum bisa dimuat"); return; }
+  bld = { mode: "auto", km: 5, follow: true, start: null, pts: [], route: null, seed: Math.random() * 360, busy: false, map: null, layer: null, marks: null };
+  const wrap = document.createElement("div");
+  wrap.className = "session builder"; wrap.setAttribute("role", "dialog"); wrap.setAttribute("aria-modal", "true"); wrap.setAttribute("aria-label", "Buat rute");
+  wrap.innerHTML = `
+    <div class="ses-top"><button type="button" class="btn ghost" id="b-close">Batal</button><b style="flex:1">Buat rute</b><span id="b-gps">Mencari lokasimu…</span></div>
+    <div class="seg" role="tablist"><button type="button" role="tab" data-bmode="auto" aria-selected="true">Putaran otomatis</button><button type="button" role="tab" data-bmode="draw" aria-selected="false">Gambar sendiri</button></div>
+    <div class="map" id="b-map"></div>
+    <div id="b-panel"></div>
+    <div class="stats4" id="b-stats"></div>
+    <div class="card"><div class="field"><label for="b-name">Nama rute</label><input id="b-name" maxlength="60" placeholder="Contoh: Putaran 5 km dekat rumah"></div>
+      <button type="button" class="btn primary" id="b-save" disabled>Simpan rute</button></div>`;
+  document.body.appendChild(wrap); document.body.style.overflow = "hidden";
+  bld.map = L.map("b-map", { zoomControl: true });
+  L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, subdomains: "abc",
+    attribution: 'Peta: © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>, SRTM | Gaya: © <a href="https://opentopomap.org" target="_blank" rel="noopener">OpenTopoMap</a>' }).addTo(bld.map);
+  bld.map.setView([-7.88, 112.52], 14);
+  bld.layer = L.polyline([], { color: "#f0a43a", weight: 5 }).addTo(bld.map);
+  bld.marks = L.layerGroup().addTo(bld.map);
+  bld.map.on("click", (e) => { if (bld.mode !== "draw") return; addDrawPoint([e.latlng.lat, e.latlng.lng]); });
+  wrap.querySelector("#b-close").addEventListener("click", closeBuilder);
+  wrap.querySelectorAll("[data-bmode]").forEach((b) => b.addEventListener("click", () => {
+    bld.mode = b.dataset.bmode; wrap.querySelectorAll("[data-bmode]").forEach((x) => x.setAttribute("aria-selected", String(x === b)));
+    bld.pts = bld.start ? [bld.start] : []; bld.route = null; drawBuilder(); renderBuilderPanel();
+  }));
+  wrap.querySelector("#b-save").addEventListener("click", saveBuilt);
+  renderBuilderPanel();
+  navigator.geolocation.getCurrentPosition((pos) => {
+    bld.start = [pos.coords.latitude, pos.coords.longitude];
+    document.getElementById("b-gps").textContent = `Lokasimu ±${Math.round(pos.coords.accuracy)} m`;
+    bld.map.setView(bld.start, 15);
+    L.circleMarker(bld.start, { radius: 8, color: "#fff", weight: 3, fillColor: "#3f97be", fillOpacity: 1 }).bindTooltip("Kamu di sini").addTo(bld.map);
+    if (bld.mode === "draw" && !bld.pts.length) bld.pts = [bld.start];
+    renderBuilderPanel();
+  }, () => {
+    document.getElementById("b-gps").textContent = "Lokasi tidak didapat";
+    toast("Lokasi tidak didapat. Ketuk peta untuk menentukan titik start.");
+    bld.mode = "draw"; wrap.querySelectorAll("[data-bmode]").forEach((x) => x.setAttribute("aria-selected", String(x.dataset.bmode === "draw")));
+    renderBuilderPanel();
+  }, { enableHighAccuracy: true, timeout: 20000, maximumAge: 30000 });
+  setTimeout(() => bld && bld.map.invalidateSize(), 80);
+}
+function renderBuilderPanel() {
+  const p = document.getElementById("b-panel"); if (!p) return;
+  if (bld.mode === "auto") {
+    p.innerHTML = `<div class="card"><div class="field"><span class="lbl">Panjang putaran dari lokasimu</span>
+      <div class="chips">${[3, 5, 8, 10, 16].map((k) => `<button type="button" class="chip-q tog" data-bkm="${k}" aria-pressed="${bld.km === k}">${k} km</button>`).join("")}</div></div>
+      <label class="switch"><input type="checkbox" id="b-follow" ${bld.follow ? "checked" : ""}><span>Ikuti jalan dan jalur setapak (butuh internet)</span></label>
+      <div class="btns"><button type="button" class="btn amber" id="b-gen" ${bld.start && !bld.busy ? "" : "disabled"}>${bld.busy ? "Membuat rute…" : bld.route ? "Buat versi lain" : "Buat putaran"}</button></div></div>`;
+    p.querySelectorAll("[data-bkm]").forEach((b) => b.addEventListener("click", () => { bld.km = Number(b.dataset.bkm); renderBuilderPanel(); }));
+    p.querySelector("#b-gen").addEventListener("click", () => { if (bld.route) bld.seed += 75 + Math.random() * 60; generateLoop(); });
+  } else {
+    p.innerHTML = `<div class="card"><p style="margin:0;font-size:15px">Ketuk peta untuk menambah titik, mulai dari lokasimu. Garis akan mengikuti jalan atau jalur setapak di antara titik.</p>
+      <label class="switch"><input type="checkbox" id="b-follow" ${bld.follow ? "checked" : ""}><span>Ikuti jalan dan jalur setapak (butuh internet)</span></label>
+      <div class="btns"><button type="button" class="btn" id="b-undo" ${bld.pts.length > 1 ? "" : "disabled"}>Hapus titik terakhir</button>
+      <button type="button" class="btn" id="b-loop" ${bld.pts.length > 2 ? "" : "disabled"}>Kembali ke start</button></div></div>`;
+    p.querySelector("#b-undo").addEventListener("click", () => { bld.pts.pop(); rebuildDraw(); });
+    p.querySelector("#b-loop").addEventListener("click", () => addDrawPoint(bld.pts[0]));
+  }
+  p.querySelector("#b-follow").addEventListener("change", (e) => { bld.follow = e.target.checked; if (bld.mode === "draw") rebuildDraw(); });
+}
+async function generateLoop() {
+  if (!bld.start || bld.busy) return;
+  bld.busy = true; renderBuilderPanel();
+  const target = bld.km * 1000;
+  let factor = bld.follow ? .72 : 1, out = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const R = target / (2 * Math.PI) * factor;
+    const c = destPoint(bld.start, bld.seed, R);
+    const way = [bld.start, destPoint(c, bld.seed + 270, R), destPoint(c, bld.seed, R), destPoint(c, bld.seed + 90, R), bld.start];
+    out = await routeVia(way, bld.follow);
+    if (!bld) return;
+    const d = enrich({ pts: out.pts }).dist;
+    if (Math.abs(d - target) / target < .15 || !out.snapped) break;
+    factor *= target / d;
+  }
+  bld.busy = false;
+  if (!out.snapped && bld.follow) toast("Layanan jalur tidak terhubung. Rute dibuat garis lurus.");
+  bld.route = out.pts; drawBuilder(); renderBuilderPanel();
+}
+async function addDrawPoint(pt) {
+  bld.pts.push(pt);
+  L.circleMarker(pt, { radius: 5, color: "#fff", weight: 2, fillColor: "#163d2e", fillOpacity: 1 }).addTo(bld.marks);
+  await rebuildDraw();
+}
+let drawGen = 0;
+async function rebuildDraw() {
+  const my = ++drawGen;
+  bld.marks.clearLayers();
+  bld.pts.forEach((pt) => L.circleMarker(pt, { radius: 5, color: "#fff", weight: 2, fillColor: "#163d2e", fillOpacity: 1 }).addTo(bld.marks));
+  if (bld.pts.length < 2) { bld.route = null; drawBuilder(); renderBuilderPanel(); return; }
+  const out = await routeVia(bld.pts, bld.follow);
+  if (!bld || my !== drawGen) return;
+  bld.route = out.pts; drawBuilder(); renderBuilderPanel();
+}
+function drawBuilder() {
+  const pts = bld.route || [];
+  bld.layer.setLatLngs(pts.map((p) => [p[0], p[1]]));
+  const st = document.getElementById("b-stats"), save = document.getElementById("b-save");
+  if (pts.length > 1) {
+    const r = enrich({ pts });
+    st.innerHTML = `<div><b>${fmtKm(r.dist)} km</b><span>jarak</span></div><div><b>${r.hasEle ? "+" + Math.round(r.gain) : "–"} m</b><span>total naik</span></div>
+      <div><b>${r.hasEle ? "−" + Math.round(r.loss) : "–"} m</b><span>total turun</span></div><div><b>${r.hasEle ? Math.round(r.maxE) : "–"} m</b><span>titik tertinggi</span></div>`;
+    if (bld.mode === "auto") bld.map.fitBounds(pts.map((p) => [p[0], p[1]]), { padding: [20, 20] });
+    save.disabled = false;
+    const nm = document.getElementById("b-name"); if (!nm.value) nm.placeholder = `Putaran ${fmtKm(r.dist)} km`;
+  } else { st.innerHTML = ""; save.disabled = true; }
+}
+async function saveBuilt() {
+  if (!bld.route || bld.route.length < 2) return;
+  const name = document.getElementById("b-name").value.trim() || document.getElementById("b-name").placeholder.replace(/^Contoh: /, "");
+  const route = { id: "r" + Date.now().toString(36), name: name.slice(0, 60), pts: bld.route, added: new Date().toISOString() };
+  await RouteDB.put(route); try { localStorage.setItem(ACTIVE_KEY, route.id); } catch (e) {}
+  closeBuilder(); await loadRoutes(); toast("Rute disimpan");
+}
+renderRunHistory();
+function closeBuilder() {
+  if (!bld) return;
+  bld.map.remove(); bld = null;
+  document.querySelector(".builder")?.remove(); document.body.style.overflow = "";
+}
+</script>
+
+
 </body>
 </html>

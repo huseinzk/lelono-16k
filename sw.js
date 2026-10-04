@@ -1,5 +1,5 @@
 // Zein Trail service worker: offline cache + daily training reminder (Android, installed app).
-const CACHE = "zeintrail-v5";
+const CACHE = "zeintrail-v6";
 const DATA = "zeintrail-data";
 const SHELL = [
   "./",
@@ -7,6 +7,7 @@ const SHELL = [
   "./manifest.webmanifest",
   "./vendor/three.min.js",
   "./vendor/GLTFLoader.js",
+  "./vendor/OutlineEffect.js",
   "./vendor/leaflet.js",
   "./vendor/leaflet.css",
   "./models/runner.glb",
